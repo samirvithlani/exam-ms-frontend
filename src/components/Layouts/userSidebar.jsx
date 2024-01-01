@@ -17,64 +17,38 @@ import {
   import ListIcon from '@mui/icons-material/List';
   import "../../assets/layouts/layout.module.css";
 
-  export const SideBar = () => {
+  export const UserSideBar = () => {
     const drawerWidth = 240;
     const RouteArray = [
-     
-  
       {
-        id: 3,
-        name: "Create Exam",
+        id: 1,
+        name: "Dashboard",
         logoImage: AddIcon,
-        linkUrl: "createexam",
+        linkUrl: "dashboard",
         textColor: "#7D8FB3",
-        activeMenuFor: ["createExam"],
+        activeMenuFor: ["dashboard"],
       },
       {
-        id: 4,
-        name: "Exam List",
-        linkUrl: "examlist",
+        id: 2,
+        name: "result",
+        linkUrl: "history",
         textColor: "#7D8FB3",
-        activeMenuFor: ["profile"],
+        activeMenuFor: ["history"],
         logoImage:ListIcon
       },
-      
       {
-        id: 6,
-        name: "ADD MCQ",
-        linkUrl: "mcqquestion",
+        id: 3,
+        name: "Answer",
+        linkUrl: "Viewanswers",
         textColor: "#7D8FB3",
-        activeMenuFor: ["createExam"],
-        logoImage: AddIcon,
+        activeMenuFor: ["viewanswers"],
+        logoImage:ListIcon
       },
-      {
-        id: 7,
-        name: "Faculty List",
-        linkUrl: "facultylist",
-        textColor: "#7D8FB3",
-        activeMenuFor: ["facultylist"],
-        logoImage: ListIcon,
-      },
-      {
-        id: 8,
-        name: "Company List",
-        linkUrl: "Companylist",
-        textColor: "#7D8FB3",
-        activeMenuFor: ["companylist"],
-        logoImage: ListIcon,
-      },
-      {
-        id: 9,
-        name: "Student List",
-        linkUrl: "studentlist",
-        textColor: "#7D8FB3",
-        activeMenuFor: ["studentlist"],
-        logoImage: ListIcon,
-      },
+
     ];
     return (
       <div>
-        <AdminHeader></AdminHeader>
+
         <CssBaseline />
         <Box sx={{ display: "flex" }}>
         <Drawer

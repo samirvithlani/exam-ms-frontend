@@ -41,6 +41,9 @@ export const CreateExam = () => {
   const [isTimeLimit, setIsTimeLimit] = useState(''); 
   const[difficultes,setdefficulties] = useState([]);
   const[selecteddiificulty,setselecteddefficultie] = useState('');
+  const[question,setquestion] = useState('');
+  const[Perquestionmark, setPerquestionmarks] = useState('');
+  const[totalMarks,settotalmarks] = useState('');
   const validationSchema = {
     Name: {
       required: {
@@ -95,11 +98,17 @@ export const CreateExam = () => {
     fetchTypes();
     fetchstd();
     fetchdifficulty();
-  }, []);
+    totalmarks();
+  }, [question,Perquestionmark]);
+  const totalmarks = ()=>{
+    if (question !== '' && Perquestionmark !== '') {
+      const totalMarks = parseInt(question) * parseInt(Perquestionmark);
+      settotalmarks(totalMarks)
+    }
+  }
   const fetchdifficulty = async() =>{
     try {
-      const response = await axios.get('http://localhost:3000/difficulty')
-      console.log(response.data);
+      const response = await axios.get('/difficulty')
       let data = response.data
       setdefficulties(data)
     } catch (error) {
@@ -109,8 +118,7 @@ export const CreateExam = () => {
   const fetchStreams = async (stdid) => {
     console.log(stdid,"stdidsss");
     try {
-      const response = await axios.get(`http://localhost:3000/stream/${stdid}`);
-      console.log(response,"in stream response ");
+      const response = await axios.get(`/stream/${stdid}`);
       setStreams(response.data);
     } catch (error) {
       console.error('Error fetching streams:', error);
@@ -120,26 +128,22 @@ export const CreateExam = () => {
     setIsTimeLimit(event.target.value);
   };
   const fetchSubjects = async (streamId,stdid) => {
-    console.log(stdid,"id of subject");
-    console.log(streamId,"id of stream");
     try {
       if(stdid){
         console.log("call in subject without stream id");
-        let response = await axios.get(`http://localhost:3000/subjects/${stdid}`)
-        console.log(response.data,"in without stream subject");
+        let response = await axios.get(`/subjects/${stdid}`)
         setSubjects(response.data);
       }else{
         console.log("call in else");
-      const response = await axios.get(`http://localhost:3000/subject/${streamId}`);
+      const response = await axios.get(`/subject/${streamId}`);
       setSubjects(response.data.result);}
     } catch (error) {
       console.error('Error fetching subjects:', error);
     }
   };
 const fetchTopics = async (stdId,subjectId) =>{
-  console.log(subjectId,"subjectid",stdId,"stdIds");
   try{
-    const response=await axios.get(`http://localhost:3000/Topics/${stdId}/${subjectId}`)
+    const response=await axios.get(`/Topics/${stdId}/${subjectId}`)
     console.log(response.data.result,"topic api");
     setTopics(response.data.result)
   } catch(error){
@@ -149,8 +153,7 @@ const fetchTopics = async (stdId,subjectId) =>{
 
 const fetchTypes = async()=>{
   try {
-    const response = await axios.get('http://localhost:3000/type')
-    console.log(response.data.result,"types");
+    const response = await axios.get('/type')
     setTypes(response.data.result)
   } catch (error) {
     console.log("error",error);
@@ -158,8 +161,7 @@ const fetchTypes = async()=>{
 }
 const fetchstd = async()=>{
   try {
-    const response = await axios.get('http://localhost:3000/getstd') 
-    console.log(response.data.data,"std");
+    const response = await axios.get('/getstd') 
     setstandards(response.data.data);
     
   } catch (error) {
@@ -169,7 +171,6 @@ const fetchstd = async()=>{
   const handleStreamChange = async (event) => {
     const streamId = event.target.value;
     setSelectedStream(streamId);
-    console.log("Selected Stream:", streamId);
     setSelectedSubject('');
     setSelectedTopic('');
     fetchSubjects(streamId,'');
@@ -183,11 +184,10 @@ const fetchstd = async()=>{
     setSelectedStandards(stdId)
     console.log(stdId,"std id");
     try {
-      const response = await axios.get(`http://localhost:3000/std/${stdId}`);
+      const response = await axios.get(`/std/${stdId}`);
       const stds = response.data.data;
       const std = stds.map(item=>item.std)
       setstd(std)
-      console.log(std,"call stddd");
       if (parseInt(std) > 10) {
         console.log("call >10");
         fetchStreams(stdId); 
@@ -205,18 +205,15 @@ const fetchstd = async()=>{
     const subjectId = event.target.value;
     setSelectedSubject(subjectId);
     setSelectedTopic('');
-    console.log("Selected Subject:", subjectId);
     fetchTopics(SelectedStandards,subjectId);
   };
   const handelTopicChange = async(event)=>{
     const TopicId = event.target.value;
     setSelectedTopic(TopicId);
-    console.log("Selected Topic",TopicId);
   };
   const handelTypeChange = async(event)=>{
     const TypeId = event.target.value;
     setSelectedType(TypeId);
-    console.log("Selected Type",TypeId);
   }
   const navigate = useNavigate();
   const defaultTheme = createTheme();
@@ -231,7 +228,7 @@ const fetchstd = async()=>{
     }
     console.log(data,"data");
     try {
-      const result = await toast.promise(axios.post("http://localhost:3000/exam", data), {
+      const result = await toast.promise(axios.post("/exam", data), {
         pending: "Creating Exam...",
         success: "Exam Created Successfully!",
         error: "Failed to create Exam. Please try again.",
@@ -292,6 +289,7 @@ const fetchstd = async()=>{
                 type="Number"
                 autoFocus
                 {...register("noofquestions",validationSchema.noofQuestion)}
+                onChange={(e)=>setquestion(e.target.value)}
               />
               {errors.noofquestions && (
               <span style={{ color: "red" }}>{errors.noofquestions.message}</span>
@@ -319,22 +317,7 @@ const fetchstd = async()=>{
         </RadioGroup>
       </FormControl>
       </Grid>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="given-title"
-                name="TotalMarks"
-                required
-                fullWidth
-                id="totalmarks"
-                label="totalmarks"
-                type="Number"
-                autoFocus
-                {...register("totalmarks",validationSchema.totalmarks)}
-              />
-              {errors.totalmarks && (
-              <span style={{ color: "red" }}>{errors.totalmarks.message}</span>
-            )}
-            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 autoComplete="given-title"
@@ -346,10 +329,26 @@ const fetchstd = async()=>{
                 type="Number"
                 autoFocus
                 {...register("perQuestionmarks",validationSchema.Perquestionmarks)}
+                onChange={(e)=>setPerquestionmarks(e.target.value)}
               />
               {errors.perQuestionmarks && (
               <span style={{ color: "red" }}>{errors.perQuestionmarks.message}</span>
             )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="given-title"
+                name="TotalMarks"
+                // required
+                fullWidth
+                id="totalmarks"
+                label="totalmarks"
+                type="Number"
+                value={totalMarks}
+                autoFocus
+                readOnly 
+                {...register("totalmarks",validationSchema.totalmarks)}
+              />
             </Grid>
             <Grid item xs={12}>
             <FormControl fullWidth>

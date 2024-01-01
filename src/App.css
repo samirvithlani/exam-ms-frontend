@@ -1,42 +1,327 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.App {
   text-align: center;
+  font-family: 'Poppins';
+  padding: 5px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
-@keyframes logo-spin {
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.login-container {
+  display: flex;
+  flex-direction: row;
 }
 
-.card {
-  padding: 2em;
+.login-text-field {
+  font-family: 'poppins';
+  font-weight: 500;
+  font-size: 14px;
+  color: #6b7a99;
 }
 
-.read-the-docs {
-  color: #888;
+.login-left {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 50%;
+  justify-content: right;
+  align-items: end;
+}
+
+.login-right {
+  display: flex;
+  flex: 0 0 50%;
+  margin: 0;
+  padding: 0;
+  justify-content: end;
+}
+
+.login-right img {
+  width: auto;
+  height: 100%;
+  position: absolute;
+}
+
+.login-box {
+  width: 60%;
+  margin: 25% auto;
+}
+
+.bxi-logo-img {
+  height: 30%;
+}
+
+.MuiButton-label .btn-login {
+  font-family: 'poppins';
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+.login-title {
+  display: flex;
+  justify-content: center;
+  font-family: 'poppins';
+  font-weight: 500;
+  font-size: 23px;
+  color: #6b7a99;
+}
+
+.selectDropdownStyle {
+  width: 100%;
+  background: rgba(243, 246, 249, 1);
+  border-radius: 15px !important;
+}
+
+.selectDropdownLabel {
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 12px;
+  width: 40%;
+}
+
+.selectDropdownStyle .MuiSelect-select,
+.MuiMenuItem-root {
+  font-size: 12px !important;
+  font-family: 'poppins' !important;
+  font-weight: 400 !important;
+}
+
+.page-header-dropwon-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  gap: 40px;
+}
+
+.page-header-dropwon-section .MuiFormControl-root {
+  width: 30%;
+}
+
+.horizontal-line {
+  margin: 20px 0;
+  border-color: rgba(240, 240, 240, 1);
+}
+
+table.common-table {
+  width: 100%;
+  text-align: center;
+}
+
+table.common-table thead {
+  color: rgba(146, 158, 174, 1);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins';
+}
+
+table.common-table tbody {
+  color: rgba(107, 122, 153, 1);
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.custom-y-axis .rv-xy-plot__axis--y {
+  width: 200px !important;
+  /* Set your desired width here */
+  /* Add other styling properties as needed */
+}
+
+.form-opacity {
+  opacity: 0.7;
+  /* Set your desired opacity value here */
+  pointer-events: none;
+  /* This ensures that the form cannot be interacted with while it's semi-transparent */
+}
+
+.members-graph-page-container {
+  background: #FAFBFC;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 600px;
+  margin: 10px 0;
+}
+
+.custom-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  -webkit-filter: invert(1);
+}
+
+.total-products-badge.custom-tab {
+  justify-content: space-between;
+  display: flex;
+}
+
+.total-products-badge.custom-tab span {
+  cursor: pointer;
+}
+
+.fileinputs {
+  position: relative;
+}
+
+.fileinputs .fakefile {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+.fileinputs .file {
+  position: relative;
+  text-align: right;
+  opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+  z-index: 2;
+}
+
+.fileinputs .fakefile span {
+  background: #445FD2;
+  padding: 8px;
+  border: 1px solid #445FD2;
+  border-radius: 4px;
+  position: absolute;
+  right: 0px;
+  color: #fff;
+  width: 160px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Poppins;
+}
+
+.primary-btn {
+  background: #445FD2;
+  border: 1px solid #445FD2;
+  border-radius: 10px;
+  padding: 10px 30px;
+  color: #fff;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.filter-model-style{
+  position: absolute;
+  width: 90%;
+  max-width: 430px;
+  height: 100%;
+  right: 5%;
+  top: 4%;
+  max-height: 90vh;
+  overflow-y: scroll;
+  background: #fff;
+  border-radius: 10px;
+}
+.popup-filters-container {
+  padding: 40px;
+}
+
+.popup-filters-container .filters-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-filters-container .filters-heading label {
+  color: #323232;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.popup-filters-container .filters-heading img {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.popup-filters-container .filters-section {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  color: #6B7A99;
+}
+
+.popup-filters-container .filters-section label {
+  color: #6B7A99;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.radio-group .MuiFormControlLabel-label {
+  color: #6B7A99;
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 10px;
+}
+
+.radio-group svg.MuiSvgIcon-root {
+  width: 15px;
+  height: 15px;
+}
+
+.popup-filters-container .filter-button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.popup-filters-container .filter-button-container button {
+  background: none;
+  border: none;
+  font-family: 'Poppins';
+  font-weight: 600;
+  font-size: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.popup-filters-container .filter-button-container button.apply {
+  background: #445FD2;
+  border: 1px solid #445FD2;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.popup-filters-container .filter-button-container button.cancel {
+  color: #B5B5C3;
 }

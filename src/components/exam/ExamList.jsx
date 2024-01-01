@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Add, DeleteOutline, Edit, PlusOneOutlined } from '@mui/icons-material';
+import { Add, DeleteOutline, Edit, PlusOneOutlined , Visibility } from '@mui/icons-material';
 import { IconButton , Tooltip } from '@mui/material';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
@@ -29,8 +29,7 @@ const ExamList = () => {
   const [allQuestions, setAllQuestions] = useState([]); 
   const fetchallquestion = async()=>{
     try {
-      const response = await axios.get('http://localhost:3000/mcq')
-      console.log(response.data,"question");
+      const response = await axios.get('/mcq')
       setAllQuestions(response.data)
     } catch (error) {
       console.log("error ",error);
@@ -40,11 +39,9 @@ const ExamList = () => {
     fetchallquestion();
   },[]);
   const navigate = useNavigate();
-  // const history = useHistory(); 
   const fetchData = async () => {
-        axios.get('http://localhost:3000/Exam')
+        axios.get('/Exam')
         .then((response) => {
-          console.log(response,"response");
           const filteredData = response.data.map((exam,index) => ({
             displayid: index+1,
             name: exam.name,
@@ -62,9 +59,12 @@ const ExamList = () => {
             totalmarks:exam.totalmarks,
             id: exam._id,
             topicId:exam.examtopic?._id || 'N/A',
-            difficultyId:exam.difficulty?._id || 'NA'
+            difficultyId:exam.difficulty?exam.difficulty._id: "NA" ,
+            subjectId : exam.subject?._id || 'NA',
+            streamId : exam.stream?._id || 'NA',
+            standardId :exam.std? exam.std._id:'NA',
+            typeId :exam.examtype?._id || 'N/A'
           }));
-          console.log(filteredData,"filterdata");
           setExamData(filteredData); 
         })
         .catch((error) => {
@@ -79,11 +79,10 @@ const ExamList = () => {
 
   const handleEdit = (id) => {
     navigate(`/update-exam/${id}`);
-    console.log(`Edit row with ID: ${id}`);
   };
-  const handleAddQuestions = (stream,id) => {
-    if (stream === 'mcq') {
-      navigate(`/adminDashboard/mcqquestion/${id}`); 
+  const handleAddQuestions = (type,id,subject,stream,difficulty,standard,subjectId,streamId,topicId,difficultyId,standardId,topic,types,typeId) => {
+    if (type === 'mcq') {
+      navigate(`/adminDashboard/mcqquestion/${id}`, { state: { subject,stream,difficulty,standard,subjectId,streamId,topicId,difficultyId,standardId,topic,types,typeId} }); 
     } else {
       navigate('/adminDashboard');
     }
@@ -91,7 +90,7 @@ const ExamList = () => {
 
   const handleDelete = async (id) => {
     try {
-         await toast.promise(axios.delete(`http://localhost:3000/exam/${id}`), {
+         await toast.promise(axios.delete(`/exam/${id}`), {
             pending: "Creating Exam...",
             success: "Exam Deleted Successfully!",
             error: "Failed to create Exam. Please try again.",
@@ -104,30 +103,27 @@ const ExamList = () => {
     console.log(`Delete row with ID: ${id}`);
   };
   const handleGenerateQuestions = async (topicId, noOfQuestions,id,difficultyId) => {
-    console.log(id,"id in genreate");
-    console.log(topicId,"topic");
-    console.log(difficultyId,"difficulty");
-    console.log(noOfQuestions,"no of question");
     try {
       const filteredQuestions = allQuestions.filter(question => question.Topic._id === topicId && question.difficulty === difficultyId);
       console.log(filteredQuestions,"question filtyer");
       if (filteredQuestions.length < noOfQuestions) {
-        console.log('Insufficient questions available for this topic.');
         toast.error('Insufficient questions available for this topic.')
         return;
       }
       const shuffledQuestions = filteredQuestions.sort(() => 0.5 - Math.random());
       const mcq = shuffledQuestions.slice(0, noOfQuestions);
-      const updateQuestionResponse = await axios.put(`http://localhost:3000/mcq/${id}`, {
+      const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
         mcq
         });
-        console.log("updateresponse",updateQuestionResponse);
-      console.log('Generated questions:', mcq);
       toast.success('Questions generated successfully!');
     } catch (error) {
       console.error('Error generating questions:', error);
       toast.error('Failed to generate questions. Please try again.');
     }
+  };
+  const handleView = (id,subject,stream,difficulty,standard,topic,type) => {
+
+    navigate(`/viewexam/${id}`,{state :{subject,stream,difficulty,standard,topic,type}});
   };
   return (
     <div>
@@ -142,6 +138,16 @@ const ExamList = () => {
               return (
                 
                 <div>
+                   <Tooltip title="View Exam" arrow>
+                      <IconButton
+                        aria-label="view"
+                        onClick={() => handleView(params.row.id,params.row.Subject,params.row.Stream,params.row.Difficulty,params.row.Standard,
+                          params.row.examTopic,params.row.examType )}
+                      >
+                      <Visibility />
+
+                      </IconButton>
+                      </Tooltip>
                   <Tooltip title="Edit Questions" arrow>
                   <IconButton
                     aria-label="edit"
@@ -161,7 +167,7 @@ const ExamList = () => {
                   <Tooltip title="Add Questions" arrow>
                   <IconButton
                       aria-label="add"
-                      onClick={() => handleAddQuestions('mcq',params.row.id)} 
+                      onClick={() => handleAddQuestions('mcq',params.row.id,params.row.Subject,params.row.Stream,params.row.Difficulty,params.row.Standard,params.row.subjectId,params.row.streamId,params.row.topicId,params.row.difficultyId,params.row.standardId,params.row.examTopic,params.row.examType,params.row.typeId)} 
                       color="primary"
                     >
                       <Add/>

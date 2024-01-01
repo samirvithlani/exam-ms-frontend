@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom';
+import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,24 +15,40 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from 'react-router-dom';
+import { useState ,useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
-export default function SignUp() {
+export default function UserRegistration() {
+  const navigate = useNavigate();
+    const [email,setemail] = useState('')
+    const {id} = useParams();
+    console.log(id,"id");
+    useEffect(()=>{
+        fetchdata();
+    },[])
+    const fetchdata = async() =>{
+        try {
+            let result = await axios.get(`/user/${id}`)
+            let email = result.data.email;
+            setemail(email);
+        } catch (error) {
+            
+        }
+    }
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const userData = {
           firstname: data.get('firstname'),
           lastname: data.get('lastname'),
-          email: data.get('email'),
           password: data.get('password'),
           phone:data.get('phone')
         };
-        console.log(userData);
     
         try {
-          const response = await axios.post('/signup', userData);
-            console.log(response.data);
+          const response = await axios.put(`/update/${id}`, userData);
           const { message } = response.data;
           console.log(message,"message");
           if (response.status === 200) {
@@ -42,6 +58,7 @@ export default function SignUp() {
           else {
             console.error('Signup failed');
           }
+          navigate('/login')
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 const errorMessage = error.response.data.message;
@@ -65,11 +82,8 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Registration
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -99,9 +113,10 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                //   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -132,15 +147,9 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign UP
+              Register
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to={"/login"}>
-                  Already have an account? log in
-                </Link>
-              </Grid>
-            </Grid>
+            
           </Box>
         </Box>
       </Container>
@@ -149,3 +158,4 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+//UserRegistration

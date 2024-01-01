@@ -5,8 +5,10 @@ import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Grid, But
 import Cookies from 'js-cookie'; 
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const MCQQuestionsPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -23,7 +25,7 @@ const MCQQuestionsPage = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/exam/${id}`);
+      const response = await axios.get(`/exam/${id}`);
       setQuestions(response.data.mcq);
       initializeAnswers(response.data.mcq);
     } catch (error) {
@@ -67,12 +69,12 @@ const MCQQuestionsPage = () => {
    }
    console.log("sumited data: ",data);
     try {
-      const result = await toast.promise(axios.post("http://localhost:3000/add", data), {
+      const result = await toast.promise(axios.post("/add", data), {
         pending: "completed Exam...",
         success: "Exam completed Successfully!",
         error: "Failed to completed Exam. Please try again.",
       });
-      console.log(result); 
+      navigate('/userDasboard/history')
     } catch (error) {
       console.log(error,"erroro");
     }

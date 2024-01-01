@@ -62,14 +62,13 @@ export const UpdateExam = () => {
   }
   const fetchExamDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/exam/${id}`);
+      const response = await axios.get(`/exam/${id}`);
       const { stream, subject, examtopic, examtype, ...otherData } = response.data;
       setNameValue(otherData.name || '');
       setNoOfQuestionsValue(otherData.noofquestions || '');
       // setIsTimeLimitValue(otherData.isTimeLimit ||'');
       setTotalMarksValue(otherData.totalmarks);
       setPerQuestionMarksValue(otherData.perQuestionmarks)
-      console.log(response.data.stream.name,"datatatatatatatata");
       setExamData({ stream, subject, examtopic, examtype });;
       setSelectedStream(response.data.stream._id);
       setSelectedSubject(response.data.subject.name);
@@ -81,7 +80,7 @@ export const UpdateExam = () => {
   };
   const fetchStreams = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/stream');
+      const response = await axios.get('/stream');
       setStreams(response.data);
     } catch (error) {
       console.error('Error fetching streams:', error);
@@ -90,7 +89,7 @@ export const UpdateExam = () => {
 
   const fetchSubjects = async (streamId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/subject/${streamId}`);
+      const response = await axios.get(`/subject/${streamId}`);
       setSubjects(response.data.result);
     } catch (error) {
       console.error('Error fetching subjects:', error);
@@ -98,8 +97,7 @@ export const UpdateExam = () => {
   };
 const fetchTopics = async (subjectId) =>{
   try{
-    const response=await axios.get(`http://localhost:3000/Topic/${subjectId}`)
-    console.log(response.data.result,"topic api");
+    const response=await axios.get(`/Topic/${subjectId}`)
     setTopics(response.data.result)
   } catch(error){
     console.log("Error fetching topics : ",error);
@@ -107,8 +105,7 @@ const fetchTopics = async (subjectId) =>{
 };
 const fetchTypes = async()=>{
   try {
-    const response = await axios.get('http://localhost:3000/type')
-    console.log(response.data.result,"types");
+    const response = await axios.get('/type')
     setTypes(response.data.result)
   } catch (error) {
     console.log("error",error);
@@ -120,34 +117,27 @@ const fetchTypes = async()=>{
     console.log("Selected Stream:", streamId);
     setSelectedSubject('');
       setSelectedTopic('');
-  
-      // Fetch subjects based on the selected stream
       fetchSubjects(streamId);
   };
   const handleSubjectChange = async (event) => {
     const subjectId = event.target.value;
     setSelectedSubject(subjectId);
     setSelectedTopic('');
-    console.log("Selected Subject:", subjectId);
-
     fetchTopics(subjectId);
   };
   const handelTopicChange = async(event)=>{
     const TopicId = event.target.value;
     setSelectedTopic(TopicId);
-    console.log("Selected Topic",TopicId);
   };
   const handelTypeChange = async(event)=>{
     const TypeId = event.target.value;
     setSelectedType(TypeId);
-    console.log("Selected Type",TypeId);
   }
   const navigate = useNavigate();
   const defaultTheme = createTheme();
   const { register, handleSubmit ,reset} = useForm();
 
   const submitHandler = async (data) => {
-    console.log(data,"data");
     const updatedFields = {};
 
     if (nameValue !== examData.name) {
@@ -180,7 +170,7 @@ const fetchTypes = async()=>{
     }
     
     try {
-        const result = await toast.promise(axios.put(`http://localhost:3000/exam/${id}`,updatedFields), {
+        const result = await toast.promise(axios.put(`/exam/${id}`,updatedFields), {
             pending: "Updating Exam...",
             success: "Exam Update Successfully!",
             error: "Failed to Update Exam. Please try again.",

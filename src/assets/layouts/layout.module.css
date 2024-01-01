@@ -1,0 +1,36 @@
+.activebtn {
+    position: absolute;
+    background: #445FD2;
+    border-radius: 10px;
+    color : #FFFFFF;
+    font-family: "Poppins"; 
+    font-Weight: 500 !important;
+    font-Size: 13px !important;
+}
+
+.activebtn span{
+    color : #FFFFFF;
+    font-family: "Poppins"; 
+    font-Weight: 500 !important;
+    font-Size: 13px !important;
+}
+
+.sidebarbox {
+    width: 240px;
+    flex-Shrink: 0;
+    position: inherit !important;
+}
+
+.sidebarbox .MuiDrawer-paper{
+      width: 240px;
+      box-sizing : border-box;
+}
+
+.sidebartext span{
+    font-family: "Poppins"; 
+    font-Weight: 500 !important;
+    font-Size: 13px !important;
+}
+.disabled-link .MuiButtonBase-root{
+    cursor: not-allowed;
+}

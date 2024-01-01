@@ -25,11 +25,10 @@ const Dashboard = () => {
     fetchDifficultyLevels();
     fetchstd();
     fetchhistory();
-    filterExamsByHistory();
   }, []);
 const fetchstd = async()=>{
   try {
-    const response = await axios.get('http://localhost:3000/getstd') 
+    const response = await axios.get('/getstd') 
     console.log(response.data.data,"std");
     setstandards(response.data.data);
     
@@ -40,7 +39,7 @@ const fetchstd = async()=>{
 
   const fetchDifficultyLevels = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/difficulty');
+      const response = await axios.get('/difficulty');
       let data = response.data;
       console.log(data, "in difficulties");
       setDifficulties(data);
@@ -70,19 +69,18 @@ const fetchstd = async()=>{
   const fetchhistory = async () => {
     const _id = Cookies.get('_id');
     try {
-      const response = await axios.get(`http://localhost:3000/userhistory/${_id}`);
+      const response = await axios.get(`/userhistory/${_id}`);
       let data = (response.data.map(item=>item.exam_id._id));
+      console.log(data,"exam history");
       setUserHistory(data)
     }catch(err){
       console.log(err,"error");
     }
   }
   const filterExamsByHistory = () => {
-    let data =examList.map((exam) => exam.id);
-    console.log(data,"filter data");
-
-    return examList.filter((exam) => !userHistory.includes(exam.id));
+   return examList.filter(exam => !userHistory.includes(exam.id))
   };
+  const filteredExams  = filterExamsByHistory();
       const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
       { field: 'name', headerName: 'Exam Name', width: 200 },
@@ -113,7 +111,7 @@ const fetchstd = async()=>{
         ),
       }      ];
   const fetchData = async (stdId,selectedDifficulty) => {
-    await axios.get(`http://localhost:3000/exams/${selectedDifficulty}/${stdId}`)
+    await axios.get(`/exams/${selectedDifficulty}/${stdId}`)
     .then((response) => {
       console.log(response,"response");
       const filteredData = response.data.data.map((exam,index) => ({
@@ -144,6 +142,11 @@ const fetchstd = async()=>{
     });
 
   }
+  const styles = {
+    fullWidthSelect: {
+      width: '50%',
+    },
+  };
   const defaultTheme = createTheme();
 
   return (
@@ -151,7 +154,7 @@ const fetchstd = async()=>{
       <CssBaseline />
       <Grid  container spacing={3}>
         <Grid item xs={12} >
-          <FormControl fullWidth sx={{ minWidth: 500 }}>
+        <FormControl style={styles.fullWidthSelect}>
             <InputLabel id="demo-simple-select-label">Select Difficulty</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -169,7 +172,7 @@ const fetchstd = async()=>{
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-            <FormControl fullWidth>
+        <FormControl style={styles.fullWidthSelect}>
       <InputLabel id="demo-simple-select-label">Select Std</InputLabel>
       <Select
         labelId="demo-simple-select-label"
@@ -187,17 +190,19 @@ const fetchstd = async()=>{
     </FormControl>
       </Grid>
       <Grid item xs={12}>
-      {filterExamsByHistory().map((exam) => (
-          <div style={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={examList}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5, 10, 20]}
-              disableSelectionOnClick
+          {filteredExams.length > 0 ? (
+            
+              <DataGrid
+                rows={filteredExams}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                disableSelectionOnClick
               />
-          </div>
-          ))}
+
+          ) : (
+            <p>No available exams</p>
+          )}
         </Grid>
       </Grid>
     </ThemeProvider>

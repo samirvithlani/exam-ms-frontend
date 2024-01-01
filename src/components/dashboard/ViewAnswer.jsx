@@ -23,7 +23,7 @@ export const ViewAnswer = () => {
   };
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/answers/${id}`);
+      const response = await axios.get(`/answers/${id}`);
       const filterData = response.data.flatMap(answer =>
         answer.mcq_answers.map(mcqAnswer => ({
           id: mcqAnswer._id,

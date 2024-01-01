@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -30,21 +30,27 @@ export default function Login() {
         password: data.get('password'),
       };
       console.log(userData);
-      if (userData.email === 'admin@gmail.com') {
-        console.log("call iffffffffffffffffffffffff");
+      if (userData.email === 'admin@gmail.com'&& userData.password === 'admin') {
+       Cookies.set('name','admin')
         navigate('/adminDashboard')
         return;
       }
       try {
        
-        const response =  await axios.post('http://localhost:3000/login', userData);
+        const response =  await axios.post('/login', userData);
           console.log(response.data,"login data");
         const { message } = response.data;
         console.log(message,"message");
         if (response.status === 200) {
           toast.success(message);
-          const {_id} = response.data; 
-          Cookies.set('_id', _id); 
+          const {_id,name,role} = response.data; 
+          Cookies.set('_id', _id);
+          Cookies.set('name',name) ;
+          if(role == "student"){
+            navigate('/userDasboard')
+          } else{
+            navigate('/adminDashboard')
+          }
         }
         else {
           console.error('Signup failed');
@@ -58,7 +64,7 @@ export default function Login() {
               console.error('Error occurred:', error);
             }
           }
-          navigate('/dashboard')
+          // navigate('/dashboard')
     };
 
 
@@ -111,7 +117,7 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link to={'/'}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

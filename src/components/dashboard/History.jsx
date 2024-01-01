@@ -19,8 +19,8 @@ const Historyofuser = () => {
     { field: 'name', headerName: 'Exam Name', width: 200 },
     { field: 'examType', headerName: 'Exam Type', width: 150 },
     { field: 'noOfQuestions', headerName: 'No. of Questions', width: 180 },
-    { field: 'totalmarks', headerName: 'Total Marks', width: 280 },
-    { field: 'result', headerName: 'Result', width: 280 },
+    { field: 'totalmarks', headerName: 'Total Marks', width: 240 },
+    { field: 'result', headerName: 'Result', width: 200 },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -39,13 +39,13 @@ const Historyofuser = () => {
   ];
 
   const viewAnswer = (id) => {
-    navigate(`/viewAnswers/${id}`);
+    navigate(`/userDasboard/viewAnswers/${id}`);
   };
   
   const fetchData = async () => {
     const _id = Cookies.get('_id');
     try {
-      const response = await axios.get(`http://localhost:3000/userhistory/${_id}`);
+      const response = await axios.get(`/userhistory/${_id}`);
       console.log(response);
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,

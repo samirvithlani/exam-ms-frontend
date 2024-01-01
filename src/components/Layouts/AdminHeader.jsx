@@ -9,6 +9,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 //import barterLogo from "../../assets/BXI_LOGO.png";
+import Cookies from 'js-cookie';
+import { red } from '@mui/material/colors';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useEffect ,useState} from "react";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -26,7 +31,6 @@ const Search = styled('div')(({ theme }) => ({
     },
     background: '#FAFBFC',
     border: '1px solid #445FD2',
-    // borderRadius: '6px'
   }));
 
   const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -56,6 +60,17 @@ const Search = styled('div')(({ theme }) => ({
 const pages = ['Home', 'About', 'Marketplace','Contact Us'];
 
 const AdminHeader = () =>{
+ 
+  const name = Cookies.get('name');
+  const navigate = useNavigate();
+  const logout = ()=>{
+    console.log("logging out");
+    Cookies.remove('name');
+    navigate('/login');
+  }
+  useEffect(()=>{
+  },[])
+  
     return (
         <Box className = "main-box">
             <AppBar position="static" sx= {{backgroundColor: "#FDFDFD",color:"#6B7A99",boxShadow:0,borderBottom:'2px solid #F0F0F0'}} >
@@ -68,28 +83,12 @@ const AdminHeader = () =>{
                     style={{ height: "auto", width: "50px" }}
                   /> */}
                 </Box>
+                <h4 style={{ marginRight: '10px'}}>Welcome {name}</h4>                
                 <Typography sx = {{mr: 5,fontFamily: 'Poppins',fontWeight: 700,color: '#6B7A99',textDecoration: 'none',fontSize: '16px'}}>
                     Admin Panel
                 </Typography>
-                <Search>
-                    <SearchIconWrapper>
-                    <RefreshIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Quick Find"
-                        inputProps={{ 'aria-label': 'refresh' }}
-                        />
-                </Search>
-                {/* <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {pages.map((page) => (
-                    <Button
-                        key={page}
-                        sx={{ my: 2, color: '#6B7A99',fontSize: '10px', display: 'block',fontFamily: 'Poppins', fontWeight: 400,}}
-                    >
-                        {page}
-                    </Button>
-                    ))}
-                </Box> */}
+               
+                  <button style={{ fontSize: '12px', padding: '5px 10px' }} onClick={logout}>LogOut</button>
                 </Toolbar>
             </Container>
             </AppBar>
