@@ -29,7 +29,6 @@ const Dashboard = () => {
 const fetchstd = async()=>{
   try {
     const response = await axios.get('/getstd') 
-    console.log(response.data.data,"std");
     setstandards(response.data.data);
     
   } catch (error) {
@@ -41,7 +40,6 @@ const fetchstd = async()=>{
     try {
       const response = await axios.get('/difficulty');
       let data = response.data;
-      console.log(data, "in difficulties");
       setDifficulties(data);
     } catch (error) {
       console.error('Error fetching difficulty levels:', error);
@@ -50,7 +48,6 @@ const fetchstd = async()=>{
 
   const handleDifficulty = async (event) => {
     const difficultyId = event.target.value;
-    console.log(difficultyId,"idds ");
     setSelectedDifficulty(difficultyId);
     fetchData(SelectedStandards, difficultyId);
 
@@ -58,12 +55,9 @@ const fetchstd = async()=>{
   const handelStd = async (event) =>{
     const stdId = event.target.value;
     setSelectedStandards(stdId)
-    console.log(stdId,"std id");
     fetchData(stdId,selectedDifficulty)
 }
   const handleStartExam = (examId,examtype_id,totalmarks) => {
-    console.log(examtype_id,"type id ");
-    console.log(`Starting exam with ID: ${examId}`);
     navigate(`/question/${examId}`, { state: { examtype_id,totalmarks } });
   }
   const fetchhistory = async () => {
@@ -71,7 +65,6 @@ const fetchstd = async()=>{
     try {
       const response = await axios.get(`/userhistory/${_id}`);
       let data = (response.data.map(item=>item.exam_id._id));
-      console.log(data,"exam history");
       setUserHistory(data)
     }catch(err){
       console.log(err,"error");
@@ -113,7 +106,6 @@ const fetchstd = async()=>{
   const fetchData = async (stdId,selectedDifficulty) => {
     await axios.get(`/exams/${selectedDifficulty}/${stdId}`)
     .then((response) => {
-      console.log(response,"response");
       const filteredData = response.data.data.map((exam,index) => ({
         displayid: index+1,
         name: exam.name,
@@ -134,7 +126,6 @@ const fetchstd = async()=>{
         difficultyId:exam.difficulty?._id || 'NA',
         examtype_id:exam.examtype?._id || 'N/A'
       }));
-      console.log(filteredData,"filterdata");
       setExamList(filteredData); 
     })
     .catch((error) => {

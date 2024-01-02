@@ -116,7 +116,6 @@ export const CreateExam = () => {
     }
   }
   const fetchStreams = async (stdid) => {
-    console.log(stdid,"stdidsss");
     try {
       const response = await axios.get(`/stream/${stdid}`);
       setStreams(response.data);
@@ -130,11 +129,9 @@ export const CreateExam = () => {
   const fetchSubjects = async (streamId,stdid) => {
     try {
       if(stdid){
-        console.log("call in subject without stream id");
         let response = await axios.get(`/subjects/${stdid}`)
         setSubjects(response.data);
       }else{
-        console.log("call in else");
       const response = await axios.get(`/subject/${streamId}`);
       setSubjects(response.data.result);}
     } catch (error) {
@@ -144,7 +141,6 @@ export const CreateExam = () => {
 const fetchTopics = async (stdId,subjectId) =>{
   try{
     const response=await axios.get(`/Topics/${stdId}/${subjectId}`)
-    console.log(response.data.result,"topic api");
     setTopics(response.data.result)
   } catch(error){
     console.log("Error fetching topics : ",error);
@@ -182,17 +178,14 @@ const fetchstd = async()=>{
   const handelStd = async (event) =>{
     const stdId = event.target.value;
     setSelectedStandards(stdId)
-    console.log(stdId,"std id");
     try {
       const response = await axios.get(`/std/${stdId}`);
       const stds = response.data.data;
       const std = stds.map(item=>item.std)
       setstd(std)
       if (parseInt(std) > 10) {
-        console.log("call >10");
         fetchStreams(stdId); 
       } else {
-        console.log("call <10");
         setStreams([]);
         fetchSubjects('',stdId); 
       }
@@ -226,14 +219,12 @@ const fetchstd = async()=>{
       toast.error('All fields are required.');
       return;
     }
-    console.log(data,"data");
     try {
       const result = await toast.promise(axios.post("/exam", data), {
         pending: "Creating Exam...",
         success: "Exam Created Successfully!",
         error: "Failed to create Exam. Please try again.",
       });
-      console.log(result); 
       reset();
       setSelectedStandards('');
       setselecteddefficultie('')

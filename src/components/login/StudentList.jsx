@@ -12,9 +12,7 @@ fetchdata();
   }, []);
 const fetchdata = async()=>{
 let response = await axios.get('/user')
-console.log(response.data);
 const facultyData = response.data.filter(user => user.role.role === 'student');
-console.log(facultyData);
 let filterdata = facultyData.map((faculty,index)=>({
     displayid: index+1,
     id:faculty._id,
@@ -24,7 +22,6 @@ let filterdata = facultyData.map((faculty,index)=>({
     status:faculty.status
 }))
 setstudents(filterdata);
-console.log(filterdata,"filter data"); 
 }
 const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },

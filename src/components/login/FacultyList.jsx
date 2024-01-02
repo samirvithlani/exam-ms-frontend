@@ -18,7 +18,6 @@ fetchRolesData();
     try {
       const response = await axios.get('/role');
       let data = response.data     
-      console.log(response.data,"response");
         setRolesData(data);
           } catch (error) {
       console.error('Error fetching data:', error);
@@ -27,7 +26,6 @@ fetchRolesData();
   const handleAddRoleClick = (role) => {
     const roleData = rolesData.find(item => item.role === role);
     if (roleData) {
-      console.log(roleData._id,"roledata id");
       navigate(`/add/${roleData._id}`);
     } else {
       console.log(`No data found for the ${role} role.`);
@@ -36,7 +34,6 @@ fetchRolesData();
 const fetchdata = async()=>{
 let response = await axios.get('/user')
 const facultyData = response.data.filter(user => user.role.role === 'faculty');
-console.log(facultyData);
 let filterdata = facultyData.map((faculty,index)=>({
     displayid: index+1,
     id:faculty._id,
@@ -46,7 +43,6 @@ let filterdata = facultyData.map((faculty,index)=>({
     status:faculty.status
 }))
 setFacultyUsers(filterdata);
-console.log(filterdata,"filter data"); 
 }
 const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },

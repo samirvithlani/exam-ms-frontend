@@ -32,9 +32,7 @@ export const ViewExam = () => {
       const type = location.state?.type;
     const fetchexams = async () =>{
         const response = await axios.get(`/exam/${id}`)
-        console.log(response.data.mcq,"response");
         setQuestions(response.data.mcq);
-
     }
   return (
     <div>

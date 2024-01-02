@@ -18,7 +18,6 @@ fetchRolesData();
     try {
       const response = await axios.get('/role');
       let data = response.data     
-      console.log(response.data,"response");
         setRolesData(data);
           } catch (error) {
       console.error('Error fetching data:', error);
