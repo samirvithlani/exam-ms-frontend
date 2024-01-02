@@ -43,9 +43,10 @@ export default function Login() {
         console.log(message,"message");
         if (response.status === 200) {
           toast.success(message);
-          const {_id,name,role} = response.data; 
+          const {_id,name,role,token} = response.data; 
           Cookies.set('_id', _id);
           Cookies.set('name',name) ;
+          Cookies.set('token',token)
           if(role == "student"){
             navigate('/userDasboard')
           } else{

@@ -4,10 +4,27 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import MainRouter from './components/Routers/Routers'
 import axios from "axios";
-
+import Cookies from 'js-cookie'
+import { useEffect } from 'react'
 function App() {
+  const token = Cookies.get("token")
   const [count, setCount] = useState(0)
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = "https://exambackendms.onrender.com/";
+  useEffect(() => {
+    axios.interceptors.request.use(
+      (config) => {
+        const token = Cookies.get('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  }, []); 
+
   return (
     <>
       {/* <AppContext.Provider value={{ count, setCount, data, setdata }}> */}

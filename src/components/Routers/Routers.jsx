@@ -23,17 +23,7 @@ import UserGrid from "../login/FacultyList";
 import CompanyList from "../login/CompanyList";
 import StudentList from "../login/StudentList";
 import { UserSideBar } from "../Layouts/userSidebar";
-import { auth } from "../../Auth/auth";
-const ProtectedRoute = ({ element: Element, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      element={
-        auth() ? <Element /> : <Navigate to="/login" replace />
-      }
-    />
-  );
-};
+
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
   const routesData = createBrowserRouter([
