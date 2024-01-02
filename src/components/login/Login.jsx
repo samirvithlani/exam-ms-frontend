@@ -29,18 +29,10 @@ export default function Login() {
         email: data.get('email'),
         password: data.get('password'),
       };
-      console.log(userData);
-      if (userData.email === 'admin@gmail.com'&& userData.password === 'admin') {
-       Cookies.set('name','admin')
-        navigate('/adminDashboard')
-        return;
-      }
       try {
        
         const response =  await axios.post('/login', userData);
-          console.log(response.data,"login data");
         const { message } = response.data;
-        console.log(message,"message");
         if (response.status === 200) {
           toast.success(message);
           const {_id,name,role,token} = response.data; 

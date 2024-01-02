@@ -17,7 +17,6 @@ export const AddRole = () => {
     const navigate = useNavigate()
     const defaultTheme = createTheme();
     const {role} = useParams();
-    console.log(role);
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);

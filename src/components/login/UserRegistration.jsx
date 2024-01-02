@@ -24,7 +24,6 @@ export default function UserRegistration() {
   const navigate = useNavigate();
     const [email,setemail] = useState('')
     const {id} = useParams();
-    console.log(id,"id");
     useEffect(()=>{
         fetchdata();
     },[])
@@ -50,10 +49,8 @@ export default function UserRegistration() {
         try {
           const response = await axios.put(`/update/${id}`, userData);
           const { message } = response.data;
-          console.log(message,"message");
           if (response.status === 200) {
             toast.success(message);
-            console.log('User signed up successfully!');
           }
           else {
             console.error('Signup failed');

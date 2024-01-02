@@ -16,9 +16,6 @@ const MCQQuestionsPage = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const examtype_id = location.state?.examtype_id;
   const totalmarks = location.state?.totalmarks;
-  console.log('examtype_id:', examtype_id);
-  console.log(totalmarks,"total mrks in mcq page");
-
   useEffect(() => {
     fetchQuestions();
   }, [id]);
@@ -50,7 +47,6 @@ const MCQQuestionsPage = () => {
 
   const handleSubmit = async() => {
     const _id = Cookies.get('_id')
-   console.log(_id,"id of user ");
    const mcqAnswers = [];
   questions.forEach(question => {
     const questionId = question._id;
@@ -67,7 +63,6 @@ const MCQQuestionsPage = () => {
     total_marks:totalmarks,
     status:'completed'
    }
-   console.log("sumited data: ",data);
     try {
       const result = await toast.promise(axios.post("/add", data), {
         pending: "completed Exam...",

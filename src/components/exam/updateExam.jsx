@@ -114,7 +114,6 @@ const fetchTypes = async()=>{
   const handleStreamChange = async (event) => {
     const streamId = event.target.value;
     setSelectedStream(streamId);
-    console.log("Selected Stream:", streamId);
     setSelectedSubject('');
       setSelectedTopic('');
       fetchSubjects(streamId);
@@ -175,7 +174,6 @@ const fetchTypes = async()=>{
             success: "Exam Update Successfully!",
             error: "Failed to Update Exam. Please try again.",
           });
-          console.log(result,"result");
           // navigate('/adminDashboard/examlist'); 
 
       } catch (error) {

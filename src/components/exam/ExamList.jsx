@@ -96,16 +96,13 @@ const ExamList = () => {
             error: "Failed to create Exam. Please try again.",
           });
       setExamData((prevData) => prevData.filter((exam) => exam.id !== id));
-      console.log(`Exam with ID ${id} deleted successfully`);
     } catch (error) {
       console.log("Error while deleting exam:", error);
     }
-    console.log(`Delete row with ID: ${id}`);
   };
   const handleGenerateQuestions = async (topicId, noOfQuestions,id,difficultyId) => {
     try {
       const filteredQuestions = allQuestions.filter(question => question.Topic._id === topicId && question.difficulty === difficultyId);
-      console.log(filteredQuestions,"question filtyer");
       if (filteredQuestions.length < noOfQuestions) {
         toast.error('Insufficient questions available for this topic.')
         return;

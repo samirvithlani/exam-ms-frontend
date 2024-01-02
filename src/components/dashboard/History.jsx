@@ -46,7 +46,6 @@ const Historyofuser = () => {
     const _id = Cookies.get('_id');
     try {
       const response = await axios.get(`/userhistory/${_id}`);
-      console.log(response);
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,
         displayid: index + 1,

@@ -55,9 +55,6 @@
       const topicId = location.state?.topicId;
       const type = location.state?.types;
       const typeId = location.state?.typeId
-      console.log(standard,"standard --------");
-      console.log(subjectId,streamId,difficultyId,standardId,topicId,typeId,"----ids");
-      console.log(subject,stream,difficulty,standard,topic,type,"-----------------");
       useEffect(()=>{
         setSelectStream(streamId)
         setselectdefficultie(difficultyId);
@@ -84,13 +81,11 @@
       const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-          console.log('Selected file:', selectedFile.name);
         }
       };
       const fetchdifficulty = async() =>{
         try {
           const response = await axios.get('/difficulty')
-          console.log(response.data);
           let data = response.data
           setdefficulties(data)
         } catch (error) {
@@ -100,21 +95,17 @@
       const fetchStreams = async (stdid) => {
         try {
           const response = await axios.get(`/stream/${stdid}`);
-          console.log(response,"in stream response ");
           setStreams(response.data);
         } catch (error) {
           console.error('Error fetching streams:', error);
         }
       };
       const fetchSubjects = async (streamId,stdid) => {
-        console.log(stdid,"id of subject");
-        console.log(streamId,"id of stream");
         try {
           if(stdid){
             let response = await axios.get(`/subjects/${stdid}`)
             setSubjects(response.data);
           }else{
-            console.log("call in else");
           const response = await axios.get(`/subject/${streamId}`);
           setSubjects(response.data.result);}
         } catch (error) {
@@ -122,7 +113,6 @@
         }
       };
     const fetchTopics = async (stdId,subjectId) =>{
-      console.log(subjectId,"subjectid",stdId,"stdIds");
       try{
         const response=await axios.get(`/Topics/${stdId}/${subjectId}`)
         setTopics(response.data.result)
@@ -167,12 +157,9 @@
           const stds = response.data.data;
           const std = stds.map(item=>item.std)
           setstd(std)
-          console.log(std,"call stddd");
           if (parseInt(std) > 10) {
-            console.log("call >10");
             fetchStreams(stdId); 
           } else {
-            console.log("call <10");
             setStreams([]);
             fetchSubjects('',stdId); 
           }
@@ -205,7 +192,6 @@
         }
         let response ;
       const formData = new FormData();
-        console.log(data.files, "fileUpload"); 
         if (data.fileUpload && data.fileUpload[0]) {
           formData.append('file', data.fileUpload[0]);
         } 

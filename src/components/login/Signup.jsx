@@ -28,16 +28,12 @@ export default function SignUp() {
           password: data.get('password'),
           phone:data.get('phone')
         };
-        console.log(userData);
     
         try {
           const response = await axios.post('/signup', userData);
-            console.log(response.data);
           const { message } = response.data;
-          console.log(message,"message");
           if (response.status === 200) {
             toast.success(message);
-            console.log('User signed up successfully!');
           }
           else {
             console.error('Signup failed');

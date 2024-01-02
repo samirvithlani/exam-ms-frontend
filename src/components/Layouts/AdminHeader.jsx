@@ -64,7 +64,6 @@ const AdminHeader = () =>{
   const name = Cookies.get('name');
   const navigate = useNavigate();
   const logout = ()=>{
-    console.log("logging out");
     Cookies.remove('name');
     navigate('/login');
   }
