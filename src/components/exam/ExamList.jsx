@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
-      { field: 'name', headerName: 'Exam Name', width: 200 ,headerClassName: 'bold-column'},
+      { field: 'name', headerName: 'Exam Name', width: 200 },
       { field: 'examType', headerName: 'Exam Type', width: 150 },
       { field: 'examTopic', headerName: 'Exam Topic', width: 200 },
       { field: 'Subject', headerName: 'Subject', width: 150 },
