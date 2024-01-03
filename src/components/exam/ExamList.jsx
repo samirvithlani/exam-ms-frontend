@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { Add, DeleteOutline, Edit, PlusOneOutlined , Visibility } from '@mui/icons-material';
@@ -9,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
-      { field: 'name', headerName: 'Exam Name', width: 200 },
+      { field: 'name', headerName: 'Exam Name', width: 200 ,headerClassName: 'bold-column'},
       { field: 'examType', headerName: 'Exam Type', width: 150 },
       { field: 'examTopic', headerName: 'Exam Topic', width: 200 },
       { field: 'Subject', headerName: 'Subject', width: 150 },
@@ -122,17 +121,17 @@ const ExamList = () => {
     navigate(`/viewexam/${id}`,{state :{subject,stream,difficulty,standard,topic,type}});
   };
   return (
-    <div>
-    <Box sx={{ height: 400, width: '100%' }}>
-        
-      <DataGrid
-        rows={examData}
+    <>
+    <div style={{ width:'60%'}}>
+      <h1>Exam List</h1>
+      <div>
+        <DataGrid 
+          rows={examData}
         columns={columns.map((column) => ({
           ...column,
           renderCell: (params) => {
             if (column.field === 'actions') {
               return (
-                
                 <div>
                    <Tooltip title="View Exam" arrow>
                       <IconButton
@@ -183,15 +182,18 @@ const ExamList = () => {
                 </div>
               );
             }
-            return params.value;
+            return (
+              <div style={{ fontWeight: 'bold'}}>{params.value}</div>
+            );
           },
         }))}
-        pageSize={1}
-        disableRowSelectionOnClick
-      />
-    </Box>
+         pageSize={5}
+          rowsPerPageOptions={[5, 10, 20]}
+        />
+      </div>
         <ToastContainer/>
     </div>
+    </>
   );
 };
 
