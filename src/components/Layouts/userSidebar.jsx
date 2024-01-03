@@ -58,6 +58,8 @@ import {
               borderRight: 0,
               width: drawerWidth,
               flexShrink: 0,
+              backgroundColor:"black",
+              borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
                 width: drawerWidth,
                 boxSizing: "border-box",
@@ -82,6 +84,11 @@ import {
                   component={Link}
                   to={res.linkUrl != "null" ? res.linkUrl : "#"}
                   style={{ marginTop: "10px" }}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#7776EE", 
+                    },
+                  }}
                 >
                   <ListItemButton>
                     <ListItemIcon>
@@ -91,7 +98,7 @@ import {
                     </ListItemIcon>
                     <ListItemText
                       className="sidebartext"
-                      sx={{ color: res.textColor }}
+                      sx={{ color: "whitesmoke" }}
                       primary={res.name}
                     />
                   </ListItemButton>
