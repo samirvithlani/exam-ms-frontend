@@ -18,7 +18,7 @@ import {
   import "../../assets/layouts/layout.module.css";
 
   export const SideBar = () => {
-    const drawerWidth = 240;
+    const drawerWidth = 200;
     const RouteArray = [
      
   
@@ -83,16 +83,19 @@ import {
               position: "inherit",
               borderRight: 0,
               width: drawerWidth,
+              // height:"17cm",
               flexShrink: 0,
+              backgroundColor:"black",
+              borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
-                width: drawerWidth,
+                // width: drawerWidth,
                 boxSizing: "border-box",
               },
             },
           }}
           variant="permanent"
           anchor="left"
-        >    <List>
+        >   <List>
               {RouteArray.map((res, index) => (
                 <ListItem
                   className={
@@ -108,6 +111,11 @@ import {
                   component={Link}
                   to={res.linkUrl != "null" ? res.linkUrl : "#"}
                   style={{ marginTop: "10px" }}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#7776EE", 
+                    },
+                  }}
                 >
                   <ListItemButton>
                     <ListItemIcon>
@@ -117,7 +125,7 @@ import {
                     </ListItemIcon>
                     <ListItemText
                       className="sidebartext"
-                      sx={{ color: res.textColor }}
+                      sx={{ color:"whitesmoke" }}
                       primary={res.name}
                     />
                   </ListItemButton>
@@ -126,9 +134,9 @@ import {
             </List>
           </Drawer>
           <Box
-            component="main"
-            sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-          >
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        >
             {/* <Toolbar /> */}
             <Outlet />
           </Box>

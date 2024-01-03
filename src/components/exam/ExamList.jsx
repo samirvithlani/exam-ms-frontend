@@ -19,8 +19,7 @@ const columns = [
       { field: 'noOfQuestions', headerName: 'No. of Questions', width: 180 },
       { field: 'isTimeLimit', headerName: 'Time-Limited', width: 150 },
       { field: 'examTime', headerName: 'Exam Time (in hours)', width: 200 },
-      { field: 'perQuestionTime', headerName: 'Time per Question (in minutes)', width: 280 },
-      { field: 'totalmarks', headerName: 'Total Marks', width: 280 },
+      { field: 'totalmarks', headerName: 'Total Marks', width: 200 },
       { field: 'actions', headerName: 'Actions', width: 200},
       ];
 
