@@ -18,7 +18,16 @@ import ListIcon from "@mui/icons-material/List";
 import "../../assets/layouts/layout.module.css";
 
 export const SideBar = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const drawerWidth = 250;
+  const partialWidth = 5; 
   const RouteArray = [
     {
       id: 3,
@@ -70,15 +79,7 @@ export const SideBar = () => {
       logoImage: ListIcon,
     },
   ];
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const handleMouseMove = () => {
-    setIsDrawerOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDrawerOpen(false);
-  };
+ 
   return (
     <div>
       {/* <AdminHeader></AdminHeader> */}
@@ -89,11 +90,11 @@ export const SideBar = () => {
             sx: {
               position: "inherit",
               borderRight: 0,
-              width: drawerWidth,
-              // height:"17cm",
+              width: isHovered ? drawerWidth : partialWidth,             
+               // height:"17cm",
               height: "100vh", // Set height to 100% of the viewport height
-
               flexShrink: 0,
+              overflowX: "hidden",
               backgroundColor: "black",
               borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
@@ -104,12 +105,10 @@ export const SideBar = () => {
           }}
           variant="permanent"
           anchor="left"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          open={isDrawerOpen}
         >
           {" "}
-          <List>
+          <List onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
             {RouteArray.map((res, index) => (
               <ListItem
                 className={
@@ -150,11 +149,8 @@ export const SideBar = () => {
         <Box
           component="main"
           sx={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "100vh", // Set minimum height to 100% of the viewport height
-            p: 3,
+            width: isHovered ? `calc(100% - ${drawerWidth}px)` : "100%",
+            // transition: "width 0.2s ease-in-out",
           }}
         >
           {/* <Toolbar /> */}
