@@ -34,3 +34,11 @@
 .disabled-link .MuiButtonBase-root{
     cursor: not-allowed;
 }
+h1{
+    font-family: "sans-serif"; 
+    color: #673ab7;
+}
+.h1font{
+    font-family: "sans-serif"; 
+    color: #673ab7;
+}

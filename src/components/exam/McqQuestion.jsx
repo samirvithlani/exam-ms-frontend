@@ -19,6 +19,7 @@
     import { useState } from "react";
     import { ToastContainer, toast } from "react-toastify";
     import "react-toastify/dist/ReactToastify.css";
+    import '../../assets/layouts/layout.module.css'
     //createUser for vc
     export const McqQuestion = () => {
       const { id } = useParams(); 
@@ -305,9 +306,11 @@
         </label>
       </div>
       
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+          {/* <Typography variant="h4" className="h1font" component="div" sx={{ flexGrow: 1 }}> */}
+          <h1>
             ADD Question :
-          </Typography>
+          </h1>
+          {/* </Typography> */}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Box component="form" onSubmit={handleSubmit(submitHandler)}>
