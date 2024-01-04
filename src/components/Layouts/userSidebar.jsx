@@ -16,9 +16,18 @@ import {
   import { deepOrange, deepPurple } from "@mui/material/colors";
   import ListIcon from '@mui/icons-material/List';
   import "../../assets/layouts/layout.module.css";
-
+  import { useState } from "react";
   export const UserSideBar = () => {
-    const drawerWidth = 240;
+    const [isHovered, setIsHovered] = useState(false);
+    const handleMouseEnter = () => {
+      setIsHovered(true);
+    };
+  
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+    };
+    const drawerWidth = 250;
+    const partialWidth = 5; 
     const RouteArray = [
       {
         id: 1,
@@ -46,6 +55,8 @@ import {
       },
 
     ];
+    const filteredRouteArray = RouteArray.filter((route) => route.name !== "Answer");
+
     return (
       <div>
 
@@ -56,20 +67,23 @@ import {
             sx: {
               position: "inherit",
               borderRight: 0,
-              width: drawerWidth,
-              flexShrink: 0,
+              width: isHovered ? drawerWidth : partialWidth,                  flexShrink: 0,
               backgroundColor:"black",
+              height: "100vh",
               borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
-                width: drawerWidth,
+                // width: drawerWidth,
                 boxSizing: "border-box",
               },
             },
           }}
           variant="permanent"
           anchor="left"
-        >    <List>
-              {RouteArray.map((res, index) => (
+        >
+          {" "}    
+        <List onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
+              {filteredRouteArray.map((res, index) => (
                 <ListItem
                   className={
                     res.activeMenuFor.some((x) => location.pathname.includes(x))
@@ -107,9 +121,11 @@ import {
             </List>
           </Drawer>
           <Box
-            component="main"
-            sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-          >
+           component="main"
+           sx={{
+             width: isHovered ? `calc(100% - ${drawerWidth}px)` : "100%",
+             // transition: "width 0.2s ease-in-out",
+           }}>
             {/* <Toolbar /> */}
             <Outlet />
           </Box>
