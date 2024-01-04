@@ -185,17 +185,18 @@ const ExamList = () => {
     display: "flex",
     flexDirection: "column",
     height: "auto",
-    backgroundColor: "#FFFFF7", // Set the background color to grey
-    mt: 2,
+    backgroundColor: "white", // Set the background color to grey
+    m1: 2,
   };
   return (
     <ThemeProvider theme={defaultTheme}>
+      <h1 style={{ paddingLeft: 500, fontSize: 50 }}>Exam List</h1>
       <Paper sx={paperStyle}>
         <div style={{ width: "85%", height: "90%" }}>
-          <h1>Exam List</h1>
           <DataGrid
             sx={{
               border: "none",
+              fontFamily: "Lato",
             }}
             rows={examData}
             columns={columns.map((column) => ({
@@ -284,7 +285,13 @@ const ExamList = () => {
                   );
                 }
                 return (
-                  <div style={{ fontWeight: "bold", fontFamily: "sans-serif" }}>
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      fontFamily: "Lato",
+                    }}
+                  >
                     {params.value}
                   </div>
                 );
