@@ -42,3 +42,23 @@ h1{
     font-family: "Lato"; 
     color: #000000;
 }
+.bold-header {
+  font-weight: bold !important;
+  font-family: "Lato";
+  font-size: large;
+  color: #445FD2;
+}
+@media (min-width: 1280px) {
+    .responsive-container {
+      width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  /* Larger than phablet (550px) */
+  @media (min-width: 550px) {
+    .responsive-header {
+      padding-left: 500px;
+    }
+  }

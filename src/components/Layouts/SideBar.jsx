@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   CssBaseline,
   Drawer,
   List,
@@ -17,17 +18,14 @@ import { deepOrange, deepPurple } from "@mui/material/colors";
 import ListIcon from "@mui/icons-material/List";
 import "../../assets/layouts/layout.module.css";
 
-export const SideBar = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+import IconButton from "@mui/material/IconButton";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+export const SideBar = () => {
   const drawerWidth = 250;
-  const partialWidth = 5; 
+  const partialWidth = 5;
   const RouteArray = [
     {
       id: 3,
@@ -79,7 +77,8 @@ export const SideBar = () => {
       logoImage: ListIcon,
     },
   ];
- 
+
+  
   return (
     <div>
       {/* <AdminHeader></AdminHeader> */}
@@ -88,15 +87,17 @@ export const SideBar = () => {
         <Drawer
           PaperProps={{
             sx: {
+              marginRight: "5px",
               position: "inherit",
               borderRight: 0,
-              width: isHovered ? drawerWidth : partialWidth,             
-               // height:"17cm",
+              //width: isHovered ? drawerWidth : partialWidth,
+              width: drawerWidth,
+              // height:"17cm",
               height: "100vh", // Set height to 100% of the viewport height
               flexShrink: 0,
               overflowX: "hidden",
               backgroundColor: "black",
-              borderRadius: "0 50px 50px 0",
+              // borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
                 // width: drawerWidth,
                 boxSizing: "border-box",
@@ -107,8 +108,7 @@ export const SideBar = () => {
           anchor="left"
         >
           {" "}
-          <List onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
+          <List >
             {RouteArray.map((res, index) => (
               <ListItem
                 className={
@@ -145,13 +145,28 @@ export const SideBar = () => {
               </ListItem>
             ))}
           </List>
+          <Box sx={{ marginTop: "auto" }}>
+            <Button
+              variant="contained"
+              sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+              startIcon={<ExitToAppIcon />}
+              onClick={() => {
+                // Handle logout logic here
+                console.log("Logout clicked");
+              }}
+              fullWidth
+            >
+              Logout
+            </Button>
+          </Box>
         </Drawer>
         <Box
           component="main"
-          sx={{
-            width: isHovered ? `calc(100% - ${drawerWidth}px)` : "100%",
-            // transition: "width 0.2s ease-in-out",
-          }}
+          sx={
+            {
+              // transition: "width 0.2s ease-in-out",
+            }
+          }
         >
           {/* <Toolbar /> */}
           <Outlet />

@@ -8,17 +8,18 @@ import {
   PlusOneOutlined,
   Visibility,
 } from "@mui/icons-material";
-import { createTheme, IconButton, Paper, Tooltip } from "@mui/material";
+import { CircularProgress, createTheme, IconButton, Paper, Tooltip } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 import "../../assets/layouts/layout.module.css";
+import { set } from "react-hook-form";
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
   { field: "name", headerName: "Exam Name", width: 200 },
   { field: "examType", headerName: "Exam Type", width: 70 },
-  { field: "examTopic", headerName: "Exam Topic", width: 200 },
+  { field: "examTopic", headerName: "Exam Topic", width: 250 },
   { field: "Subject", headerName: "Subject", width: 150 },
   { field: "Stream", headerName: "Stream", width: 100 },
   { field: "Standard", headerName: "Standard", width: 100 },
@@ -27,10 +28,11 @@ const columns = [
   { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
   { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
   { field: "totalmarks", headerName: "Total Marks", width: 70 },
-  { field: "actions", headerName: "Actions", width: 200 },
+  { field: "actions", headerName: "Actions", width: 700 },
 ];
 
 const ExamList = () => {
+  const [isLoading, setisLoading] = useState(false)
   const [examData, setExamData] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const fetchallquestion = async () => {
@@ -46,13 +48,14 @@ const ExamList = () => {
   }, []);
   const navigate = useNavigate();
   const fetchData = async () => {
+    setisLoading(true)
     axios
       .get("/Exam")
       .then((response) => {
         const filteredData = response.data.map((exam, index) => ({
           displayid: index + 1,
-          name: exam.name,
-          examType: exam.examtype?.type || "N/A",
+          name: exam.name.toUpperCase(),
+          examType: exam.examtype?.type.toUpperCase() || "N/A",
           examTopic: exam.examtopic?.name || "N/A",
           Subject: exam.subject?.name || "N/A",
           Stream: exam.stream ? exam.stream.name : "NA",
@@ -73,6 +76,7 @@ const ExamList = () => {
           typeId: exam.examtype?._id || "N/A",
         }));
         setExamData(filteredData);
+        setisLoading(false)
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -190,8 +194,17 @@ const ExamList = () => {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      <h1 style={{ paddingLeft: 500, fontSize: 50 }}>Exam List</h1>
-      <Paper sx={paperStyle}>
+      
+      <Paper sx={paperStyle} className="responsive-container">
+        {
+          isLoading ? <div style={{display:"flex",marginLeft:"500px",alignItems:"center",height:"100vh"}}><CircularProgress/></div> : null
+        }
+        <h1
+          style={{ paddingLeft: 500, fontSize: 50 }}
+          className="responsive-container"
+        >
+          Exam List
+        </h1>
         <div style={{ width: "85%", height: "90%" }}>
           <DataGrid
             sx={{
@@ -204,7 +217,7 @@ const ExamList = () => {
               renderCell: (params) => {
                 if (column.field === "actions") {
                   return (
-                    <div>
+                    <div className="responsive-container">
                       <Tooltip title="View Exam" arrow>
                         <IconButton
                           aria-label="view"
