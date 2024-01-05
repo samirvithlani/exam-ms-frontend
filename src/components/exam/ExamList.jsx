@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 import "../../assets/layouts/layout.module.css";
 import { set } from "react-hook-form";
+import { CustomeLoader } from "../Layouts/CustomeLoader";
+import Cookies from "js-cookie";
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
   { field: "name", headerName: "Exam Name", width: 200 },
@@ -197,7 +199,7 @@ const ExamList = () => {
       
       <Paper sx={paperStyle} className="responsive-container">
         {
-          isLoading ? <div style={{display:"flex",marginLeft:"500px",alignItems:"center",height:"100vh"}}><CircularProgress/></div> : null
+          isLoading ? <CustomeLoader/> : null
         }
         <h1
           style={{ paddingLeft: 500, fontSize: 50 }}

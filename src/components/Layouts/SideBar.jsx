@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
 import AddIcon from "@mui/icons-material/Add";
 import { deepOrange, deepPurple } from "@mui/material/colors";
@@ -22,8 +22,10 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import Cookies from "js-cookie";
 
 export const SideBar = () => {
+  const navigate = useNavigate();
   const drawerWidth = 250;
   const partialWidth = 5;
   const RouteArray = [
@@ -78,10 +80,9 @@ export const SideBar = () => {
     },
   ];
 
-  
   return (
     <div>
-      {/* <AdminHeader></AdminHeader> */}
+      
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
         <Drawer
@@ -108,7 +109,7 @@ export const SideBar = () => {
           anchor="left"
         >
           {" "}
-          <List >
+          <List>
             {RouteArray.map((res, index) => (
               <ListItem
                 className={
@@ -151,8 +152,13 @@ export const SideBar = () => {
               sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
               startIcon={<ExitToAppIcon />}
               onClick={() => {
-                // Handle logout logic here
-                console.log("Logout clicked");
+                //remove cookie
+                //Cookies.remove("token");
+                //clear cookie
+                Cookies.remove("token", { path: "" });
+                Cookies.remove("name", { path: "" });
+                Cookies.remove("id", { path: "" });
+                navigate("/login");
               }}
               fullWidth
             >
