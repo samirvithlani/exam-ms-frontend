@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Typography, Grid, Button } from '@mui/material';
+import { FormControl, FormControlLabel, Paper, Radio, RadioGroup, Typography, Grid, Button } from '@mui/material';
 import Cookies from 'js-cookie'; 
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import { CustomeLoader } from "../Layouts/CustomeLoader";
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false)
   const location = useLocation();
   const { id } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -19,8 +20,16 @@ const MCQQuestionsPage = () => {
   useEffect(() => {
     fetchQuestions();
   }, [id]);
-
+  const paperStyle = {
+    p: 2,
+    display: "flex",
+    flexDirection: "column",
+    height: "auto",
+    backgroundColor: "white", // Set the background color to grey
+    m1: 2,
+  };
   const fetchQuestions = async () => {
+    setisLoading(true)
     try {
       const response = await axios.get(`/exam/${id}`);
       setQuestions(response.data.mcq);
@@ -28,6 +37,8 @@ const MCQQuestionsPage = () => {
     } catch (error) {
       console.error('Error fetching questions:', error);
     }
+    setisLoading(false)
+
   };
 
   const initializeAnswers = (questions) => {
@@ -76,6 +87,10 @@ const MCQQuestionsPage = () => {
   };
   return (
     <div>
+      <Paper sx={paperStyle} className="responsive-container">
+        {
+          isLoading ? <CustomeLoader/> : null
+        }
       <Typography variant="h4" gutterBottom>
         MCQ Questions for Exam
       </Typography>
@@ -104,6 +119,7 @@ const MCQQuestionsPage = () => {
         Submit Answers
       </Button>
       <ToastContainer/>
+      </Paper>
     </div>
 
   );

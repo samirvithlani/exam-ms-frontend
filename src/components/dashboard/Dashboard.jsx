@@ -11,8 +11,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 
 const Dashboard = () => {
+const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [difficulties, setDifficulties] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [examList, setExamList] = useState([]);
@@ -58,7 +63,7 @@ const fetchstd = async()=>{
     fetchData(stdId,selectedDifficulty)
 }
   const handleStartExam = (examId,examtype_id,totalmarks) => {
-    navigate(`/question/${examId}`, { state: { examtype_id,totalmarks } });
+    navigate(`/userDasboard/question/${examId}`, { state: { examtype_id,totalmarks } });
   }
   const fetchhistory = async () => {
     const _id = Cookies.get('_id');
@@ -76,18 +81,18 @@ const fetchstd = async()=>{
   const filteredExams  = filterExamsByHistory();
       const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
-      { field: 'name', headerName: 'Exam Name', width: 200 },
-      { field: 'examType', headerName: 'Exam Type', width: 150 },
-      { field: 'examTopic', headerName: 'Exam Topic', width: 200 },
-      { field: 'Subject', headerName: 'Subject', width: 150 },
+      { field: 'name', headerName: 'Exam Name', width: 130 },
+      { field: 'examType', headerName: 'Exam Type', width: 130 },
+      { field: 'examTopic', headerName: 'Exam Topic', width: 150 },
+      { field: 'Subject', headerName: 'Subject', width: 130 },
       { field: 'Stream', headerName: 'Stream', width: 100 },
       {field: 'Standard', headerName: 'Standard', width: 100},
       {field: 'Difficulty', headerName: 'Difficulty', width: 100},
       { field: 'noOfQuestions', headerName: 'No. of Questions', width: 180 },
       { field: 'isTimeLimit', headerName: 'Time-Limited', width: 150 },
       { field: 'examTime', headerName: 'Exam Time (in hours)', width: 200 },
-      { field: 'perQuestionTime', headerName: 'Time per Question (in minutes)', width: 280 },
-      { field: 'totalmarks', headerName: 'Total Marks', width: 280 },
+      { field: 'perQuestionTime', headerName: 'Time per Question', width: 180 },
+      { field: 'totalmarks', headerName: 'Total Marks', width: 100 },
       {
         field: 'actions',
         headerName: 'Actions',
@@ -180,10 +185,23 @@ const fetchstd = async()=>{
       </Select>
     </FormControl>
       </Grid>
-      <Grid item xs={12}>
-          {filteredExams.length > 0 ? (
+      <Grid
+          container
+          item
+          xs={12}
+          sx={{
+            width: isMobile ? "45vw" : "80vw",
+            height: isMobile ? "50vh" : "50vh",
+            overflowX: "auto",
+          }}
+        >       
+            {filteredExams.length > 0 ? (
             
               <DataGrid
+              sx={{
+                border: "none",
+                fontFamily: "Lato",
+              }}
                 rows={filteredExams}
                 columns={columns}
                 pageSize={5}
