@@ -16,18 +16,18 @@ import {
   import { deepOrange, deepPurple } from "@mui/material/colors";
   import ListIcon from '@mui/icons-material/List';
   import "../../assets/layouts/layout.module.css";
+  import MenuIcon from '@mui/icons-material/Menu';
+  import IconButton from "@mui/material/IconButton";
+  import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
   import { useState } from "react";
   export const UserSideBar = () => {
-    const [isHovered, setIsHovered] = useState(false);
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-  
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
     const drawerWidth = 250;
-    const partialWidth = 5; 
+    const partialWidth = 70; 
+    const [isExpanded, setIsExpanded] = useState(true); 
+
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
     const RouteArray = [
       {
         id: 1,
@@ -53,24 +53,38 @@ import {
         activeMenuFor: ["viewanswers"],
         logoImage:ListIcon
       },
+      {
+        id: 4,
+        name: "Question",
+        linkUrl: "question",
+        textColor: "#7D8FB3",
+        activeMenuFor: ["question"],
+        logoImage:ListIcon
+      },
+
 
     ];
-    const filteredRouteArray = RouteArray.filter((route) => route.name !== "Answer");
+    const filteredRouteArray = RouteArray.filter((route) => route.name !== "Answer"&& route.name !== "Question");
 
     return (
       <div>
 
         <CssBaseline />
+        <IconButton onClick={toggleSidebar}>
+        {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
+      </IconButton>
         <Box sx={{ display: "flex" }}>
         <Drawer
           PaperProps={{
             sx: {
+              // marginRight: "5px",
               position: "inherit",
               borderRight: 0,
-              width: isHovered ? drawerWidth : partialWidth,                  flexShrink: 0,
+              width: isExpanded ? drawerWidth : partialWidth,
+              flexShrink: 0,
               backgroundColor:"black",
               height: "100vh",
-              borderRadius: "0 50px 50px 0",
+              // borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
                 // width: drawerWidth,
                 boxSizing: "border-box",
@@ -81,8 +95,7 @@ import {
           anchor="left"
         >
           {" "}    
-        <List onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}>
+        <List>
               {filteredRouteArray.map((res, index) => (
                 <ListItem
                   className={
@@ -123,7 +136,7 @@ import {
           <Box
            component="main"
            sx={{
-             width: isHovered ? `calc(100% - ${drawerWidth}px)` : "100%",
+            //  width:   "100%",
              // transition: "width 0.2s ease-in-out",
            }}>
             {/* <Toolbar /> */}

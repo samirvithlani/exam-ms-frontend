@@ -8,7 +8,7 @@ import {
   PlusOneOutlined,
   Visibility,
 } from "@mui/icons-material";
-import { CircularProgress, createTheme, IconButton, Paper, Tooltip } from "@mui/material";
+import { Box, CircularProgress, createTheme, CssBaseline, IconButton, Paper, Tooltip , Grid, Typography, useMediaQuery} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +17,7 @@ import "../../assets/layouts/layout.module.css";
 import { set } from "react-hook-form";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import Cookies from "js-cookie";
+import { useTheme } from "@mui/material/styles";
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
   { field: "name", headerName: "Exam Name", width: 200 },
@@ -30,13 +31,16 @@ const columns = [
   { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
   { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
   { field: "totalmarks", headerName: "Total Marks", width: 70 },
-  { field: "actions", headerName: "Actions", width: 700 },
+  { field: "actions", headerName: "Actions", width: 350 },
 ];
 
 const ExamList = () => {
+  const theme = useTheme();
+
   const [isLoading, setisLoading] = useState(false)
   const [examData, setExamData] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const fetchallquestion = async () => {
     try {
       const response = await axios.get("/mcq");
@@ -196,18 +200,25 @@ const ExamList = () => {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      
+        
       <Paper sx={paperStyle} className="responsive-container">
         {
           isLoading ? <CustomeLoader/> : null
         }
-        <h1
-          style={{ paddingLeft: 500, fontSize: 50 }}
-          className="responsive-container"
-        >
+       <Typography variant="h1" sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }} 
+       className="responsive-container">
           Exam List
-        </h1>
-        <div style={{ width: "85%", height: "90%" }}>
+        </Typography>
+        <Grid
+          container
+          item
+          xs={12}
+          sx={{
+            width: isMobile ? "100vw" : "100vw",
+            height: isMobile ? "50vh" : "90vh",
+            overflowX: "auto",
+          }}
+        >          
           <DataGrid
             sx={{
               border: "none",
@@ -307,7 +318,7 @@ const ExamList = () => {
                       fontFamily: "Lato",
                     }}
                   >
-                    {params.value}
+                   {params.value}
                   </div>
                 );
               },
@@ -317,7 +328,7 @@ const ExamList = () => {
             rowHeight={80}
           />
           <ToastContainer />
-        </div>
+        </Grid>
       </Paper>
     </ThemeProvider>
   );

@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import ListIcon from "@mui/icons-material/List";
 import "../../assets/layouts/layout.module.css";
-
+import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -27,7 +27,12 @@ import Cookies from "js-cookie";
 export const SideBar = () => {
   const navigate = useNavigate();
   const drawerWidth = 250;
-  const partialWidth = 5;
+  const partialWidth = 70;
+  const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
+
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
   const RouteArray = [
     {
       id: 3,
@@ -84,6 +89,11 @@ export const SideBar = () => {
     <div>
       
       <CssBaseline />
+      
+      <IconButton onClick={toggleSidebar}>
+        {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
+      </IconButton>
+          
       <Box sx={{ display: "flex" }}>
         <Drawer
           PaperProps={{
@@ -91,16 +101,12 @@ export const SideBar = () => {
               marginRight: "5px",
               position: "inherit",
               borderRight: 0,
-              //width: isHovered ? drawerWidth : partialWidth,
-              width: drawerWidth,
-              // height:"17cm",
+              width: isExpanded ? drawerWidth : partialWidth,
               height: "100vh", // Set height to 100% of the viewport height
               flexShrink: 0,
               overflowX: "hidden",
               backgroundColor: "black",
-              // borderRadius: "0 50px 50px 0",
               "& .MuiDrawer-paper": {
-                // width: drawerWidth,
                 boxSizing: "border-box",
               },
             },

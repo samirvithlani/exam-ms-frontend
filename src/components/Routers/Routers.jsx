@@ -42,10 +42,7 @@ const MainRouter = ({ children }) => {
       path : "/update-exam/:id", 
     element:<UpdateExam />
   },
-  { 
-    path : "/question/:id", 
-  element:< MCQQuestionsPage/>
-},
+ 
 {
   path:"/viewAnswers/:id",
   element:<ViewAnswer/>
@@ -82,6 +79,11 @@ const MainRouter = ({ children }) => {
       element:<ViewAnswer/>,
       errorElement:<div>400</div>
     },
+    { 
+    path : "question/:id", 
+    element:< MCQQuestionsPage/>,
+    errorElement:<div>404</div>
+  },
   ]
 },
     {
