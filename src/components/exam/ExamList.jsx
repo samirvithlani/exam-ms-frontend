@@ -18,6 +18,8 @@ import { set } from "react-hook-form";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import Cookies from "js-cookie";
 import { useTheme } from "@mui/material/styles";
+import { useDemoData } from '@mui/x-data-grid-generator';
+
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
   { field: "name", headerName: "Exam Name", width: 200 },
@@ -41,6 +43,11 @@ const ExamList = () => {
   const [examData, setExamData] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { data } = useDemoData({
+    dataSet: 'Commodity',
+    rowLength: 100,
+    maxColumns: 6,
+  });
   const fetchallquestion = async () => {
     try {
       const response = await axios.get("/mcq");
@@ -214,7 +221,7 @@ const ExamList = () => {
           item
           xs={12}
           sx={{
-            width: isMobile ? "100vw" : "100vw",
+            width: isMobile ? "60vw" : "80vw",
             height: isMobile ? "50vh" : "90vh",
             overflowX: "auto",
           }}
@@ -323,8 +330,11 @@ const ExamList = () => {
                 );
               },
             }))}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
+            
+            initialState={{
+              ...data.initialState,
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
             rowHeight={80}
           />
           <ToastContainer />

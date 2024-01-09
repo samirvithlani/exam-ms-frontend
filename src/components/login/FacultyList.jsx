@@ -3,13 +3,29 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
+import { Box,Grid,Typography ,useTheme,Paper} from '@mui/material';
+import { useDemoData } from '@mui/x-data-grid-generator';
+import { CustomeLoader } from "../Layouts/CustomeLoader";
 
 const UserGrid = () => {
     const navigate = useNavigate();
   const [facultyUsers, setFacultyUsers] = useState([]);
+  const [isLoading, setisLoading] = useState(false)
   const [rolesData, setRolesData] = useState([]);
-
-
+  const theme = useTheme();
+  const { data } = useDemoData({
+    dataSet: 'Commodity',
+    rowLength: 100,
+    maxColumns: 6,
+  });
+  const paperStyle = {
+    p: 2,
+    display: "flex",
+    flexDirection: "column",
+    height: "auto",
+    backgroundColor: "white", 
+    m1: 2,
+  };
   useEffect(() => {
 fetchdata();
 fetchRolesData();
@@ -32,6 +48,7 @@ fetchRolesData();
     }
   };
 const fetchdata = async()=>{
+  setisLoading(true)
 let response = await axios.get('/user')
 const facultyData = response.data.filter(user => user.role.role === 'faculty');
 let filterdata = facultyData.map((faculty,index)=>({
@@ -43,6 +60,8 @@ let filterdata = facultyData.map((faculty,index)=>({
     status:faculty.status
 }))
 setFacultyUsers(filterdata);
+setisLoading(false)
+
 }
 const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
@@ -52,28 +71,75 @@ const columns = [
     { field: 'status', headerName: 'Status', width: 300 }
   ]
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <Paper sx={paperStyle} className="responsive-container">
+    {
+      isLoading ? <CustomeLoader/> : null
+    }
+    <Grid style={{ height: 400, width: '100%' }}>
+    <Typography variant="h1" sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }} >Faculty List</Typography>
     <Button
               variant="contained"
               onClick={() => handleAddRoleClick('faculty')}
               sx={{
                 fontSize: '12px',
                 padding: '5px 10px',
-                backgroundColor: '#FFA500', 
+                backgroundColor: 'blue',
                 color: 'white',
-                marginLeft: 'auto',
+                marginLeft:'80%', 
+                [theme.breakpoints.down('sm')]: {
+                  mt: '10px', 
+                  marginLeft: 'auto', 
+                },
               }}
             >
               Add Faculty
             </Button>
-    <h1>Faculty List</h1>
+    <Grid
+  container
+  item
+  xs={12}
+  sx={{
+    width: "80vw", 
+    height: "50vh", 
+    overflowX: "auto",
+    [theme.breakpoints.down("sm")]: {
+      width: "100vw",
+      height: "50vh",
+    },
+  }}
+>
+
+
     <DataGrid
+     sx={{
+      border: "none",
+      fontFamily: "Lato",
+    }}
       rows={facultyUsers}
-      columns={columns}
-      pageSize={5}
-      rowsPerPageOptions={[5, 10, 20]}
+      columns={columns.map((column)=>({
+        ...column,
+        renderCell:(params)=>{
+          return(
+            <div 
+            style={{
+              fontWeight: "bold",
+              fontSize: 20,
+              fontFamily: "Lato",
+            }}
+          >
+           {params.value}
+            </div>
+          )
+        }
+      }))}
+      initialState={{
+        ...data.initialState,
+        pagination: { paginationModel: { pageSize: 5} },
+      }}
     />
-  </div>
+    </Grid>
+  </Grid>
+  </Paper>
 );
 };
 
