@@ -1,0 +1,32 @@
+/* styles.css */
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px;
+    width: 100%; 
+    max-width: 500px;
+    height: 200px;
+    display: flexbox;
+  }
+  
+  .card-content {
+    padding: 16px;
+  }
+  
+  .card h2 {
+    margin-bottom: 8px;
+  }
+  
+  .card p {
+    color: #555;
+  }
+  
+  @media screen and (min-width: 600px) {
+    .card {
+      width: 500px; 
+    }
+  }
+  
+  

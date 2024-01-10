@@ -46,9 +46,12 @@ export default function Login() {
         Cookies.set("_id", _id);
         Cookies.set("name", name);
         Cookies.set("token", token);
+        Cookies.set("role", role);
         if (role == "student") {
           navigate("/userDasboard");
-        } else {
+        } else if(role == "faculty") {
+          navigate("/facultyDashboard");
+          }else{
           navigate("/adminDashboard");
         }
       } else {

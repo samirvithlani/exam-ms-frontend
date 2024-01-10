@@ -10,7 +10,7 @@ import {
   } from "@mui/material";
   import { Box } from "@mui/system";
   import React, { useContext } from "react";
-  import { Link, Outlet } from "react-router-dom";
+  import { Link, Outlet ,useNavigate} from "react-router-dom";
   import AdminHeader from "./AdminHeader";
   import AddIcon from "@mui/icons-material/Add";
   import { deepOrange, deepPurple } from "@mui/material/colors";
@@ -20,7 +20,12 @@ import {
   import IconButton from "@mui/material/IconButton";
   import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
   import { useState } from "react";
+  import Cookies from "js-cookie";
+  import {Button} from "@mui/material";
+  import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
   export const UserSideBar = () => {
+    const navigate = useNavigate();
     const drawerWidth = 250;
     const partialWidth = 70; 
     const [isExpanded, setIsExpanded] = useState(true); 
@@ -39,6 +44,14 @@ import {
       },
       {
         id: 2,
+        name: "Current Exam",
+        logoImage: ListIcon,
+        linkUrl: "currentexam",
+        textColor: "#7D8FB3",
+        activeMenuFor: ["currentexam"],
+      },
+      {
+        id: 3,
         name: "result",
         linkUrl: "history",
         textColor: "#7D8FB3",
@@ -46,7 +59,7 @@ import {
         logoImage:ListIcon
       },
       {
-        id: 3,
+        id: 4,
         name: "Answer",
         linkUrl: "Viewanswers",
         textColor: "#7D8FB3",
@@ -54,7 +67,7 @@ import {
         logoImage:ListIcon
       },
       {
-        id: 4,
+        id: 5,
         name: "Question",
         linkUrl: "question",
         textColor: "#7D8FB3",
@@ -68,7 +81,7 @@ import {
 
     return (
       <div>
-
+        
         <CssBaseline />
         <IconButton onClick={toggleSidebar}>
         {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
@@ -132,6 +145,22 @@ import {
                 </ListItem>
               ))}
             </List>
+            <Box sx={{ marginTop: "auto" }}>
+            <Button
+              variant="contained"
+              sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+              startIcon={<ExitToAppIcon />}
+              onClick={() => {
+                Cookies.remove("token", { path: "" });
+                Cookies.remove("name", { path: "" });
+                Cookies.remove("id", { path: "" });
+                navigate("/login");
+              }}
+              fullWidth
+            >
+              Logout
+            </Button>
+          </Box>
           </Drawer>
           <Box
            component="main"

@@ -14,7 +14,7 @@ import Cookies from 'js-cookie';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from "@mui/material/styles";
 
-const Dashboard = () => {
+const CurrentExam = () => {
 const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -218,4 +218,4 @@ const fetchstd = async()=>{
   );
 };
 
-export default Dashboard;
+export default CurrentExam;
