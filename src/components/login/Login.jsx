@@ -19,7 +19,10 @@ import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { Paper } from "@mui/material";
 const defaultTheme = createTheme();
+import loginpagImage from "../../assets/images/loginpage.jpg";
+import loginpagImage1 from "../../assets/images/loginpage1.png";
 
 export default function Login() {
   const [isLoading, setisLoading] = React.useState(false);
@@ -67,19 +70,21 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {isLoading && <CustomeLoader />}
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+    {isLoading && <CustomeLoader />}
+    <CssBaseline />
+    <Grid container style={{ height: '100vh' }}>
+      <Grid item xs={6}>
         <Box
           sx={{
-            marginTop: 8,
+            height: '100%',
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            
           </Avatar>
           <Typography component="h1" variant="h5">
             Log in
@@ -125,8 +130,19 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
-      </Container>
-      <ToastContainer />
-    </ThemeProvider>
+      </Grid>
+
+      <Grid item xs={6}>
+        <img
+          src={loginpagImage1}
+          alt="loginpage"
+          style={{ width: "100%", height: "100%" }}
+        />
+      </Grid>
+    </Grid>
+
+    <ToastContainer />
+  </ThemeProvider>
+
   );
 }

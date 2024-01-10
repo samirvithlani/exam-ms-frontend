@@ -3,7 +3,7 @@ import {
   BrowserRouter,
   createBrowserRouter,
   RouterProvider,
-  Route
+  Route,
 } from "react-router-dom";
 import { SideBar } from "../Layouts/SideBar";
 import Login from "../login/Login";
@@ -23,116 +23,120 @@ import UserGrid from "../login/FacultyList";
 import CompanyList from "../login/CompanyList";
 import StudentList from "../login/StudentList";
 import { UserSideBar } from "../Layouts/userSidebar";
+import { AdminDashboard } from "../dashboard/AdminDashboard";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
   const routesData = createBrowserRouter([
     {
       path: "/",
-      element: <SignUp/>,
+      element: <SignUp />,
       errorElement: <div>404</div>,
     },
     {
       path: "/login",
-      element:<Login/>,
+      element: <Login />,
       errorElement: <div>404</div>,
     },
-    
-    { 
-      path : "/update-exam/:id", 
-    element:<UpdateExam />
-  },
- 
-{
-  path:"/viewAnswers/:id",
-  element:<ViewAnswer/>
-},
-{
-  path:"/viewExam/:id",
-  element:<ViewExam/>
-},
-{
-  path:"/add/:role",
-  element:<AddRole/>
-},
-{
-  path:"user/:id",
-  element:<UserRegistration/>
-},
 
-{
-  path:"/userDasboard",
-  element:<UserSideBar/>,
-  errorElement:<div>404</div>,
-  children : [
     {
-      path:"dashboard",
-      element:<Dashboard/>,
-      errorElement:<div>404</div>
+      path: "/update-exam/:id",
+      element: <UpdateExam />,
+    },
+
+    {
+      path: "/viewAnswers/:id",
+      element: <ViewAnswer />,
     },
     {
-      path:"history",
-      element:<Historyofuser/>
+      path: "/viewExam/:id",
+      element: <ViewExam />,
     },
     {
-      path:"viewAnswers/:id",
-      element:<ViewAnswer/>,
-      errorElement:<div>400</div>
+      path: "/add/:role",
+      element: <AddRole />,
     },
-    { 
-    path : "question/:id", 
-    element:< MCQQuestionsPage/>,
-    errorElement:<div>404</div>
-  },
-  ]
-},
+    {
+      path: "user/:id",
+      element: <UserRegistration />,
+    },
+
+    {
+      path: "/userDasboard",
+      element: <UserSideBar />,
+      errorElement: <div>404</div>,
+      children: [
+        {
+          path: "dashboard",
+          element: <Dashboard />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "history",
+          element: <Historyofuser />,
+        },
+        {
+          path: "viewAnswers/:id",
+          element: <ViewAnswer />,
+          errorElement: <div>400</div>,
+        },
+        {
+          path: "question/:id",
+          element: <MCQQuestionsPage />,
+          errorElement: <div>404</div>,
+        },
+      ],
+    },
     {
       path: "/adminDashboard",
       element: <SideBar />,
       errorElement: <div>404</div>,
 
       children: [
+        // {
+        //   path: "",
+        // },
         {
           path: "",
-        }
-        ,
-        {
-          path: "createexam",
-          element: <CreateExam/>,
+          element: <AdminDashboard />,
           errorElement: <div>404</div>,
         },
         {
-            path:"examlist",
-            element:<ExamList/>,
-            errorElement:<div>404</div>
+          path: "createexam",
+          element: <CreateExam />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "examlist",
+          element: <ExamList />,
+          errorElement: <div>404</div>,
         },
         {
           path: "facultylist",
-          element:<UserGrid/>,
+          element: <UserGrid />,
           errorElement: <div>404</div>,
         },
-        
-        {
-          path:"companylist",
-          element:<CompanyList/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"mcqquestion/:id",
-        element:<McqQuestion/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"mcqquestion",
-        element:<McqQuestion/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"studentlist",
-          element:<StudentList/>,
-          errorElement:<div>404</div>
-        }
 
+        {
+          path: "companylist",
+          element: <CompanyList />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion/:id",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "studentlist",
+          element: <StudentList />,
+          errorElement: <div>404</div>,
+        },
       ],
     },
     {
@@ -142,7 +146,6 @@ const MainRouter = ({ children }) => {
   return (
     <React.Fragment>
       <RouterProvider router={routesData}>{children}</RouterProvider>
-      
     </React.Fragment>
   );
 };
