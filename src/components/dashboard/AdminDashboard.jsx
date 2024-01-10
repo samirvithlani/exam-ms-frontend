@@ -1,10 +1,23 @@
-import React from 'react'
+import React from 'react';
+import Card from '../Layouts/Card';
+import '../../assets/layouts/card.css';
+import { Grid } from '@mui/material';
 
 export const AdminDashboard = () => {
   return (
-    <div>
-        <h1>ADMIN DASHBOARD</h1>
-    </div>
-  )
-}
-
+    <Grid container className="app" spacing={2}>
+    <Grid item xs={12} sm={6} md={3}>
+      <Card title="Card Title" description="This is a sample card description." />
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+      <Card title="Card Title" description="This is a sample card description." />
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+      <Card title="Card Title" description="This is a sample card description." />
+    </Grid>
+    <Grid item xs={12} sm={6} md={3}>
+      <Card title="Card Title" description="This is a sample card description." />
+    </Grid>
+  </Grid>
+  );
+};

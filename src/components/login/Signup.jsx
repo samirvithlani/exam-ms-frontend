@@ -23,6 +23,7 @@ const defaultTheme = createTheme({
   },
 });
 export default function SignUp() {
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -33,7 +34,11 @@ export default function SignUp() {
       password: data.get("password"),
       phone: data.get("phone"),
     };
-
+    const emptyFields = Object.entries(userData).filter(([key, value]) => !value);
+    if (emptyFields.length > 0) {
+      toast.error('Please fill in all required fields.');
+      return; 
+    }
     try {
       const response = await axios.post("/signup", userData);
       const { message } = response.data;
@@ -89,9 +94,7 @@ export default function SignUp() {
                     id="firstname"
                     label="First Name"
                     autoFocus
-                    sx={{ borderRadius: 8 }}  
-
-                    
+                    sx={{ borderRadius: 8 }} 
                   />
                 </Grid>
                 <Grid item xs={12}>

@@ -19,6 +19,9 @@ import { CustomeLoader } from "../Layouts/CustomeLoader";
 import Cookies from "js-cookie";
 import { useTheme } from "@mui/material/styles";
 import { useDemoData } from '@mui/x-data-grid-generator';
+const userRole = Cookies.get('role');
+const isSuperAdmin = userRole === 'superAdmin';
+
 
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
@@ -235,7 +238,7 @@ const ExamList = () => {
             columns={columns.map((column) => ({
               ...column,
               renderCell: (params) => {
-                if (column.field === "actions") {
+                if (column.field === "actions" && isSuperAdmin) {
                   return (
                     <div className="responsive-container">
                       <Tooltip title="View Exam" arrow>
