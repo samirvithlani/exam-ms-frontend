@@ -147,7 +147,7 @@ const ExamList = () => {
   const handleDelete = async (id) => {
     try {
       await toast.promise(axios.delete(`/exam/${id}`), {
-        pending: "Creating Exam...",
+        pending: "Deleting Exam...",
         success: "Exam Deleted Successfully!",
         error: "Failed to create Exam. Please try again.",
       });
