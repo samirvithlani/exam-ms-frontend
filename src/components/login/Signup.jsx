@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -16,6 +16,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import signUpImage from "../../assets/images/signup.jpg";
+import { useState } from "react";
 
 const defaultTheme = createTheme({
   typography: {
@@ -23,7 +24,20 @@ const defaultTheme = createTheme({
   },
 });
 export default function SignUp() {
-  
+   const navigate = useNavigate()
+  const [validation, setValidation] = useState({
+    firstname: true,
+    lastname: true,
+    email: true,
+    password: true,
+    phone: true,
+  });
+  const handleFieldChange = (fieldName, value) => {
+    setValidation((prevValidation) => ({
+      ...prevValidation,
+      [fieldName]: !!value,
+    }));
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -34,16 +48,25 @@ export default function SignUp() {
       password: data.get("password"),
       phone: data.get("phone"),
     };
-    const emptyFields = Object.entries(userData).filter(([key, value]) => !value);
-    if (emptyFields.length > 0) {
-      toast.error('Please fill in all required fields.');
-      return; 
+    const updatedValidation = {};
+    let isValid = true;
+
+    for (const key in userData) {
+      updatedValidation[key] = !!userData[key];
+      isValid = isValid && updatedValidation[key];
+    }
+
+    setValidation(updatedValidation);
+
+    if (!isValid) {
+      return;
     }
     try {
       const response = await axios.post("/signup", userData);
       const { message } = response.data;
       if (response.status === 200) {
-        toast.success(message);
+      toast.success(message);
+      navigate('/login');
       } else {
         console.error("Signup failed");
       }
@@ -57,7 +80,7 @@ export default function SignUp() {
       }
     }
   };
-  const textFieldStyle = { borderRadius: 8 }; // Common style for text fields
+  const textFieldStyle = { borderRadius: 8 }; 
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -72,9 +95,6 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                  <LockOutlinedIcon />
-                </Avatar> */}
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
@@ -85,6 +105,7 @@ export default function SignUp() {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
+             
                 <Grid item xs={12}>
                   <TextField
                     autoComplete="given-name"
@@ -93,6 +114,9 @@ export default function SignUp() {
                     fullWidth
                     id="firstname"
                     label="First Name"
+                   error={!validation.firstname}
+                    helperText={!validation.firstname && "First Name is required"}
+                    onChange={(e) => handleFieldChange("firstname", e.target.value)}
                     autoFocus
                     sx={{ borderRadius: 8 }} 
                   />
@@ -104,6 +128,9 @@ export default function SignUp() {
                     id="lastname"
                     label="Last Name"
                     name="lastname"
+                    error={!validation.lastname}
+                    helperText={!validation.lastname && "Last Name is required"}
+                    onChange={(e) => handleFieldChange("lastname", e.target.value)}
                     autoComplete="family-name"
                   />
                 </Grid>
@@ -115,6 +142,9 @@ export default function SignUp() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    error={!validation.email}
+                    helperText={!validation.email && "Email is required"}
+                    onChange={(e) => handleFieldChange("email", e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -126,6 +156,10 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    error={!validation.password}
+                    helperText={!validation.password && "Password is required"}
+                    onChange={(e) => handleFieldChange("password", e.target.value)}
+
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -136,6 +170,9 @@ export default function SignUp() {
                     label="Phone"
                     type="Number"
                     id="phone"
+                    error={!validation.phone}
+                    helperText={!validation.phone && "Phone Number is required"}
+                    onChange={(e) => handleFieldChange("phone", e.target.value)}
                   />
                 </Grid>
               </Grid>

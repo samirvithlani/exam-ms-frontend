@@ -81,11 +81,8 @@ import {
 
     return (
       <div>
-        
+    <AdminHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} ></AdminHeader>
         <CssBaseline />
-        <IconButton onClick={toggleSidebar}>
-        {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
-      </IconButton>
         <Box sx={{ display: "flex" }}>
         <Drawer
           PaperProps={{
