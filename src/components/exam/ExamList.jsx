@@ -238,7 +238,7 @@ const ExamList = () => {
             columns={columns.map((column) => ({
               ...column,
               renderCell: (params) => {
-                if (column.field === "actions" && isSuperAdmin) {
+                if (column.field === "actions") {
                   return (
                     <div className="responsive-container">
                       <Tooltip title="View Exam" arrow>

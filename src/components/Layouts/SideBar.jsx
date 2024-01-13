@@ -83,6 +83,30 @@ export const SideBar = () => {
       activeMenuFor: ["studentlist"],
       logoImage: ListIcon,
     },
+    {
+      id: 10,
+      name: "Add subject",
+      linkUrl: "subject",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["subject"],
+      logoImage: AddIcon,
+    },
+    {
+      id: 11,
+      name: "Add standard",
+      linkUrl: "standard",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["standard"],
+      logoImage: AddIcon,
+    },
+    {
+      id: 12,
+      name: "Add stream",
+      linkUrl: "stream",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["stream"],
+      logoImage: AddIcon,
+    },
   ];
 
   return (
