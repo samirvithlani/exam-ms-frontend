@@ -16,7 +16,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { Paper } from "@mui/material";
@@ -27,6 +27,16 @@ import loginpagImage1 from "../../assets/images/loginpage1.png";
 export default function Login() {
   const [isLoading, setisLoading] = React.useState(false);
   const navigate = useNavigate();
+  const [validation, setValidation] = useState({
+    email: true,
+    password: true,
+  });
+  const handleFieldChange = (fieldName, value) => {
+    setValidation((prevValidation) => ({
+      ...prevValidation,
+      [fieldName]: !!value,
+    }));
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setisLoading(true);
@@ -36,6 +46,19 @@ export default function Login() {
       email: data.get("email"),
       password: data.get("password"),
     };
+    const updatedValidation = {};
+    let isValid = true;
+
+    for (const key in userData) {
+      updatedValidation[key] = !!userData[key];
+      isValid = isValid && updatedValidation[key];
+    }
+
+    setValidation(updatedValidation);
+
+    if (!isValid) {
+      return;
+    }
     try {
       const response = await axios.post("/login", userData);
       const { message } = response.data;
@@ -107,6 +130,9 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={!validation.email}
+              helperText={!validation.email && "Email is required"}
+              onChange={(e) => handleFieldChange("email", e.target.value)}
             />
             <TextField
               margin="normal"
@@ -117,6 +143,9 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={!validation.password}
+              helperText={!validation.password && "Password is required"}
+              onChange={(e) => handleFieldChange("password", e.target.value)}
             />
             <Button
               type="submit"

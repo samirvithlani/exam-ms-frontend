@@ -26,6 +26,9 @@ import CurrentExam from "../dashboard/Dashboard";
 import { AdminDashboard } from "../dashboard/AdminDashboard";
 import { FacultySideBar } from "../Layouts/Facultysidebar";
 import { FacultyDashboard } from "../dashboard/FacultyDashboard";
+import { AddSubject } from "../login/Addsubject";
+import { AddStandard } from "../login/AddStandard";
+import { AddStream } from "../login/AddStream";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -178,7 +181,23 @@ const MainRouter = ({ children }) => {
           path:"studentlist",
           element:<StudentList/>,
           errorElement:<div>404</div>
-        }
+        },
+        {
+          path:"subject",
+          element:<AddSubject/>,
+          errorElement:<dov>404</dov>
+        },
+        {
+          path:'standard',
+          element:<AddStandard/>,
+          errorElement:<div>404</div>
+        },
+        {
+          path:'stream',
+          element:<AddStream/>,
+          errorElement:<div>404</div>
+        },
+        
 
       ],
     },

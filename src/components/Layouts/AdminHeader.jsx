@@ -66,7 +66,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const AdminHeader = ({ isExpanded, toggleSidebar }) =>{
 
-  const role = Cookies.get('role');
+  const role = Cookies.get('name');
   const navigate = useNavigate();
   useEffect(()=>{
   },[])
