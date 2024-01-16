@@ -107,6 +107,14 @@ export const SideBar = () => {
       activeMenuFor: ["stream"],
       logoImage: AddIcon,
     },
+    {
+      id: 13,
+      name: "Add Topic",
+      linkUrl: "topic",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["topic"],
+      logoImage: AddIcon,
+    },
   ];
 
   return (

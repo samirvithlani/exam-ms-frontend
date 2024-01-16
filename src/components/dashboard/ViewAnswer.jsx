@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { useParams } from 'react-router-dom';
 
 export const ViewAnswer = () => {
@@ -59,7 +59,13 @@ export const ViewAnswer = () => {
     { field: 'correctOption', headerName: 'CorrectAnswer', width: 150 },
     { field: 'status', headerName: 'Status', width: 150 },
   ];
-
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarExport />
+      </GridToolbarContainer>
+    );
+  }
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid 
@@ -67,6 +73,9 @@ export const ViewAnswer = () => {
       columns={columns} 
       pageSize={5} 
       getRowClassName={getRowClassName}
+      slots={{
+        toolbar:CustomToolbar
+      }}
       />
        <style>
         {`
