@@ -29,6 +29,7 @@ import { FacultyDashboard } from "../dashboard/FacultyDashboard";
 import { AddSubject } from "../login/Addsubject";
 import { AddStandard } from "../login/AddStandard";
 import { AddStream } from "../login/AddStream";
+import { AddTopic } from "../login/AddTopic";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -197,6 +198,11 @@ const MainRouter = ({ children }) => {
           element:<AddStream/>,
           errorElement:<div>404</div>
         },
+        {
+          path:'topic',
+          element:<AddTopic/>,
+          errorElement:<div>404 </div>
+        }
         
 
       ],
