@@ -23,6 +23,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Cookies from "js-cookie";
+import HomeIcon from '@mui/icons-material/Home';
 
 export const SideBar = () => {
   const navigate = useNavigate();
@@ -34,6 +35,14 @@ export const SideBar = () => {
     setIsExpanded(!isExpanded);
   };
   const RouteArray = [
+    {
+      id: 12,
+      name: "HOME",
+      logoImage: HomeIcon,
+      linkUrl: "adminDashboard",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["adminDashboard"],
+    },
     {
       id: 3,
       name: "Create Exam",
