@@ -27,8 +27,8 @@ import HomeIcon from '@mui/icons-material/Home';
 
 export const SideBar = () => {
   const navigate = useNavigate();
-  const drawerWidth = 250;
-  const partialWidth = 70;
+  const drawerWidth = 350;
+  const partialWidth = 90;
   const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
 
   const toggleSidebar = () => {
@@ -130,7 +130,7 @@ export const SideBar = () => {
     <div>
     <AdminHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} ></AdminHeader>
       <CssBaseline />
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex" , background:"green",width:"100%" }}>
         <Drawer
           PaperProps={{
             sx: {
@@ -212,6 +212,7 @@ export const SideBar = () => {
           component="main"
           sx={
             {
+              width: "100%",
               // transition: "width 0.2s ease-in-out",
             }
           }

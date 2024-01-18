@@ -31,182 +31,186 @@ import { AddStandard } from "../login/AddStandard";
 import { AddStream } from "../login/AddStream";
 import { AddTopic } from "../login/AddTopic";
 
+import { PrivateRoutes } from "../PrivateRoutes";
+import { checkAuthToken } from "../../util/util";
+
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
   const routesData = createBrowserRouter([
     {
       path: "/",
-      element: <SignUp/>,
+      element: <SignUp />,
       errorElement: <div>404</div>,
     },
     {
       path: "/login",
-      element:<Login/>,
+      element: <Login />,
       errorElement: <div>404</div>,
     },
-    
-    { 
-      path : "/update-exam/:id", 
-    element:<UpdateExam />
-  },
- 
-{
-  path:"/viewAnswers/:id",
-  element:<ViewAnswer/>
-},
-{
-  path:"/viewExam/:id",
-  element:<ViewExam/>
-},
-{
-  path:"/add/:role",
-  element:<AddRole/>
-},
-{
-  path:"user/:id",
-  element:<UserRegistration/>
-},
 
-{
-  path:"/userDasboard",
-  element:<UserSideBar/>,
-  errorElement:<div>404</div>,
-  children : [
     {
-      path:"dashboard",
-      // element:<Dashboard/>,
-      errorElement:<div>404</div>
+      path: "/update-exam/:id",
+      element: <UpdateExam />,
+    },
+
+    {
+      path: "/viewAnswers/:id",
+      element: <ViewAnswer />,
     },
     {
-      path:"currentexam",
-      element:<CurrentExam/>,
-      errorElement:<div>404</div>
-    },
-    
-    {
-      path:"history",
-      element:<Historyofuser/>
+      path: "/viewExam/:id",
+      element: <ViewExam />,
     },
     {
-      path:"viewAnswers/:id",
-      element:<ViewAnswer/>,
-      errorElement:<div>400</div>
+      path: "/add/:role",
+      element: <AddRole />,
     },
-    { 
-    path : "question/:id", 
-    element:< MCQQuestionsPage/>,
-    errorElement:<div>404</div>
-  },
-  ]
-},
-{
-  path:"/facultyDashboard",
-  element:<FacultySideBar/>,
-  errorElement:<div>404</div>,
-  children:[
     {
-      path: "",
-      element: <FacultyDashboard />,
+      path: "user/:id",
+      element: <UserRegistration />,
+    },
+
+    {
+      path: "/userDasboard",
+      element: <UserSideBar />,
       errorElement: <div>404</div>,
+      children: [
+        {
+          path: "dashboard",
+          // element:<Dashboard/>,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "currentexam",
+          element: <CurrentExam />,
+          errorElement: <div>404</div>,
+        },
+
+        {
+          path: "history",
+          element: <Historyofuser />,
+        },
+        {
+          path: "viewAnswers/:id",
+          element: <ViewAnswer />,
+          errorElement: <div>400</div>,
+        },
+        {
+          path: "question/:id",
+          element: <MCQQuestionsPage />,
+          errorElement: <div>404</div>,
+        },
+      ],
     },
     {
-      path: "createexam",
-      element: <CreateExam/>,
+      path: "/facultyDashboard",
+      element: <FacultySideBar />,
       errorElement: <div>404</div>,
+      children: [
+        {
+          path: "",
+          element: <FacultyDashboard />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "createexam",
+          element: <CreateExam />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "examlist",
+          element: <ExamList />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion/:id",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "studentlist",
+          element: <StudentList />,
+          errorElement: <div>404</div>,
+        },
+      ],
     },
-    {
-        path:"examlist",
-        element:<ExamList/>,
-        errorElement:<div>404</div>
-    },
-    {
-      path:"mcqquestion/:id",
-    element:<McqQuestion/>,
-      errorElement:<div>404</div>
-    },
-    {
-      path:"mcqquestion",
-    element:<McqQuestion/>,
-      errorElement:<div>404</div>
-    },
-    {
-      path:"studentlist",
-      element:<StudentList/>,
-      errorElement:<div>404</div>
-    }
-  ]
-},
     {
       path: "/adminDashboard",
       element: <SideBar />,
       errorElement: <div>404</div>,
+      loader: checkAuthToken,
 
       children: [
         {
           path: "",
           element: <AdminDashboard />,
           errorElement: <div>404</div>,
+          
         },
         {
           path: "createexam",
-          element: <CreateExam/>,
+          element: <CreateExam />,
           errorElement: <div>404</div>,
         },
         {
-            path:"examlist",
-            element:<ExamList/>,
-            errorElement:<div>404</div>
+          path: "examlist",
+          element: <ExamList />,
+          errorElement: <div>404</div>,
         },
         {
           path: "facultylist",
-          element:<UserGrid/>,
+          element: <UserGrid />,
           errorElement: <div>404</div>,
         },
-        
-        {
-          path:"companylist",
-          element:<CompanyList/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"mcqquestion/:id",
-        element:<McqQuestion/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"mcqquestion",
-        element:<McqQuestion/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"studentlist",
-          element:<StudentList/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:"subject",
-          element:<AddSubject/>,
-          errorElement:<dov>404</dov>
-        },
-        {
-          path:'standard',
-          element:<AddStandard/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:'stream',
-          element:<AddStream/>,
-          errorElement:<div>404</div>
-        },
-        {
-          path:'topic',
-          element:<AddTopic/>,
-          errorElement:<div>404 </div>
-        }
-        
 
+        {
+          path: "companylist",
+          element: <CompanyList />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion/:id",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "mcqquestion",
+          element: <McqQuestion />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "studentlist",
+          element: <StudentList />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "subject",
+          element: <AddSubject />,
+          errorElement: <dov>404</dov>,
+        },
+        {
+          path: "standard",
+          element: <AddStandard />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "stream",
+          element: <AddStream />,
+          errorElement: <div>404</div>,
+        },
+        {
+          path: "topic",
+          element: <AddTopic />,
+          errorElement: <div>404 </div>,
+        },
       ],
     },
+
     {
       basename: `/`,
     },
@@ -214,7 +218,6 @@ const MainRouter = ({ children }) => {
   return (
     <React.Fragment>
       <RouterProvider router={routesData}>{children}</RouterProvider>
-      
     </React.Fragment>
   );
 };
