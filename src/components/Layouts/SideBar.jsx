@@ -124,7 +124,22 @@ export const SideBar = () => {
       activeMenuFor: ["topic"],
       logoImage: AddIcon,
     },
+    {
+      id: 14,
+      name: "View Exam",
+      linkUrl: "viewexam",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["viewexam"],
+    },
+    {
+      id: 15,
+      name: "Update Exam",
+      linkUrl: "updateexam",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["updateexam"],
+    },
   ];
+  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam");
 
   return (
     <div>
@@ -152,7 +167,7 @@ export const SideBar = () => {
         >
           {" "}
           <List>
-            {RouteArray.map((res, index) => (
+            {filteredRouteArray.map((res, index) => (
               <ListItem
                 className={
                   res.activeMenuFor.some((x) => location.pathname.includes(x))

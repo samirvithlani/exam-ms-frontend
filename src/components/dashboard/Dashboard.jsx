@@ -150,7 +150,13 @@ const fetchstd = async()=>{
       <CssBaseline />
       <Grid  container spacing={3}>
         <Grid item xs={12} >
-        <FormControl style={styles.fullWidthSelect}>
+        <FormControl
+          sx={{
+            mt: 2,
+            ml: { xs: 0, md: 30 }, 
+            ...styles.fullWidthSelect,
+          }}
+        >
             <InputLabel id="demo-simple-select-label">Select Difficulty</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -168,7 +174,13 @@ const fetchstd = async()=>{
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-        <FormControl style={styles.fullWidthSelect}>
+        <FormControl
+          sx={{
+            mt: 2,
+            ml: { xs: 0, md: 30 }, 
+            ...styles.fullWidthSelect,
+          }}
+        >
       <InputLabel id="demo-simple-select-label">Select Std</InputLabel>
       <Select
         labelId="demo-simple-select-label"

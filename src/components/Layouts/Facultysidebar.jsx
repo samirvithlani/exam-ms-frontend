@@ -23,7 +23,8 @@ import {
   import ChevronRightIcon from "@mui/icons-material/ChevronRight";
   import ExitToAppIcon from "@mui/icons-material/ExitToApp";
   import Cookies from "js-cookie";
-  
+  import HomeIcon from '@mui/icons-material/Home';
+
   export const FacultySideBar = () => {
     const navigate = useNavigate();
     const drawerWidth = 250;
@@ -34,6 +35,14 @@ import {
       setIsExpanded(!isExpanded);
     };
     const RouteArray = [
+      {
+        id: 1,
+        name: "Home",
+        logoImage: HomeIcon,
+        linkUrl: "facultydashboard",
+        textColor: "#7D8FB3",
+        activeMenuFor: ["facultydashboard"],
+      },
       {
         id: 3,
         name: "Create Exam",

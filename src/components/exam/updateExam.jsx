@@ -185,9 +185,20 @@ const fetchTypes = async()=>{
       <CssBaseline />
 
       <Grid>
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <AddBoxIcon />
-        </Avatar>
+      <Avatar
+      sx={{
+        m: 1,
+        bgcolor: "secondary.main",
+        marginLeft: '500px', 
+        '@media (max-width: 600px)':{
+          marginLeft: '0', 
+          width: '50px',
+          height: '50px', 
+        },
+      }}
+    >
+      <AddBoxIcon />
+    </Avatar>
         <Typography component="h1" variant="h5">
           UPDATE EXAM
         </Typography>
