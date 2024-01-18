@@ -23,6 +23,7 @@ import {
   import Cookies from "js-cookie";
   import {Button} from "@mui/material";
   import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+  import HomeIcon from '@mui/icons-material/Home';
 
   export const UserSideBar = () => {
     const navigate = useNavigate();
@@ -36,8 +37,8 @@ import {
     const RouteArray = [
       {
         id: 1,
-        name: "Dashboard",
-        logoImage: AddIcon,
+        name: "Home",
+        logoImage: HomeIcon,
         linkUrl: "dashboard",
         textColor: "#7D8FB3",
         activeMenuFor: ["dashboard"],

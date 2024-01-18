@@ -104,7 +104,7 @@ const ExamList = () => {
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/update-exam/${id}`);
+    navigate(`/adminDashboard/update-exam/${id}`);
   };
   const handleAddQuestions = (
     type,
@@ -152,6 +152,7 @@ const ExamList = () => {
         error: "Failed to create Exam. Please try again.",
       });
       setExamData((prevData) => prevData.filter((exam) => exam.id !== id));
+      fetchData();
     } catch (error) {
       console.log("Error while deleting exam:", error);
     }
@@ -193,7 +194,7 @@ const ExamList = () => {
     topic,
     type
   ) => {
-    navigate(`/viewexam/${id}`, {
+    navigate(`/adminDashboard/viewexam/${id}`, {
       state: { subject, stream, difficulty, standard, topic, type },
     });
   };

@@ -44,6 +44,7 @@ export const McqQuestion = () => {
   const [topics, setTopics] = useState([]);
   const [std, setstd] = useState("");
   const [types, setTypes] = useState([]);
+  const [questionsList, setQuestionsList] = useState([]);
   const subject = location.state?.subject;
   const stream = location.state?.stream;
   const difficulty = location.state?.difficulty;
@@ -74,6 +75,7 @@ export const McqQuestion = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -184,26 +186,13 @@ export const McqQuestion = () => {
     setSelectedType(TypeId);
   };
   const submitHandler = async (data) => {
-    if (
-      selectSubject ||
-      selectStream ||
-      selectTopic ||
-      SelectStandards ||
-      selectdiificulty
-    ) {
-      (data.subject = selectSubject),
-        (data.stream = selectStream),
-        (data.topic = selectTopic),
-        (data.std = SelectStandards),
-        (data.difficulty = selectdiificulty);
-    }
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
       formData.append("file", data.fileUpload[0]);
     }
     if (!data.fileUpload || data.fileUpload === undefined) {
-      response = await axios.post("/mcqsingle", data);
+      response = await axios.post("/mcqmany", {questions:questionsList});
       navigate("/admindashboard/examlist");
       toast.success("Question Added Sucess Fully ...");
     } else {
@@ -228,7 +217,17 @@ export const McqQuestion = () => {
       });
     }
   };
-
+  const handleAddQuestion = () => {
+    const data = getValues();
+    const isValid = validateQuestionData(data);
+    
+    if (isValid) {
+      setQuestionsList((prevList) => [...prevList, { ...data }]);
+    }
+  };
+  const validateQuestionData = (data) => {
+      return true;
+  };
   const validationSchema = {
     question: {
       required: {
@@ -309,7 +308,6 @@ export const McqQuestion = () => {
         </label>
       </div>
 
-      {/* <Typography variant="h4" className="h1font" component="div" sx={{ flexGrow: 1 }}> */}
       <h1>ADD Question :</h1>
       {/* </Typography> */}
       <Grid container spacing={2}>
@@ -598,6 +596,27 @@ export const McqQuestion = () => {
                     </Grid>
                   )}
                 </Grid>
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={() => handleAddQuestion(getValues())}
+                >
+                  Add Question
+                </Button>
+
+                {/* Display the list of added questions */}
+                {questionsList.map((question, index) => (
+                  <div key={index}>
+                    <Typography variant="subtitle1">
+                      Question {index + 1}:
+                    </Typography>
+                    <pre>{JSON.stringify(question, null, 2)}</pre>
+                  </div>
+                ))}
+
+
                 <Button
                   type="submit"
                   fullWidth

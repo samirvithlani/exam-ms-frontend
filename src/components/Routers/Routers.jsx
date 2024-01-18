@@ -47,20 +47,6 @@ const MainRouter = ({ children }) => {
       element: <Login />,
       errorElement: <div>404</div>,
     },
-
-    {
-      path: "/update-exam/:id",
-      element: <UpdateExam />,
-    },
-
-    {
-      path: "/viewAnswers/:id",
-      element: <ViewAnswer />,
-    },
-    {
-      path: "/viewExam/:id",
-      element: <ViewExam />,
-    },
     {
       path: "/add/:role",
       element: <AddRole />,
@@ -207,6 +193,15 @@ const MainRouter = ({ children }) => {
           path: "topic",
           element: <AddTopic />,
           errorElement: <div>404 </div>,
+        },
+        {
+          path: "viewExam/:id",
+          element: <ViewExam />,
+          errorElement:<div>404</div>
+        },
+        {
+          path: "update-exam/:id",
+          element: <UpdateExam />,
         },
       ],
     },
