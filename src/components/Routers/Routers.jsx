@@ -33,6 +33,7 @@ import { AddTopic } from "../login/AddTopic";
 
 import { PrivateRoutes } from "../PrivateRoutes";
 import { checkAuthToken } from "../../util/util";
+import UserProfile from "../Layouts/UserProfile";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -55,7 +56,10 @@ const MainRouter = ({ children }) => {
       path: "user/:id",
       element: <UserRegistration />,
     },
-
+    {
+      path:"/userprofile",
+      element:<UserProfile/>
+    },
     {
       path: "/userDasboard",
       element: <UserSideBar />,
