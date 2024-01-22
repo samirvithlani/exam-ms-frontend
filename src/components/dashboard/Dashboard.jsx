@@ -5,18 +5,20 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider} from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery,Paper } from '@mui/material';
 import { useTheme } from "@mui/material/styles";
+import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 const CurrentExam = () => {
 const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isLoading, setisLoading] = useState(false)
 
   const [difficulties, setDifficulties] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
@@ -40,7 +42,15 @@ const fetchstd = async()=>{
     console.log(error,"error");
   }
 }
-
+const paperStyle = {
+  p: 2,
+  display: "flex",
+  flexDirection: "column",
+  height: "auto",
+  backgroundColor: "white", // Set the background color to grey
+  m1: 2,
+  
+};
   const fetchDifficultyLevels = async () => {
     try {
       const response = await axios.get('/difficulty');
@@ -109,6 +119,7 @@ const fetchstd = async()=>{
         ),
       }      ];
   const fetchData = async (stdId,selectedDifficulty) => {
+    setisLoading(true)
     await axios.get(`/exams/${selectedDifficulty}/${stdId}`)
     .then((response) => {
       const filteredData = response.data.data.map((exam,index) => ({
@@ -132,6 +143,7 @@ const fetchstd = async()=>{
         examtype_id:exam.examtype?._id || 'N/A'
       }));
       setExamList(filteredData); 
+      setisLoading(false)
     })
     .catch((error) => {
       console.error('Error fetching data:', error);
@@ -148,7 +160,11 @@ const fetchstd = async()=>{
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Grid  container spacing={3}>
+      <Grid style={{ height: 400, width: '100%' }}>
+      <Paper sx={paperStyle} className="responsive-container">
+    {
+      isLoading ? <CustomeLoader/> : null
+    }
         <Grid item xs={12} >
         <FormControl
           sx={{
@@ -225,6 +241,7 @@ const fetchstd = async()=>{
             <p>No available exams</p>
           )}
         </Grid>
+        </Paper>
       </Grid>
     </ThemeProvider>
   );

@@ -113,10 +113,10 @@ const ExamList = () => {
     fetchData();
   }, []);
 
-  const handleEdit = (id) => {
+  const handleEdit =  (id) => {
     navigate(`/adminDashboard/update-exam/${id}`);
   };
-  const handleAddQuestions = (
+  const handleAddQuestions = async(
     type,
     id,
     subject,
@@ -130,9 +130,14 @@ const ExamList = () => {
     standardId,
     topic,
     types,
-    typeId
+    typeId,
+    noOfQuestions
   ) => {
-    if (type === "mcq") {
+    let data = await axios.get(`/exam/${id}`)
+    if(data.data.mcq.length === noOfQuestions){
+      return alert("question is full")
+        }
+      if(type === "mcq") {
       navigate(`/adminDashboard/mcqquestion/${id}`, {
         state: {
           subject,
@@ -147,6 +152,7 @@ const ExamList = () => {
           topic,
           types,
           typeId,
+          noOfQuestions
         },
       });
     } else {
@@ -216,7 +222,7 @@ const ExamList = () => {
     display: "flex",
     flexDirection: "column",
     height: "auto",
-    backgroundColor: "white", // Set the background color to grey
+    backgroundColor: "white",
     m1: 2,
   };
   return (
@@ -263,7 +269,7 @@ const ExamList = () => {
                               params.row.Difficulty,
                               params.row.Standard,
                               params.row.examTopic,
-                              params.row.examType
+                              params.row.examType,
                             )
                           }
                         >
@@ -304,7 +310,8 @@ const ExamList = () => {
                               params.row.standardId,
                               params.row.examTopic,
                               params.row.examType,
-                              params.row.typeId
+                              params.row.typeId,
+                              params.row.noOfQuestions
                             )
                           }
                           color="primary"
