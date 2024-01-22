@@ -1,51 +1,64 @@
 import React from "react";
-import Card from "../Layouts/Card";
-import "../../assets/layouts/card.css";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 export const AdminDashboard = () => {
   const cardStyle = {
-    backgroundColor: "rgb(69, 39, 160)",
+    backgroundColor: "rgb(94, 53, 177)",
     border: "1px solid #ddd",
-    borderRadius: "8px",
+    borderRadius: "20px",
+    height: 200,
+    
   };
+
+  
 
   return (
     <Grid
       container
-      gap={0.5}
+      spacing={2}
+      width="100%"
       sx={{
-        backgroundColor: "rgb(54, 65, 82)",
         borderRadius: "8px",
-        mt: 0.5,
-        ml: 0.5,
-        width: "100%", // Set width to 100% for responsiveness
-        mx: "auto", // Center horizontally        
+        mt: 2,
+        ml: 0.1,
+        p: 2,
       }}
     >
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card
-          title="Card Title"
-          description="This is a sample card description."
-          cardStyle={cardStyle}
-        />
+      {/* First Row */}
+      <Grid item xs={12} sm={4} md={4} lg={4} xl={4} style={{ background: "pink", ...cardStyle, mb: 2 }}>
+        <Grid container className="card-content" direction="column" spacing={0}>
+          <Typography variant="h4">Card 1</Typography>
+          <Typography variant="body1">Print no of student in portal</Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card
-          title="Card Title"
-          description="This is a sample card description."
-          cardStyle={{
-            backgroundColor: "rgb(30, 136, 229)",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-          }}
-        />
+
+      <Grid item xs={12} sm={4} md={4} lg={4} xl={4} style={{ background: "pink", ...cardStyle, mb: 2 }}>
+        <Grid container className="card-content" direction="column" spacing={0}>
+          <Typography variant="h4">Card 2</Typography>
+          <Typography variant="body1">Print not of exam in portal.</Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-        <Card
-          title="Card Title"
-          description="This is a sample card description."
-        />
+
+      <Grid item xs={12} sm={4} md={4} lg={4} xl={4} style={{ background: "pink", ...cardStyle, mb: 2 }}>
+        <Grid container className="card-content" direction="column" spacing={0}>
+          <Typography variant="h4">Card 3</Typography>
+          <Typography variant="body1">This is a sample card description.</Typography>
+        </Grid>
+      </Grid>
+
+      {/* Second Row */}
+      <Grid item xs={12} sm={8} md={8} lg={8} xl={8} style={{ background: "pink", ...cardStyle, height: 500, mb: 2 }}>
+        <Grid container className="card-content" direction="column" spacing={0}>
+          <Typography variant="h4">Card 4</Typography>
+          <Typography variant="body1">Please create bar chart here for students</Typography>
+        </Grid>
+      </Grid>
+
+      <Grid item xs={12} sm={4} md={4} lg={4} xl={4} style={{ background: "pink", ...cardStyle, height: 500, mb: 2 }}>
+        <Grid container className="card-content" direction="column" spacing={0}>
+          <Typography variant="h4">Card 5</Typography>
+          <Typography variant="body1">This is another card in the second row.</Typography>
+        </Grid>
       </Grid>
     </Grid>
   );

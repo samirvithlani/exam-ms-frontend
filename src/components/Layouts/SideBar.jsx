@@ -27,8 +27,8 @@ import HomeIcon from '@mui/icons-material/Home';
 
 export const SideBar = () => {
   const navigate = useNavigate();
-  const drawerWidth = 350;
-  const partialWidth = 90;
+  const drawerWidth = 250;
+  const partialWidth = 70;
   const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
 
   const toggleSidebar = () => {
@@ -39,7 +39,7 @@ export const SideBar = () => {
       id: 12,
       name: "HOME",
       logoImage: HomeIcon,
-      linkUrl: "adminDashboard",
+      linkUrl: "",
       textColor: "#7D8FB3",
       activeMenuFor: ["adminDashboard"],
     },
@@ -145,7 +145,7 @@ export const SideBar = () => {
     <div>
     <AdminHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} ></AdminHeader>
       <CssBaseline />
-      <Box sx={{ display: "flex" , background:"green",width:"100%" }}>
+      <Box sx={{ display: "flex" ,backgroundColor:"rgb(238,242,246)",width:"100%" }}>
         <Drawer
           PaperProps={{
             sx: {
@@ -181,7 +181,7 @@ export const SideBar = () => {
                 disablePadding
                 component={Link}
                 to={res.linkUrl != "null" ? res.linkUrl : "#"}
-                style={{ marginTop: "10px" }}
+                style={{ marginTop: "5px" }}
                 sx={{
                   "&:hover": {
                     backgroundColor: "#7776EE",
@@ -190,7 +190,7 @@ export const SideBar = () => {
               >
                 <ListItemButton>
                   <ListItemIcon>
-                    <Avatar sx={{ m: 1, bgcolor: deepPurple[500] }}>
+                    <Avatar sx={{ bgcolor: deepPurple[500] }}>
                       {res?.logoImage && <res.logoImage />}
                     </Avatar>
                   </ListItemIcon>
@@ -228,6 +228,9 @@ export const SideBar = () => {
           sx={
             {
               width: "100%",
+              mt: "50px",
+              backgroundColor:"rgb(240,235,247)",
+              borderRadius: "8px",
               // transition: "width 0.2s ease-in-out",
             }
           }

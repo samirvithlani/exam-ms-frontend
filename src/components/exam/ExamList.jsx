@@ -8,7 +8,18 @@ import {
   PlusOneOutlined,
   Visibility,
 } from "@mui/icons-material";
-import { Box, CircularProgress, createTheme, CssBaseline, IconButton, Paper, Tooltip , Grid, Typography, useMediaQuery} from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  createTheme,
+  CssBaseline,
+  IconButton,
+  Paper,
+  Tooltip,
+  Grid,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,10 +29,9 @@ import { set } from "react-hook-form";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import Cookies from "js-cookie";
 import { useTheme } from "@mui/material/styles";
-import { useDemoData } from '@mui/x-data-grid-generator';
-const userRole = Cookies.get('role');
-const isSuperAdmin = userRole === 'superAdmin';
-
+import { useDemoData } from "@mui/x-data-grid-generator";
+const userRole = Cookies.get("role");
+const isSuperAdmin = userRole === "superAdmin";
 
 const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
@@ -42,12 +52,12 @@ const columns = [
 const ExamList = () => {
   const theme = useTheme();
 
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const [examData, setExamData] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { data } = useDemoData({
-    dataSet: 'Commodity',
+    dataSet: "Commodity",
     rowLength: 100,
     maxColumns: 6,
   });
@@ -64,7 +74,7 @@ const ExamList = () => {
   }, []);
   const navigate = useNavigate();
   const fetchData = async () => {
-    setisLoading(true)
+    setisLoading(true);
     axios
       .get("/Exam")
       .then((response) => {
@@ -92,7 +102,7 @@ const ExamList = () => {
           typeId: exam.examtype?._id || "N/A",
         }));
         setExamData(filteredData);
-        setisLoading(false)
+        setisLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -211,13 +221,13 @@ const ExamList = () => {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-        
       <Paper sx={paperStyle} className="responsive-container">
-        {
-          isLoading ? <CustomeLoader/> : null
-        }
-       <Typography variant="h1" sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }} 
-       className="responsive-container">
+        {isLoading ? <CustomeLoader /> : null}
+        <Typography
+          variant="h1"
+          sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }}
+          className="responsive-container"
+        >
           Exam List
         </Typography>
         <Grid
@@ -229,7 +239,7 @@ const ExamList = () => {
             height: isMobile ? "50vh" : "90vh",
             overflowX: "auto",
           }}
-        >          
+        >
           <DataGrid
             sx={{
               border: "none",
@@ -329,12 +339,11 @@ const ExamList = () => {
                       fontFamily: "Lato",
                     }}
                   >
-                   {params.value}
+                    {params.value}
                   </div>
                 );
               },
             }))}
-            
             initialState={{
               ...data.initialState,
               pagination: { paginationModel: { pageSize: 5 } },

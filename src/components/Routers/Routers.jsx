@@ -34,6 +34,7 @@ import { AddTopic } from "../login/AddTopic";
 import { PrivateRoutes } from "../PrivateRoutes";
 import { checkAuthToken } from "../../util/util";
 import UserProfile from "../Layouts/UserProfile";
+import { StudentDashboard } from "../dashboard/StudentDashboard";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -67,7 +68,8 @@ const MainRouter = ({ children }) => {
       children: [
         {
           path: "dashboard",
-          // element:<Dashboard/>,
+           //element:<Dashboard/>,
+           element:<StudentDashboard/>,
           errorElement: <div>404</div>,
         },
         {
