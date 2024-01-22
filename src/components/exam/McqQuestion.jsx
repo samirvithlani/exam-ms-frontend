@@ -57,6 +57,7 @@ export const McqQuestion = () => {
   const topicId = location.state?.topicId;
   const type = location.state?.types;
   const typeId = location.state?.typeId;
+  const noOfQuestions = location.state?.noOfQuestions
   useEffect(() => {
     setSelectStream(streamId);
     setselectdefficultie(difficultyId);
@@ -206,8 +207,8 @@ export const McqQuestion = () => {
     }
 
     let mcq;
-    if (Array.isArray(response.data)) {
-      mcq = response.data.map((item) => item._id);
+    if (Array.isArray(response.data.data)) {
+      mcq = response.data.data.map((item) => item._id);
     } else {
       mcq = response.data._id;
     }
