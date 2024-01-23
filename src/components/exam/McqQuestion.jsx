@@ -21,7 +21,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../assets/layouts/layout.module.css";
 import { MySnackBar } from "../MySnackBar";
-//createUser for vc
 export const McqQuestion = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -58,7 +57,8 @@ export const McqQuestion = () => {
   const topicId = location.state?.topicId;
   const type = location.state?.types;
   const typeId = location.state?.typeId;
-  const noOfQuestions = location.state?.noOfQuestions;
+  const noOfQuestions = location.state?.noOfQuestions
+  const [totalQuestions, setTotalQuestions] = useState(noOfQuestions);
   useEffect(() => {
     setSelectStream(streamId);
     setselectdefficultie(difficultyId);
@@ -225,6 +225,7 @@ export const McqQuestion = () => {
 
     if (isValid) {
       setQuestionsList((prevList) => [...prevList, { ...data }]);
+      setTotalQuestions((prevTotal) => prevTotal - 1);
     }
   };
   const validateQuestionData = (data) => {
@@ -648,6 +649,7 @@ export const McqQuestion = () => {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={totalQuestions !== 0}
               >
                 SUBMIT
               </Button>
