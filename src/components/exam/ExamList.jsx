@@ -230,9 +230,8 @@ const ExamList = () => {
       <Paper sx={paperStyle} className="responsive-container">
         {isLoading ? <CustomeLoader /> : null}
         <Typography
-          variant="h1"
-          sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }}
-          className="responsive-container"
+          variant="h4"
+          sx={{textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
         >
           Exam List
         </Typography>

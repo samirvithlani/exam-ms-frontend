@@ -20,6 +20,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../assets/layouts/layout.module.css";
+import { MySnackBar } from "../MySnackBar";
 //createUser for vc
 export const McqQuestion = () => {
   const { id } = useParams();
@@ -57,7 +58,7 @@ export const McqQuestion = () => {
   const topicId = location.state?.topicId;
   const type = location.state?.types;
   const typeId = location.state?.typeId;
-  const noOfQuestions = location.state?.noOfQuestions
+  const noOfQuestions = location.state?.noOfQuestions;
   useEffect(() => {
     setSelectStream(streamId);
     setselectdefficultie(difficultyId);
@@ -193,7 +194,7 @@ export const McqQuestion = () => {
       formData.append("file", data.fileUpload[0]);
     }
     if (!data.fileUpload || data.fileUpload === undefined) {
-      response = await axios.post("/mcqmany", {questions:questionsList});
+      response = await axios.post("/mcqmany", { questions: questionsList });
       navigate("/admindashboard/examlist");
       toast.success("Question Added Sucess Fully ...");
     } else {
@@ -221,13 +222,13 @@ export const McqQuestion = () => {
   const handleAddQuestion = () => {
     const data = getValues();
     const isValid = validateQuestionData(data);
-    
+
     if (isValid) {
       setQuestionsList((prevList) => [...prevList, { ...data }]);
     }
   };
   const validateQuestionData = (data) => {
-      return true;
+    return true;
   };
   const validationSchema = {
     question: {
@@ -285,10 +286,27 @@ export const McqQuestion = () => {
       },
     },
   };
+  const cardStyle = {
+    backgroundColor: "white",
+    border: "1px solid #ddd",
+    borderRadius: "15px",
+    height: "100%",
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div>
+      <MySnackBar />
+      <Grid
+        container
+        spacing={2}
+        width="100%"
+        sx={{
+          borderRadius: "8px",
+          mt: 2,
+          ml: 0.1,
+          p: 2,
+        }}
+      >
         <label>
           <input
             type="radio"
@@ -307,351 +325,357 @@ export const McqQuestion = () => {
           />
           Upload File
         </label>
-      </div>
-
-      <h1>ADD Question :</h1>
-      {/* </Typography> */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Box component="form" onSubmit={handleSubmit(submitHandler)}>
-            {selectedOption === "manual" && (
-              <>
-                {standard && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Standard: {standard}</Typography>
-                  </Grid>
-                )}
-                {stream && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Stream: {stream}</Typography>
-                  </Grid>
-                )}
-                {subject && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Subject: {subject}</Typography>
-                  </Grid>
-                )}
-                {topic && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Topic: {topic}</Typography>
-                  </Grid>
-                )}
-                {type && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">Type: {type}</Typography>
-                  </Grid>
-                )}
-                {difficulty && (
-                  <Grid item xs={12}>
-                    <Typography variant="h6">
-                      Difficulty: {difficulty}
-                    </Typography>
-                  </Grid>
-                )}
-                <InputLabel htmlFor="question">Question</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="question"
-                  // required
-                  fullWidth
-                  id="question"
-                  label="question"
-                  autoFocus
-                  {...register("question")}
-                />
-                {errors.question && (
-                  <span style={{ color: "red" }}>
-                    {errors.question.message}
-                  </span>
-                )}
-
-                <InputLabel htmlFor="Option1">Option1</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="Option1"
-                  // required
-                  fullWidth
-                  id="Option1"
-                  label="Option1"
-                  autoFocus
-                  {...register("Option1")}
-                />
-                {errors.Option1 && (
-                  <span style={{ color: "red" }}>{errors.Option1.message}</span>
-                )}
-
-                <InputLabel htmlFor="Option2">Option2</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="Option2"
-                  // required
-                  fullWidth
-                  id="Option2"
-                  label="Option2"
-                  autoFocus
-                  {...register("Option2")}
-                />
-                {errors.Option2 && (
-                  <span style={{ color: "red" }}>{errors.Option2.message}</span>
-                )}
-
-                <InputLabel htmlFor="Option3">Option3</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="Option3"
-                  // required
-                  fullWidth
-                  id="Option3"
-                  label="Option3"
-                  autoFocus
-                  {...register("Option3")}
-                />
-                {errors.Option3 && (
-                  <span style={{ color: "red" }}>{errors.Option3.message}</span>
-                )}
-
-                <InputLabel htmlFor="Option4">Option4</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="Option4"
-                  // required
-                  fullWidth
-                  id="Option4"
-                  label="Option4"
-                  autoFocus
-                  {...register("Option4")}
-                />
-                {errors.Option4 && (
-                  <span style={{ color: "red" }}>{errors.Option4.message}</span>
-                )}
-                <InputLabel htmlFor="correctOption">CorrectOption</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="correctOption"
-                  // required
-                  fullWidth
-                  id="correctOption"
-                  label="correctOption"
-                  type="Number"
-                  autoFocus
-                  {...register("correctOption")}
-                />
-                {errors.correctOption && (
-                  <span style={{ color: "red" }}>
-                    {errors.correctOption.message}
-                  </span>
-                )}
-                <Grid container spacing={2}>
-                  {SelectStandards ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Std
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="std"
-                          value={SelectedStandards}
-                          label="Stream"
-                          {...register("std", validationSchema.stdandard)}
-                          onChange={handelStd}
-                        >
-                          {errors.std && (
-                            <span style={{ color: "red" }}>
-                              {errors.std.message}
-                            </span>
-                          )}
-                          {standards.map((item) => (
-                            <MenuItem key={item.id} value={item._id}>
-                              {item.std}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-
-                  {std > 10 && (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Stream
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="strem"
-                          value={selectedStream}
-                          label="Stream"
-                          {...register("stream", validationSchema.Stream)}
-                          onChange={handleStreamChange}
-                        >
-                          {streams.map((item) => (
-                            <MenuItem key={item.id} value={item._id}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                  {selectSubject ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Subject
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={selectedSubject}
-                          label="Subject"
-                          {...register("subject", validationSchema.subject)}
-                          onChange={handleSubjectChange}
-                        >
-                          {subjects.map((item) => (
-                            <MenuItem key={item._id} value={item._id}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                  {selectTopic ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Topic
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={selectedTopic}
-                          label="Topic"
-                          {...register("topic")}
-                          onChange={handelTopicChange}
-                        >
-                          {topics.map((item) => (
-                            <MenuItem key={item._id} value={item._id}>
-                              {item.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                  {selectType ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Type
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={selectedType}
-                          label="examtype"
-                          {...register("examtype")}
-                          onChange={handelTypeChange}
-                        >
-                          {types.map((item) => (
-                            <MenuItem key={item._id} value={item._id}>
-                              {item.type}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                  {selectdiificulty ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Difficulty
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={selecteddiificulty}
-                          label="Difficlty"
-                          {...register("difficulty")}
-                          onChange={handelDifficulty}
-                        >
-                          {difficultes.map((item) => (
-                            <MenuItem key={item.id} value={item._id}>
-                              {item.difficulty}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                </Grid>
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={() => handleAddQuestion(getValues())}
-                >
-                  Add Question
-                </Button>
-
-                {/* Display the list of added questions */}
-                {questionsList.map((question, index) => (
-                  <div key={index}>
-                    <Typography variant="subtitle1">
-                      Question {index + 1}:
-                    </Typography>
-                    <pre>{JSON.stringify(question, null, 2)}</pre>
-                  </div>
-                ))}
-
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  ADD
-                </Button>
-              </>
-            )}
-            {selectedOption === "file" && (
-              <>
-                <input
-                  type="file"
-                  name="fileUpload"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={(event) => handleFileChange(event)}
-                  {...register("fileUpload")}
-                />
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Upload File
-                </Button>
-              </>
-            )}
-          </Box>
-        </Grid>
-        <ToastContainer />
       </Grid>
+
+      <Typography
+        variant="h4"
+        sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+      >
+        ADD Question :
+      </Typography>
+      {/* </Typography> */}
+      <Grid
+        item
+        xs={12}
+        sm={4}
+        md={4}
+        lg={4}
+        xl={4}
+        style={{ background: "pink", ...cardStyle, mb: 2 }}
+      >
+        <Box component="form" onSubmit={handleSubmit(submitHandler)}>
+          {selectedOption === "manual" && (
+            <>
+              {standard && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Standard: {standard}</Typography>
+                </Grid>
+              )}
+              {stream && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Stream: {stream}</Typography>
+                </Grid>
+              )}
+              {subject && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Subject: {subject}</Typography>
+                </Grid>
+              )}
+              {topic && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Topic: {topic}</Typography>
+                </Grid>
+              )}
+              {type && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Type: {type}</Typography>
+                </Grid>
+              )}
+              {difficulty && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Difficulty: {difficulty}</Typography>
+                </Grid>
+              )}
+              <InputLabel htmlFor="question">Question</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="question"
+                // required
+                fullWidth
+                id="question"
+                label="question"
+                autoFocus
+                {...register("question")}
+              />
+              {errors.question && (
+                <span style={{ color: "red" }}>{errors.question.message}</span>
+              )}
+
+              <InputLabel htmlFor="Option1">Option1</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="Option1"
+                // required
+                fullWidth
+                id="Option1"
+                label="Option1"
+                autoFocus
+                {...register("Option1")}
+              />
+              {errors.Option1 && (
+                <span style={{ color: "red" }}>{errors.Option1.message}</span>
+              )}
+
+              <InputLabel htmlFor="Option2">Option2</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="Option2"
+                // required
+                fullWidth
+                id="Option2"
+                label="Option2"
+                autoFocus
+                {...register("Option2")}
+              />
+              {errors.Option2 && (
+                <span style={{ color: "red" }}>{errors.Option2.message}</span>
+              )}
+
+              <InputLabel htmlFor="Option3">Option3</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="Option3"
+                // required
+                fullWidth
+                id="Option3"
+                label="Option3"
+                autoFocus
+                {...register("Option3")}
+              />
+              {errors.Option3 && (
+                <span style={{ color: "red" }}>{errors.Option3.message}</span>
+              )}
+
+              <InputLabel htmlFor="Option4">Option4</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="Option4"
+                // required
+                fullWidth
+                id="Option4"
+                label="Option4"
+                autoFocus
+                {...register("Option4")}
+              />
+              {errors.Option4 && (
+                <span style={{ color: "red" }}>{errors.Option4.message}</span>
+              )}
+              <InputLabel htmlFor="correctOption">CorrectOption</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="correctOption"
+                // required
+                fullWidth
+                id="correctOption"
+                label="correctOption"
+                type="Number"
+                autoFocus
+                {...register("correctOption")}
+              />
+              {errors.correctOption && (
+                <span style={{ color: "red" }}>
+                  {errors.correctOption.message}
+                </span>
+              )}
+              <Grid container spacing={2}>
+                {SelectStandards ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Std
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="std"
+                        value={SelectedStandards}
+                        label="Stream"
+                        {...register("std", validationSchema.stdandard)}
+                        onChange={handelStd}
+                      >
+                        {errors.std && (
+                          <span style={{ color: "red" }}>
+                            {errors.std.message}
+                          </span>
+                        )}
+                        {standards.map((item) => (
+                          <MenuItem key={item.id} value={item._id}>
+                            {item.std}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
+                {std > 10 && (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Stream
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="strem"
+                        value={selectedStream}
+                        label="Stream"
+                        {...register("stream", validationSchema.Stream)}
+                        onChange={handleStreamChange}
+                      >
+                        {streams.map((item) => (
+                          <MenuItem key={item.id} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {selectSubject ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Subject
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedSubject}
+                        label="Subject"
+                        {...register("subject", validationSchema.subject)}
+                        onChange={handleSubjectChange}
+                      >
+                        {subjects.map((item) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {selectTopic ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Topic
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedTopic}
+                        label="Topic"
+                        {...register("topic")}
+                        onChange={handelTopicChange}
+                      >
+                        {topics.map((item) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {selectType ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Type
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedType}
+                        label="examtype"
+                        {...register("examtype")}
+                        onChange={handelTypeChange}
+                      >
+                        {types.map((item) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.type}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+                {selectdiificulty ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Difficulty
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selecteddiificulty}
+                        label="Difficlty"
+                        {...register("difficulty")}
+                        onChange={handelDifficulty}
+                      >
+                        {difficultes.map((item) => (
+                          <MenuItem key={item.id} value={item._id}>
+                            {item.difficulty}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+              </Grid>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => handleAddQuestion(getValues())}
+              >
+                Add Question To List
+              </Button>
+
+              {/* Display the list of added questions */}
+              {questionsList.map((question, index) => (
+                <div key={index}>
+                  <Typography variant="subtitle1">
+                    Question {index + 1}:
+                  </Typography>
+                  <pre>{JSON.stringify(question, null, 2)}</pre>
+                </div>
+              ))}
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                SUBMIT
+              </Button>
+            </>
+          )}
+          {selectedOption === "file" && (
+            <>
+              <input
+                type="file"
+                name="fileUpload"
+                accept=".csv,.xlsx,.xls"
+                onChange={(event) => handleFileChange(event)}
+                {...register("fileUpload")}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Upload File
+              </Button>
+            </>
+          )}
+        </Box>
+      </Grid>
+      <ToastContainer />
     </ThemeProvider>
   );
 };

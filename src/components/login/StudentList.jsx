@@ -61,7 +61,12 @@ const columns = [
     }
     <Grid style={{ height: 400, width: '100%' }}>
    
-    <Typography variant="h1" sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }} >Student List</Typography>
+    <Typography
+          variant="h4"
+          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+        >
+          Student List
+        </Typography>
     <Grid
   container
   item
@@ -102,6 +107,7 @@ const columns = [
         ...data.initialState,
         pagination: { paginationModel: { pageSize: 5} },
       }}
+      rowHeight={80}
 
     />
   </Grid>

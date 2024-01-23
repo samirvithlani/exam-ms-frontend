@@ -38,9 +38,11 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
       >
         <Container maxWidth="fluid">
           <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+            
             <IconButton onClick={toggleSidebar}>
               {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
+            ADMIN PANEL
             <Box sx={{ width: "100px" }}></Box>
             <Typography
               sx={{

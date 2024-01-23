@@ -29,7 +29,7 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const drawerWidth = 250;
   const partialWidth = 70;
-  const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
+  const [isExpanded, setIsExpanded] = useState(false); // State to manage sidebar expansion
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
@@ -145,7 +145,7 @@ export const SideBar = () => {
     <div>
     <AdminHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} ></AdminHeader>
       <CssBaseline />
-      <Box sx={{ display: "flex" ,backgroundColor:"rgb(238,242,246)",width:"100%" }}>
+      <Box sx={{ display: "flex" ,backgroundColor:"rgb(238,242,246)",width:"100%",fontFamily: "Lato", }}>
         <Drawer
           PaperProps={{
             sx: {
@@ -153,7 +153,7 @@ export const SideBar = () => {
               position: "inherit",
               borderRight: 0,
               width: isExpanded ? drawerWidth : partialWidth,
-              height: "100vh", // Set height to 100% of the viewport height
+              height: "100%", // Set height to 100% of the viewport height
               flexShrink: 0,
               overflowX: "hidden",
               backgroundColor: "black",
