@@ -134,9 +134,9 @@ const ExamList = () => {
     noOfQuestions
   ) => {
     let data = await axios.get(`/exam/${id}`)
-    if(data.data.mcq.length === noOfQuestions){
-      return alert("question is full")
-        }
+    if (data.data.mcq.length === noOfQuestions) {
+      return alert("Question limit reached. Cannot add more questions.");
+    }
       if(type === "mcq") {
       navigate(`/adminDashboard/mcqquestion/${id}`, {
         state: {
