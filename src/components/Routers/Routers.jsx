@@ -50,10 +50,6 @@ const MainRouter = ({ children }) => {
       errorElement: <div>404</div>,
     },
     {
-      path: "/add/:role",
-      element: <AddRole />,
-    },
-    {
       path: "user/:id",
       element: <UserRegistration />,
     },
@@ -209,6 +205,10 @@ const MainRouter = ({ children }) => {
           path: "update-exam/:id",
           element: <UpdateExam />,
         },
+        {
+          path: "add/:role",
+          element: <AddRole />,
+        }
       ],
     },
 

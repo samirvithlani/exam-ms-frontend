@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { Breadcrumbs, Grid, Link, Typography } from "@mui/material";
+import { BarChart } from "@mui/x-charts/BarChart";
 import axios from "axios";
-import { Bar } from "react-chartjs-2";
 export const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
@@ -23,7 +23,6 @@ export const AdminDashboard = () => {
     setExamData(examsCount);
   };
 
-  //barchar props
 
 
 
@@ -111,7 +110,16 @@ export const AdminDashboard = () => {
         <Grid container className="card-content" direction="column" spacing={0}>
           <Typography variant="h4">Card 4</Typography>
           <Typography variant="body1">
-            Please create bar chart here for students
+          <BarChart
+  xAxis={[{ scaleType: 'band', data: ['Student', 'Exam'] }]}
+  series={[
+    { data: [students, 0] },  // 0 for the 'Exam' category
+    { data: [0, examData] }   // 0 for the 'Student' category
+  ]}
+  width={300}
+  height={300}
+/>
+    
           </Typography>
         </Grid>
       </Grid>
