@@ -17,10 +17,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import signUpImage from "../../assets/images/signup.jpg";
 import { useState } from "react";
+import signup from "../../assets/images/signup.svg";
 
 const defaultTheme = createTheme({
-  typography: {
-    fontFamily: "Lato, sans-serif",
+  palette: {
+    primary: {
+      main: '#673AB7', // Change this to your desired color
+    },
   },
 });
 export default function SignUp() {
@@ -95,7 +98,7 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h4" sx={{fontFamily:"Lato"}}>
               Sign up
             </Typography>
             <Box
@@ -194,7 +197,7 @@ export default function SignUp() {
         </Grid>
         <Grid item xs={5} sx={{ ml: 1 }}>
           <img
-            src={signUpImage}
+            src={signup}
             alt="loginpage"
             style={{ width: "100%", height: "100%" }}
           />

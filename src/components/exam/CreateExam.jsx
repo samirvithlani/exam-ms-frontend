@@ -209,7 +209,13 @@ export const CreateExam = () => {
     setSelectedType(TypeId);
   };
   const navigate = useNavigate();
-  const defaultTheme = createTheme();
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#673AB7', // Change this to your desired color
+      },
+    },
+  });
   const {
     register,
     handleSubmit,

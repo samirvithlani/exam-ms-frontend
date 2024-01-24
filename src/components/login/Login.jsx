@@ -20,10 +20,17 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { Paper } from "@mui/material";
-const defaultTheme = createTheme();
+const defaultTheme= createTheme({
+  palette: {
+    primary: {
+      main: '#673AB7', // Change this to your desired color
+    },
+  },
+});
 import loginpagImage from "../../assets/images/loginpage.jpg";
 import loginpagImage1 from "../../assets/images/loginpage1.png";
-
+import loginpagImage2 from "../../assets/images/loginpage2.svg";
+import loginpagImage3 from "../../assets/images/loginImage3.svg";
 export default function Login() {
   const [isLogin, setisLogin] = useState(false)
   const [isLoading, setisLoading] = React.useState(false);
@@ -114,8 +121,8 @@ export default function Login() {
               justifyContent: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
-            <Typography component="h1" variant="h5">
+            <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
+            <Typography component="h1" variant="h5" sx={{fontFamily:"Lato"}}>
               Log in
             </Typography>
             <Box
@@ -168,11 +175,8 @@ export default function Login() {
         </Grid>
 
         <Grid item xs={6}>
-          <img
-            src={loginpagImage1}
-            alt="loginpage"
-            style={{ width: "100%", height: "100%" }}
-          />
+          <img src={loginpagImage3} style={{width:"100%",height:"100%"}}/>
+
         </Grid>
       </Grid>
 
