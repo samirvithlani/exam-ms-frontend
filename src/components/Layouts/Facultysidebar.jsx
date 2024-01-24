@@ -8,6 +8,7 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    Dialog, DialogActions, DialogContent, DialogTitle
   } from "@mui/material";
   import { Box } from "@mui/system";
   import React, { useContext, useState } from "react";
@@ -30,9 +31,23 @@ import {
     const drawerWidth = 250;
     const partialWidth = 70;
     const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
-  
+    const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
     const toggleSidebar = () => {
       setIsExpanded(!isExpanded);
+    };
+    const handleOpenLogoutDialog = () => {
+      setOpenLogoutDialog(true);
+    };
+  
+    const handleCloseLogoutDialog = () => {
+      setOpenLogoutDialog(false);
+    };
+  
+    const handleLogout = () => {
+      Cookies.remove("token", { path: "" });
+      Cookies.remove("name", { path: "" });
+      Cookies.remove("id", { path: "" });
+      navigate("/login");
     };
     const RouteArray = [
       {
@@ -142,22 +157,14 @@ import {
             </List>
             <Box sx={{ marginTop: "auto" }}>
               <Button
-                variant="contained"
-                sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
-                startIcon={<ExitToAppIcon />}
-                onClick={() => {
-                  //remove cookie
-                  //Cookies.remove("token");
-                  //clear cookie
-                  Cookies.remove("token", { path: "" });
-                  Cookies.remove("name", { path: "" });
-                  Cookies.remove("id", { path: "" });
-                  navigate("/login");
-                }}
-                fullWidth
-              >
-                Logout
-              </Button>
+            variant="contained"
+            sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+            startIcon={<ExitToAppIcon />}
+            onClick={handleOpenLogoutDialog}
+            fullWidth
+          >
+            Logout
+          </Button>
             </Box>
           </Drawer>
           <Box
@@ -172,6 +179,16 @@ import {
             <Outlet />
           </Box>
         </Box>
+        <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          Are you sure you want to exit?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
+          <Button onClick={handleLogout} color="error">Logout</Button>
+        </DialogActions>
+      </Dialog>
       </div>
     );
   };
