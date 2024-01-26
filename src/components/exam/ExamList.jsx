@@ -46,7 +46,7 @@ const columns = [
   { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
   { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
   { field: "totalmarks", headerName: "Total Marks", width: 70 },
-  { field: "actions", headerName: "Actions", width: 350 },
+  { field: "actions", headerName: "Actions", width: 360 },
 ];
 
 const ExamList = () => {
@@ -113,10 +113,10 @@ const ExamList = () => {
     fetchData();
   }, []);
 
-  const handleEdit =  (id) => {
+  const handleEdit = (id) => {
     navigate(`/adminDashboard/update-exam/${id}`);
   };
-  const handleAddQuestions = async(
+  const handleAddQuestions = async (
     type,
     id,
     subject,
@@ -133,11 +133,11 @@ const ExamList = () => {
     typeId,
     noOfQuestions
   ) => {
-    let data = await axios.get(`/exam/${id}`)
+    let data = await axios.get(`/exam/${id}`);
     if (data.data.mcq.length === noOfQuestions) {
       return alert("Question limit reached. Cannot add more questions.");
     }
-      if(type === "mcq") {
+    if (type === "mcq") {
       navigate(`/adminDashboard/mcqquestion/${id}`, {
         state: {
           subject,
@@ -152,7 +152,7 @@ const ExamList = () => {
           topic,
           types,
           typeId,
-          noOfQuestions
+          noOfQuestions,
         },
       });
     } else {
@@ -221,17 +221,18 @@ const ExamList = () => {
     p: 2,
     display: "flex",
     flexDirection: "column",
-    height: "auto",
+    height: "100%",
     backgroundColor: "white",
     m1: 2,
   };
   return (
     <ThemeProvider theme={defaultTheme}>
+      {isLoading ? <CustomeLoader /> : null}
       <Paper sx={paperStyle} className="responsive-container">
-        {isLoading ? <CustomeLoader /> : null}
+        
         <Typography
           variant="h4"
-          sx={{textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
         >
           Exam List
         </Typography>
@@ -240,8 +241,8 @@ const ExamList = () => {
           item
           xs={12}
           sx={{
-            width: isMobile ? "60vw" : "80vw",
-            height: isMobile ? "50vh" : "90vh",
+            width: isMobile ? "60vw" : "94%",
+            height: isMobile ? "50%" : "100%",
             overflowX: "auto",
           }}
         >
@@ -249,6 +250,7 @@ const ExamList = () => {
             sx={{
               border: "none",
               fontFamily: "Lato",
+              
             }}
             rows={examData}
             columns={columns.map((column) => ({
@@ -268,7 +270,7 @@ const ExamList = () => {
                               params.row.Difficulty,
                               params.row.Standard,
                               params.row.examTopic,
-                              params.row.examType,
+                              params.row.examType
                             )
                           }
                         >

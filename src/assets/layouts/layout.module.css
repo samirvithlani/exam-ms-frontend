@@ -62,4 +62,28 @@ h1{
       padding-left: 500px;
     }
   }
+ 
+/* Add this CSS to your existing styles */
+@media (max-width: 600px) {
+  Grid {
+    height: auto; /* Adjust the height for smaller screens */
+    flex-direction: column-reverse; /* Change the direction to column-reverse for mobile */
+  }
+
+  img {
+    width: 100%; /* Make the image responsive */
+    height: auto;
+  }
+
+  Box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  /* Add any additional styles needed for smaller screens */
+}
+  
 

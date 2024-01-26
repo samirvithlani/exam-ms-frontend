@@ -93,7 +93,7 @@ import {
               position: "inherit",
               borderRight: 0,
               width: isExpanded ? drawerWidth : partialWidth,
-              height: "100vh", // Set height to 100% of the viewport height
+              height: "100%", // Set height to 100% of the viewport height
               flexShrink: 0,
               overflowX: "hidden",
               backgroundColor: "black",
