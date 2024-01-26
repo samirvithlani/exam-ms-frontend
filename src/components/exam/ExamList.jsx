@@ -46,7 +46,7 @@ const columns = [
   { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
   { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
   { field: "totalmarks", headerName: "Total Marks", width: 70 },
-  { field: "actions", headerName: "Actions", width: 360 },
+  { field: "actions", headerName: "Actions", width: 260 },
 ];
 
 const ExamList = () => {

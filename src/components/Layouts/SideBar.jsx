@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Dialog, DialogActions, DialogContent, DialogTitle
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
@@ -30,7 +31,22 @@ export const SideBar = () => {
   const drawerWidth = 250;
   const partialWidth = 70;
   const [isExpanded, setIsExpanded] = useState(false); // State to manage sidebar expansion
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const handleOpenLogoutDialog = () => {
+    setOpenLogoutDialog(true);
+  };
 
+  const handleCloseLogoutDialog = () => {
+    setOpenLogoutDialog(false);
+  };
+
+  const handleLogout = () => {
+    // Remove cookies and navigate to login page
+    Cookies.remove("token", { path: "" });
+    Cookies.remove("name", { path: "" });
+    Cookies.remove("id", { path: "" });
+    navigate("/login");
+  };
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
@@ -138,8 +154,22 @@ export const SideBar = () => {
       textColor: "#7D8FB3",
       activeMenuFor: ["updateexam"],
     },
+    {
+      id:16,
+      name:"Add Faculty",
+      linkUrl:"addfaculty",
+      activeMenuFor:['addfaculty']
+    },
+    {
+      id:17,
+      name:"userprofile",
+      linkUrl:"userprofile",
+      activeMenuFor:['userprofile']
+    },
+    
   ];
-  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam");
+  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam" && route.name !=="Add Faculty"
+  && route.name!= "userprofile");
 
   return (
     <div>
@@ -204,24 +234,16 @@ export const SideBar = () => {
             ))}
           </List>
           <Box sx={{ marginTop: "auto" }}>
-            <Button
-              variant="contained"
-              sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
-              startIcon={<ExitToAppIcon />}
-              onClick={() => {
-                //remove cookie
-                //Cookies.remove("token");
-                //clear cookie
-                Cookies.remove("token", { path: "" });
-                Cookies.remove("name", { path: "" });
-                Cookies.remove("id", { path: "" });
-                navigate("/login");
-              }}
-              fullWidth
-            >
-              Logout
-            </Button>
-          </Box>
+          <Button
+            variant="contained"
+            sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+            startIcon={<ExitToAppIcon />}
+            onClick={handleOpenLogoutDialog}
+            fullWidth
+          >
+            Logout
+          </Button>
+        </Box>
         </Drawer>
         <Box
           component="main"
@@ -239,6 +261,16 @@ export const SideBar = () => {
           <Outlet />
         </Box>
       </Box>
+      <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          Are you sure you want to exit?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
+          <Button onClick={handleLogout} color="error">Logout</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

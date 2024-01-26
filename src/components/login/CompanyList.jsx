@@ -43,7 +43,7 @@ const CompanyList = () => {
   const handleAddRoleClick = (role) => {
     const roleData = rolesData.find((item) => item.role === role);
     if (roleData) {
-      navigate(`/add/${roleData._id}`);
+      navigate(`/adminDashboard/add/${roleData._id}`);
     } else {
       console.log(`No data found for the ${role} role.`);
     }
