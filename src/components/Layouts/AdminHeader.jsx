@@ -1,29 +1,51 @@
-import * as React from "react";
+import React, { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { styled, alpha } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-//import barterLogo from "../../assets/BXI_LOGO.png";
-import Cookies from "js-cookie";
-import { red } from "@mui/material/colors";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { IconButton } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import Cookies from "js-cookie";
+import {
+  Button,
+  Dialog, DialogActions, DialogContent, DialogTitle
+} from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { deepOrange, deepPurple } from "@mui/material/colors";
+
 const AdminHeader = ({ isExpanded, toggleSidebar }) => {
-  const role = Cookies.get("name");
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-  useEffect(() => {}, []);
+  const role = Cookies.get("name");
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleOpenLogoutDialog = () => {
+    setOpenLogoutDialog(true);
+  };
+
+  const handleCloseLogoutDialog = () => {
+    setOpenLogoutDialog(false);
+  };
+
+
+  const handleLogout = () => {
+    Cookies.remove("token", { path: "" });
+    Cookies.remove("name", { path: "" });
+    Cookies.remove("id", { path: "" });
+    navigate("/login");
+  };
 
   return (
     <Box className="main-box">
@@ -38,38 +60,63 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
       >
         <Container maxWidth="fluid">
           <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-            
             <IconButton onClick={toggleSidebar}>
               {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            ADMIN PANEL
-            <Box sx={{ width: "100px" }}></Box>
-            <Typography
-              sx={{
-                mr: 5,
-                fontFamily: "Poppins",
-                fontWeight: 700,
-                color: "#6B7A99",
-                textDecoration: "none",
-                fontSize: "16px",
-              }}
-            >
-              {/* Admin Panel */}
+            <Typography variant="h6" sx={{ color: "#333", fontWeight: "bold" }}>
+              ADMIN PANEL
             </Typography>
-
+            <Box sx={{ width: "100px" }}></Box>
             <div style={{ flexGrow: 1 }} />
             <IconButton color="inherit">
               <NotificationsIcon />
-            </IconButton>
-            <IconButton color="inherit" component={Link} to="/userprofile">
+             </IconButton>
+            <IconButton color="inherit" onClick={handleMenuClick}>
               <AccountCircleIcon />
             </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                component={Link}
+                to="/adminDashboard"
+                onClick={handleMenuClose}
+              >
+                <Typography variant="inherit">Home</Typography>
+              </MenuItem>
+              <MenuItem
+                component={Link}
+                to="/adminDashboard/userprofile"
+                onClick={handleMenuClose}
+              >
+                <Typography variant="inherit">Profile</Typography>
+              </MenuItem>
+              <MenuItem
+               sx={{ color: "#whitesmoke" }}
+               onClick={handleOpenLogoutDialog}
+               
+              >
+                <Typography variant="inherit">Logout</Typography>
+              </MenuItem>
+            </Menu>
             <Typography sx={{ mr: 2, color: "#6B7A99", fontSize: "14px" }}>
               {role}
             </Typography>
           </Toolbar>
         </Container>
       </AppBar>
+      <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          Are you sure you want to exit?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
+          <Button onClick={handleLogout} color="error">Logout</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
