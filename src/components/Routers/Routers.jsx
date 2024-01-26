@@ -54,10 +54,6 @@ const MainRouter = ({ children }) => {
       element: <UserRegistration />,
     },
     {
-      path:"/userprofile",
-      element:<UserProfile/>
-    },
-    {
       path: "/userDasboard",
       element: <UserSideBar />,
       errorElement: <div>404</div>,
@@ -208,7 +204,11 @@ const MainRouter = ({ children }) => {
         {
           path: "add/:role",
           element: <AddRole />,
-        }
+        },
+        {
+          path:"userprofile",
+          element:<UserProfile/>
+        },
       ],
     },
 

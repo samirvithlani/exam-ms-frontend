@@ -159,9 +159,17 @@ export const SideBar = () => {
       name:"Add Faculty",
       linkUrl:"addfaculty",
       activeMenuFor:['addfaculty']
-    }
+    },
+    {
+      id:17,
+      name:"userprofile",
+      linkUrl:"userprofile",
+      activeMenuFor:['userprofile']
+    },
+    
   ];
-  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam" && route.name !=="Add Faculty");
+  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam" && route.name !=="Add Faculty"
+  && route.name!= "userprofile");
 
   return (
     <div>
