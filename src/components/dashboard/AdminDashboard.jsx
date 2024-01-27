@@ -1,14 +1,15 @@
 import { React, useEffect, useState } from "react";
 import { Breadcrumbs, Grid, Link, Typography } from "@mui/material";
-import { BarChart } from "@mui/x-charts/BarChart";
+
 import axios from "axios";
+
 export const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
   const cardStyle = {
     border: "1px solid #ddd",
     borderRadius: "20px",
-    height: 200,
+    height: 140,
   };
 
   useEffect(() => {
@@ -22,9 +23,6 @@ export const AdminDashboard = () => {
     setStudents(studentsCount);
     setExamData(examsCount);
   };
-
-
-
 
   return (
     <Grid
@@ -40,87 +38,193 @@ export const AdminDashboard = () => {
     >
       {/* First Row */}
       <Grid
-        item
-        xs={12}
-        sm={4}
-        md={4}
-        lg={4}
-        xl={4}
-        style={{ background: "rgb(67,157,240)", ...cardStyle, mb: 2 }}
-      >
-        <Grid container className="card-content" direction="column" spacing={0}>
-          <Typography variant="h4" sx={{color:"white",fontFamily:"Lato"}}>Student Detail</Typography>
-          <Typography variant="h6" sx={{color:"black",fontFamily:"Lato"}}>
-            Total student in portal:{students}
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Grid
-        item
-        xs={12}
-        sm={4}
-        md={4}
-        lg={4}
-        xl={4}
-        style={{ background: "rgb(96,183,100)", ...cardStyle, mb: 2 }}
-      >
-        <Grid container className="card-content" direction="column" spacing={0}>
-        <Typography variant="h4" sx={{color:"white",fontFamily:"Lato"}}>Exam Detail</Typography>
-        <Typography variant="h6" sx={{color:"black",fontFamily:"Lato"}}>
-            Total no of exam in portal:{examData}
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Grid
-        item
-        xs={12}
-        sm={4}
-        md={4}
-        lg={4}
-        xl={4}
-        style={{ background: "rgb(52,52,58)", ...cardStyle, mb: 2 }}
-      >
-        <Grid container className="card-content" direction="column" spacing={0}>
-          <Typography variant="h4">Card 3</Typography>
-          <Typography variant="body1">
-            This is a sample card description.
-          </Typography>
-        </Grid>
-      </Grid>
-
-      {/* Second Row */}
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        style={{
-          background: "rgb(248,250,249)",
-          ...cardStyle,
-          height: 500,
-          mb: 2,
-          marginTop: 10,
-          border: "1px solid black",
+        container
+        spacing={2}
+        width="100%"
+        sx={{
+          maxheight: "100%",
+          height: "400px",
+          borderRadius: "20px",
+          mt: 2,
+          ml: 0.1,
+          p: 2,
+          background: "rgb(94,114,228)",
+          pt: 10,
+          gap: 1,
         }}
       >
-        <Grid container className="card-content" direction="column" spacing={0}>
-          <Typography variant="h4">Card 4</Typography>
-          <Typography variant="body1">
-          <BarChart
-  xAxis={[{ scaleType: 'band', data: ['Student', 'Exam'] }]}
-  series={[
-    { data: [students, 0] },  // 0 for the 'Exam' category
-    { data: [0, examData] }   // 0 for the 'Student' category
-  ]}
-  width={300}
-  height={300}
-/>
-    
-          </Typography>
+        <Grid
+          item
+          xs={12}
+          sm={3}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{ background: "rgb(255,255,255)", ...cardStyle, mb: 2 }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography
+              variant="h4"
+              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+            >
+              Student Detail
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: "black", fontFamily: "Lato" }}
+            >
+              Total student in portal:{students}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={3}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{ background: "rgb(255,255,255)", ...cardStyle, mb: 2 }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography
+              variant="h4"
+              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+            >
+              Student Detail
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: "black", fontFamily: "Lato" }}
+            >
+              Total student in portal:{students}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          sm={3}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{ background: "rgb(255,255,255)", ...cardStyle, mb: 2 }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography
+              variant="h4"
+              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+            >
+              Exam Detail
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: "black", fontFamily: "Lato" }}
+            >
+              Total no of exam in portal:{examData}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          sm={2.7}
+          md={2.7}
+          lg={2.7}
+          xl={2.7}
+          style={{ background: "rgb(255,255,255)", ...cardStyle, mb: 2 }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography
+              variant="h4"
+              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+            >
+              Exam Detail
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ color: "black", fontFamily: "Lato" }}
+            >
+              Total no of exam in portal:{examData}
+            </Typography>
+          </Grid>
+        </Grid>
+
+        {/* Second Row */}
+        <Grid
+          item
+          xs={12}
+          sm={6.1}
+          md={6.1}
+          lg={6.1}
+          xl={6.1}
+          style={{
+            background: "rgb(255,255,255)",
+            ...cardStyle,
+            height: 380,
+            mb: 2,
+            marginTop: 10,
+            border: "1px solid white",
+          }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography variant="h4">Card 4</Typography>
+            <Typography variant="body1"></Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={5.8}
+          md={5.8}
+          lg={5.8}
+          xl={5.8}
+          style={{
+            background: "rgb(255,255,255)",
+            ...cardStyle,
+            height: 380,
+            mb: 2,
+            marginTop: 10,
+            border: "1px solid white",
+          }}
+        >
+          <Grid
+            container
+            className="card-content"
+            direction="column"
+            spacing={0}
+          >
+            <Typography variant="h4">Card 4</Typography>
+            <Typography variant="body1"></Typography>
+            
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

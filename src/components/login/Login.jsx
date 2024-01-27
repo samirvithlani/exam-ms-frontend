@@ -21,10 +21,10 @@ import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { Paper } from "@mui/material";
 
-const defaultTheme= createTheme({
+const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#673AB7', // Change this to your desired color
+      main: "#673AB7", // Change this to your desired color
     },
   },
 });
@@ -33,7 +33,7 @@ import loginpagImage1 from "../../assets/images/loginpage1.png";
 import loginpagImage2 from "../../assets/images/loginpage2.svg";
 import loginpagImage3 from "../../assets/images/loginImage3.svg";
 export default function Login() {
-  const [isLogin, setisLogin] = useState(false)
+  const [isLogin, setisLogin] = useState(false);
   const [isLoading, setisLoading] = React.useState(false);
   const navigate = useNavigate();
   const [validation, setValidation] = useState({
@@ -72,7 +72,7 @@ export default function Login() {
       const response = await axios.post("/login", userData);
       const { message } = response.data;
       if (response.status === 200) {
-        setisLogin(true)
+        setisLogin(true);
         setisLoading(false);
         toast.success(message);
         const { _id, name, role, token } = response.data;
@@ -85,9 +85,8 @@ export default function Login() {
         } else if (role == "faculty") {
           navigate("/facultyDashboard");
         } else {
-        
-            navigate("/adminDashboard");
-          
+          navigate("/adminDashboard");
+
           //navigate("/adminDashboard");
         }
       } else {
@@ -111,73 +110,101 @@ export default function Login() {
     <ThemeProvider theme={defaultTheme}>
       {isLoading && <CustomeLoader />}
       <CssBaseline />
-      <Grid container style={{ height: "100vh" }}>
-        <Grid item xs={6}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+
+      <Grid
+        container
+        spacing={2}
+        width="100%"
+        sx={{
+          borderRadius: "8px",
+          mt: 2,
+          ml: 0.1,
+          p: 2,
+        }}
+      >
+        <Grid container style={{ height: "100vh" }}>
+          <Grid
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+            xl={6}
+            sx={{ ml: 1, textAlign: "center" }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
-            <Typography component="h1" variant="h5" sx={{fontFamily:"Lato"}}>
-              Log in
-            </Typography>
+            <img
+              src={loginpagImage3}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </Grid>
+         <Grid item xs={12} sm={5} md={5} lg={5} xl={5} sx={{ ml: 1 }}>
             <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                error={!validation.email}
-                helperText={!validation.email && "Email is required"}
-                onChange={(e) => handleFieldChange("email", e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                error={!validation.password}
-                helperText={!validation.password && "Password is required"}
-                onChange={(e) => handleFieldChange("password", e.target.value)}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+              <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
+              <Typography
+                component="h1"
+                variant="h5"
+                sx={{ fontFamily: "Lato" }}
               >
-                Log In
-              </Button>
-              <Grid container>
-                <Grid item>
-                  <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
+                Log in
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}
+              >
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  error={!validation.email}
+                  helperText={!validation.email && "Email is required"}
+                  onChange={(e) => handleFieldChange("email", e.target.value)}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  error={!validation.password}
+                  helperText={!validation.password && "Password is required"}
+                  onChange={(e) =>
+                    handleFieldChange("password", e.target.value)
+                  }
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Log In
+                </Button>
+                <Grid container>
+                  <Grid item>
+                    <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-
-        <Grid item xs={6}>
-          <img src={loginpagImage3} style={{width:"100%",height:"100%"}}/>
-
+          </Grid>
         </Grid>
       </Grid>
 

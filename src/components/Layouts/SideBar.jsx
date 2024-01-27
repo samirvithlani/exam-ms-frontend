@@ -8,7 +8,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Dialog, DialogActions, DialogContent, DialogTitle
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
@@ -18,18 +21,18 @@ import AddIcon from "@mui/icons-material/Add";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import ListIcon from "@mui/icons-material/List";
 import "../../assets/layouts/layout.module.css";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Cookies from "js-cookie";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 
 export const SideBar = () => {
   const navigate = useNavigate();
   const drawerWidth = 250;
-  const partialWidth = 70;
+  const partialWidth = 0;
   const [isExpanded, setIsExpanded] = useState(false); // State to manage sidebar expansion
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const handleOpenLogoutDialog = () => {
@@ -155,27 +158,41 @@ export const SideBar = () => {
       activeMenuFor: ["updateexam"],
     },
     {
-      id:16,
-      name:"Add Faculty",
-      linkUrl:"addfaculty",
-      activeMenuFor:['addfaculty']
+      id: 16,
+      name: "Add Faculty",
+      linkUrl: "addfaculty",
+      activeMenuFor: ["addfaculty"],
     },
     {
-      id:17,
-      name:"userprofile",
-      linkUrl:"userprofile",
-      activeMenuFor:['userprofile']
+      id: 17,
+      name: "userprofile",
+      linkUrl: "userprofile",
+      activeMenuFor: ["userprofile"],
     },
-    
   ];
-  const filteredRouteArray = RouteArray.filter((route) => route.name !== "View Exam" && route.name !== "Update Exam" && route.name !=="Add Faculty"
-  && route.name!= "userprofile");
+  const filteredRouteArray = RouteArray.filter(
+    (route) =>
+      route.name !== "View Exam" &&
+      route.name !== "Update Exam" &&
+      route.name !== "Add Faculty" &&
+      route.name != "userprofile"
+  );
 
   return (
     <div>
-    <AdminHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} ></AdminHeader>
+      <AdminHeader
+        isExpanded={isExpanded}
+        toggleSidebar={toggleSidebar}
+      ></AdminHeader>
       <CssBaseline />
-      <Box sx={{ display: "flex" ,backgroundColor:"rgb(238,242,246)",width:"100%",fontFamily: "Lato", }}>
+      <Box
+        sx={{
+          display: "flex",
+          backgroundColor: "rgb(238,242,246)",
+          width: "100%",
+          fontFamily: "Lato",
+        }}
+      >
         <Drawer
           PaperProps={{
             sx: {
@@ -186,7 +203,10 @@ export const SideBar = () => {
               height: "100%", // Set height to 100% of the viewport height
               flexShrink: 0,
               overflowX: "hidden",
-              backgroundColor: "black",
+              border: "5px solid #F0F0F0",
+              borderRadius: "30px",
+
+              backgroundColor: "white",
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
               },
@@ -220,13 +240,13 @@ export const SideBar = () => {
               >
                 <ListItemButton>
                   <ListItemIcon>
-                    <Avatar sx={{ bgcolor: deepPurple[500] }}>
+                    <Avatar sx={{ bgcolor: "rgb(94,114,228)" }}>
                       {res?.logoImage && <res.logoImage />}
                     </Avatar>
                   </ListItemIcon>
                   <ListItemText
                     className="sidebartext"
-                    sx={{ color: "whitesmoke" }}
+                    sx={{ color: "black" }}
                     primary={res.name}
                   />
                 </ListItemButton>
@@ -234,28 +254,27 @@ export const SideBar = () => {
             ))}
           </List>
           <Box sx={{ marginTop: "auto" }}>
-          <Button
-            variant="contained"
-            sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
-            startIcon={<ExitToAppIcon />}
-            onClick={handleOpenLogoutDialog}
-            fullWidth
-          >
-            Logout
-          </Button>
-        </Box>
+            <Button
+              variant="contained"
+              sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+              startIcon={<ExitToAppIcon />}
+              onClick={handleOpenLogoutDialog}
+              fullWidth
+            >
+              Logout
+            </Button>
+          </Box>
         </Drawer>
         <Box
           component="main"
-          sx={
-            {
-              width: "100%",
-              mt: "50px",
-              backgroundColor:"rgb(240,235,247)",
-              borderRadius: "8px",
-              // transition: "width 0.2s ease-in-out",
-            }
-          }
+          sx={{
+            width: "100%",
+            mt: "50px",
+            height: "100%",
+            // backgroundColor:"rgb(240,235,247)",
+            // borderRadius: "8px",
+            // transition: "width 0.2s ease-in-out",
+          }}
         >
           {/* <Toolbar /> */}
           <Outlet />
@@ -263,12 +282,12 @@ export const SideBar = () => {
       </Box>
       <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
         <DialogTitle>Confirm Logout</DialogTitle>
-        <DialogContent>
-          Are you sure you want to exit?
-        </DialogContent>
+        <DialogContent>Are you sure you want to exit?</DialogContent>
         <DialogActions>
           <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
-          <Button onClick={handleLogout} color="error">Logout</Button>
+          <Button onClick={handleLogout} color="error">
+            Logout
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

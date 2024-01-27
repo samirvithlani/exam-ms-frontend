@@ -13,7 +13,10 @@ import { styled } from "@mui/material/styles";
 import Cookies from "js-cookie";
 import {
   Button,
-  Dialog, DialogActions, DialogContent, DialogTitle
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { deepOrange, deepPurple } from "@mui/material/colors";
@@ -39,7 +42,6 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
     setOpenLogoutDialog(false);
   };
 
-
   const handleLogout = () => {
     Cookies.remove("token", { path: "" });
     Cookies.remove("name", { path: "" });
@@ -52,7 +54,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "#D6E4E9",
+          backgroundColor: "rgb(94,114,228)",
           color: "#6B7A99",
           boxShadow: 0,
           borderBottom: "2px solid #F0F0F0",
@@ -63,15 +65,18 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
             <IconButton onClick={toggleSidebar}>
               {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            <Typography variant="h6" sx={{ color: "#333", fontWeight: "bold" }}>
+            <Typography
+              variant="h6"
+              sx={{ color: "white", fontWeight: "bold" }}
+            >
               ADMIN PANEL
             </Typography>
             <Box sx={{ width: "100px" }}></Box>
             <div style={{ flexGrow: 1 }} />
-            <IconButton color="inherit">
+            <IconButton color="rgb(255 255 255)" sx={{color:"rgb(255 255 255)"}}>
               <NotificationsIcon />
-             </IconButton>
-            <IconButton color="inherit" onClick={handleMenuClick}>
+            </IconButton>
+            <IconButton color="white" onClick={handleMenuClick} sx={{color:"rgb(255 255 255)"}}>
               <AccountCircleIcon />
             </IconButton>
             <Menu
@@ -94,14 +99,13 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
                 <Typography variant="inherit">Profile</Typography>
               </MenuItem>
               <MenuItem
-               sx={{ color: "#whitesmoke" }}
-               onClick={handleOpenLogoutDialog}
-               
+                sx={{ color: "#whitesmoke" }}
+                onClick={handleOpenLogoutDialog}
               >
                 <Typography variant="inherit">Logout</Typography>
               </MenuItem>
             </Menu>
-            <Typography sx={{ mr: 2, color: "#6B7A99", fontSize: "14px" }}>
+            <Typography sx={{ mr: 2, color: "white", fontSize: "14px" }}>
               {role}
             </Typography>
           </Toolbar>
@@ -109,12 +113,12 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
       </AppBar>
       <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
         <DialogTitle>Confirm Logout</DialogTitle>
-        <DialogContent>
-          Are you sure you want to exit?
-        </DialogContent>
+        <DialogContent>Are you sure you want to exit?</DialogContent>
         <DialogActions>
           <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
-          <Button onClick={handleLogout} color="error">Logout</Button>
+          <Button onClick={handleLogout} color="error">
+            Logout
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

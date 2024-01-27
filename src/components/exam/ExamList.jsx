@@ -227,7 +227,7 @@ const ExamList = () => {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      {isLoading ? <CustomeLoader /> : null}
+      {isLoading ? <CustomeLoader /> :
       <Paper sx={paperStyle} className="responsive-container">
         
         <Typography
@@ -361,6 +361,7 @@ const ExamList = () => {
           <ToastContainer />
         </Grid>
       </Paper>
+}
     </ThemeProvider>
   );
 };

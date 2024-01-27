@@ -46,7 +46,7 @@ const CurrentExam = () => {
     p: 2,
     display: "flex",
     flexDirection: "column",
-    height: "auto",
+    height: "100%",
     backgroundColor: "white", // Set the background color to grey
     m1: 2,
   };
@@ -167,7 +167,7 @@ const CurrentExam = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Paper sx={paperStyle} className="responsive-container">
+      
       <Typography
           variant="h4"
           sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
@@ -267,7 +267,7 @@ const CurrentExam = () => {
           </Grid>
         
       </Grid>
-      </Paper>
+      
     </ThemeProvider>
   );
 };
