@@ -74,7 +74,7 @@ export default function Login() {
       if (response.status === 200) {
         setisLogin(true);
         setisLoading(false);
-        toast.success(message);
+        // toast.success(message);
         const { _id, name, role, token } = response.data;
         Cookies.set("_id", _id);
         Cookies.set("name", name);

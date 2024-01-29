@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,16 +21,17 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 
-const AdminHeader = ({ isExpanded, toggleSidebar }) => {
+const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const role = Cookies.get("name");
-
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  useEffect(() => {
+        setOpenLogoutDialog(false);
+  }, []);
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -48,7 +49,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
     Cookies.remove("id", { path: "" });
     navigate("/login");
   };
-
+ 
   return (
     <Box className="main-box">
       <AppBar
@@ -69,7 +70,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
               variant="h6"
               sx={{ color: "white", fontWeight: "bold" }}
             >
-              ADMIN PANEL
+              {name}
             </Typography>
             <Box sx={{ width: "100px" }}></Box>
             <div style={{ flexGrow: 1 }} />
@@ -86,14 +87,16 @@ const AdminHeader = ({ isExpanded, toggleSidebar }) => {
             >
               <MenuItem
                 component={Link}
-                to="/adminDashboard"
+                to={name === 'STUDENT PANEL' ? '/userDasboard' : '/adminDashboard'}
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Home</Typography>
               </MenuItem>
               <MenuItem
                 component={Link}
-                to="/adminDashboard/userprofile"
+                // to="/adminDashboard/userprofile"
+                to={name === 'STUDENT PANEL' ? '/userDasboard/userprofile' : '/adminDashboard/userprofile'}
+
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Profile</Typography>

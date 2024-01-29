@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
 import AddIcon from "@mui/icons-material/Add";
@@ -38,6 +38,9 @@ export const SideBar = () => {
   const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
   const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
   
+  useEffect(() => {
+    setOpenLogoutDialog(false);
+  }, []);
 
   const handleOpenLogoutDialog = () => {
     setOpenLogoutDialog(true);
@@ -49,9 +52,10 @@ export const SideBar = () => {
 
   const handleLogout = () => {
     // Remove cookies and navigate to login page
-    Cookies.remove("token", { path: "" });
-    Cookies.remove("name", { path: "" });
-    Cookies.remove("id", { path: "" });
+    Cookies.remove("token");
+    Cookies.remove("name");
+    Cookies.remove("_id");  
+    Cookies.remove("role");
     navigate("/login");
   };
   const toggleSidebar = () => {
@@ -187,6 +191,7 @@ export const SideBar = () => {
       <AdminHeader
         isExpanded={isExpanded}
         toggleSidebar={toggleSidebar}
+        name = {'ADMIN PANEL'}
       ></AdminHeader>
       <CssBaseline />
       <Box
