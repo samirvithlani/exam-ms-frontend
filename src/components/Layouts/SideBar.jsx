@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  useMediaQuery,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useState } from "react";
@@ -31,10 +32,13 @@ import HomeIcon from "@mui/icons-material/Home";
 
 export const SideBar = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width:600px)");
   const drawerWidth = 250;
   const partialWidth = 0;
-  const [isExpanded, setIsExpanded] = useState(false); // State to manage sidebar expansion
-  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // State to manage sidebar expansion
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
+  
+
   const handleOpenLogoutDialog = () => {
     setOpenLogoutDialog(true);
   };
@@ -285,7 +289,7 @@ export const SideBar = () => {
         <DialogContent>Are you sure you want to exit?</DialogContent>
         <DialogActions>
           <Button onClick={handleCloseLogoutDialog}>Cancel</Button>
-          <Button onClick={handleLogout} color="error">
+          <Button onClick={()=>{handleLogout()}} color="error">
             Logout
           </Button>
         </DialogActions>

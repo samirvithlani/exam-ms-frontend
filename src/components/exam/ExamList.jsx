@@ -37,15 +37,15 @@ const columns = [
   { field: "displayid", headerName: "ID", width: 90 },
   { field: "name", headerName: "Exam Name", width: 200 },
   { field: "examType", headerName: "Exam Type", width: 70 },
-  { field: "examTopic", headerName: "Exam Topic", width: 250 },
+  { field: "examTopic", headerName: "Exam Topic", width: 200 },
   { field: "Subject", headerName: "Subject", width: 150 },
   { field: "Stream", headerName: "Stream", width: 100 },
   { field: "Standard", headerName: "Standard", width: 100 },
   { field: "Difficulty", headerName: "Difficulty", width: 100 },
-  { field: "noOfQuestions", headerName: "No. of Questions", width: 70 },
-  { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
-  { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
-  { field: "totalmarks", headerName: "Total Marks", width: 70 },
+  // { field: "noOfQuestions", headerName: "No. of Questions", width: 70 },
+  // { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
+  // { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
+  // { field: "totalmarks", headerName: "Total Marks", width: 70 },
   { field: "actions", headerName: "Actions", width: 260 },
 ];
 
@@ -241,7 +241,7 @@ const ExamList = () => {
           item
           xs={12}
           sx={{
-            width: isMobile ? "60vw" : "94%",
+            
             height: isMobile ? "50%" : "100%",
             overflowX: "auto",
           }}
@@ -250,6 +250,7 @@ const ExamList = () => {
             sx={{
               border: "none",
               fontFamily: "Lato",
+              
               
             }}
             rows={examData}

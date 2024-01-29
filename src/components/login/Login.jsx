@@ -108,7 +108,8 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {isLoading && <CustomeLoader />}
+      {isLoading  ?  <CustomeLoader /> :
+      <>
       <CssBaseline />
 
       <Grid
@@ -209,6 +210,7 @@ export default function Login() {
       </Grid>
 
       <ToastContainer />
+      </>    }
     </ThemeProvider>
   );
 }
