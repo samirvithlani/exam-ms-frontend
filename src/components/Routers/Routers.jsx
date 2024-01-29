@@ -59,7 +59,7 @@ const MainRouter = ({ children }) => {
       errorElement: <div>404</div>,
       children: [
         {
-          path: "dashboard",
+          path: "",
            //element:<Dashboard/>,
            element:<StudentDashboard/>,
           errorElement: <div>404</div>,
@@ -83,6 +83,10 @@ const MainRouter = ({ children }) => {
           path: "question/:id",
           element: <MCQQuestionsPage />,
           errorElement: <div>404</div>,
+        },
+        {
+          path:"userprofile",
+          element:<UserProfile/>
         },
       ],
     },
