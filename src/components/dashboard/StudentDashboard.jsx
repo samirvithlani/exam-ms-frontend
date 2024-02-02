@@ -55,17 +55,17 @@ export const StudentDashboard = () => {
   };
 
   return (
+    <div style={{ height: '100vh', overflowY: 'auto' }}>
+
     <Grid
-      container
-      spacing={2}
-      width="100%"
-      sx={{
-        borderRadius: "8px",
-        // mt: 2,
-        ml: 0.1, 
-        p: 2,
-      }}
-    >
+    container
+    spacing={2}
+    width="100%"
+    sx={{
+      borderRadius: "8px",
+      p: 2,
+    }}
+  >
       {/* First Row */}
       <Grid
         container
@@ -341,5 +341,6 @@ export const StudentDashboard = () => {
         </Grid>
       </Grid>
     </Grid>
+    </div>
   );
 };
