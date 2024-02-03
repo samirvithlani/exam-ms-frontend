@@ -1,11 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
+import Typography from '@mui/material/Typography';
 
 export const Wallet = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -13,29 +13,35 @@ export const Wallet = () => {
 
     const fetchData = async () => {
         try {
-            let response = await axios.get(`/transcation/${id}`);
-            console.log(response.data.wallet.token, "response");
+            const response = await axios.get(`/transcation/${Cookies.get('_id')}`);
             setData(response.data);
         } catch (error) {
-            console.error(error, "error");
-            setError('An error occurred while fetching data.');
+            console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
-    const id = Cookies.get('_id');
-
     return (
-        <div>
-            {loading && <p>Loading...</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {data && (
-                <div>
-                    <h1>Transaction History: {data.Transcation_history}</h1>
-                    <h1>Transaction ID: {data.TranscationId}</h1>
-                    <h1>Token: {data.wallet.token}</h1>
-                </div>
+        <div style={{ maxWidth: '600px', margin: 'auto', padding: '20px' }}>
+            {loading ? (
+                <Typography variant="subtitle1" fontStyle="italic">
+                    Loading...
+                </Typography>
+            ) : (
+                data && (
+                    <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Typography variant="h6" fontWeight="bold" margin="10px 0">
+                            Transaction History: {data.Transcation_history}
+                        </Typography>
+                        <Typography variant="h6" fontWeight="bold" margin="10px 0">
+                            Transaction ID: {data.TranscationId}
+                        </Typography>
+                        <Typography variant="h6" fontWeight="bold" margin="10px 0">
+                            Wallet Token: {data.wallet.token}
+                        </Typography>
+                    </div>
+                )
             )}
         </div>
     );
