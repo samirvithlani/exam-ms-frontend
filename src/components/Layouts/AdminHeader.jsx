@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { deepOrange, deepPurple } from "@mui/material/colors";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
@@ -49,7 +50,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
     Cookies.remove("id", { path: "" });
     navigate("/login");
   };
- 
+ const handlewallet =()=>{
+  navigate("/userDasboard/wallet")
+ }
   return (
     <Box className="main-box">
       <AppBar
@@ -79,6 +82,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
             </IconButton>
             <IconButton color="white" onClick={handleMenuClick} sx={{color:"rgb(255 255 255)"}}>
               <AccountCircleIcon />
+            </IconButton>
+            <IconButton color="white"  onClick={handlewallet}>
+              <AccountBalanceWalletIcon />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
