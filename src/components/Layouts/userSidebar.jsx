@@ -105,13 +105,20 @@ import {
         linkUrl: "userprofile",
         activeMenuFor: ["userprofile"],
       },
-
+      {
+        id: 7,
+        name: "wallet",
+        linkUrl: "wallet",
+        activeMenuFor: ["wallet"],
+      },
+      
     ];
     const filteredRouteArray = RouteArray.filter(
       (route) =>
        route.name !== "Answer"&& 
        route.name !== "Question"&&
-       route.name != "userprofile"
+       route.name != "userprofile"&&
+       route.name !== "wallet"
        );
     return (
       <div>

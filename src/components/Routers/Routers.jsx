@@ -35,6 +35,7 @@ import { PrivateRoutes } from "../PrivateRoutes";
 import { checkAuthToken } from "../../util/util";
 import UserProfile from "../Layouts/UserProfile";
 import { StudentDashboard } from "../dashboard/StudentDashboard";
+import { Wallet } from "../dashboard/Wallet";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -52,7 +53,7 @@ const MainRouter = ({ children }) => {
     {
       path: "user/:id",
       element: <UserRegistration />,
-    },
+    },  
     {
       path: "/userDasboard",
       element: <UserSideBar />,
@@ -87,6 +88,10 @@ const MainRouter = ({ children }) => {
         {
           path:"userprofile",
           element:<UserProfile/>
+        },
+        {
+          path:"wallet",
+          element:<Wallet/>
         },
       ],
     },
