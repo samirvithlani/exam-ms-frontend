@@ -42,14 +42,19 @@ export const McqQuestion = () => {
   const [SelectStandards, setSelectStandards] = useState("");
   const [standards, setstandards] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [std, setstd] = useState("");
+  const [stds, setstd] = useState("");
   const [types, setTypes] = useState([]);
   const [questionsList, setQuestionsList] = useState([]);
   const subject = location.state?.subject;
   const stream = location.state?.stream;
-  const difficulty = location.state?.difficulty;
+  const Difficulty = location.state?.difficulty;
+  const difficulty = location.state?.difficultyId;
+  const std = location.state?.standardId;
   const standard = location.state?.standard;
   const topic = location.state?.topic;
+  const Subject = location.state?.subjectId;
+  const Topic = location.state?.topicId;
+  const Stream = location.state?.streamId;
   const subjectId = location.state?.subjectId;
   const streamId = location.state?.streamId;
   const difficultyId = location.state?.difficultyId;
@@ -220,14 +225,29 @@ export const McqQuestion = () => {
     }
   };
   const handleAddQuestion = () => {
-    const data = getValues();
-    const isValid = validateQuestionData(data);
+  const data = getValues();
+  const isValid = validateQuestionData(data);
 
-    if (isValid) {
+  if (isValid) {
+    if (
+      Subject &&
+      Stream !== "NA" &&
+      difficulty &&
+      std &&
+      Topic
+    ) {
+      setQuestionsList((prevList) => [
+        ...prevList,
+        { ...data, Subject, Stream, difficulty, std,Topic },
+      ]);
+    } else {
       setQuestionsList((prevList) => [...prevList, { ...data }]);
-      setTotalQuestions((prevTotal) => prevTotal - 1);
     }
-  };
+
+    setTotalQuestions((prevTotal) => prevTotal - 1);
+  }
+};
+
   const validateQuestionData = (data) => {
     return true;
   };
@@ -372,9 +392,9 @@ export const McqQuestion = () => {
                   <Typography variant="h6">Type: {type}</Typography>
                 </Grid>
               )}
-              {difficulty && (
+              {Difficulty && (
                 <Grid item xs={12}>
-                  <Typography variant="h6">Difficulty: {difficulty}</Typography>
+                  <Typography variant="h6">Difficulty: {Difficulty}</Typography>
                 </Grid>
               )}
               <InputLabel htmlFor="question">Question</InputLabel>
@@ -500,7 +520,7 @@ export const McqQuestion = () => {
                   </Grid>
                 )}
 
-                {std > 10 && (
+                {stds > 10 && (
                   <Grid item xs={12}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
@@ -511,7 +531,7 @@ export const McqQuestion = () => {
                         id="strem"
                         value={selectedStream}
                         label="Stream"
-                        {...register("stream", validationSchema.Stream)}
+                        {...register("Stream", validationSchema.Stream)}
                         onChange={handleStreamChange}
                       >
                         {streams.map((item) => (
@@ -536,7 +556,7 @@ export const McqQuestion = () => {
                         id="demo-simple-select"
                         value={selectedSubject}
                         label="Subject"
-                        {...register("subject", validationSchema.subject)}
+                        {...register("Subject", validationSchema.subject)}
                         onChange={handleSubjectChange}
                       >
                         {subjects.map((item) => (
@@ -561,7 +581,7 @@ export const McqQuestion = () => {
                         id="demo-simple-select"
                         value={selectedTopic}
                         label="Topic"
-                        {...register("topic")}
+                        {...register("Topic")}
                         onChange={handelTopicChange}
                       >
                         {topics.map((item) => (
@@ -649,7 +669,7 @@ export const McqQuestion = () => {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                disabled={totalQuestions !== 0}
+                // disabled={totalQuestions !== 0}
               >
                 SUBMIT
               </Button>
