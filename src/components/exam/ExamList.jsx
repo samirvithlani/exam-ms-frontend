@@ -197,6 +197,7 @@ const ExamList = () => {
       });
       toast.success("Questions generated successfully!");
     } catch (error) {
+      console.log(error);
       console.error("Error generating questions:", error);
       toast.error("Failed to generate questions. Please try again.");
     }
