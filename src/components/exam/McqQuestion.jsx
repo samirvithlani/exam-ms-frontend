@@ -245,6 +245,7 @@ export const McqQuestion = () => {
     }
 
     setTotalQuestions((prevTotal) => prevTotal - 1);
+    reset()
   }
 };
 
@@ -669,8 +670,8 @@ export const McqQuestion = () => {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                // disabled={totalQuestions !== 0}
-              >
+                disabled={totalQuestions !== 0  && !isNaN(totalQuestions)}
+                >
                 SUBMIT
               </Button>
             </>
