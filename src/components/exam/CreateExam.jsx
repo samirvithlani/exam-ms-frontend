@@ -362,7 +362,7 @@ export const CreateExam = () => {
                 label="totalmarks"
                 type="Number"
                 value={totalMarks}
-                autoFocus
+                // autoFocus
                 readOnly
                 {...register("totalmarks", validationSchema.totalmarks)}
               />
