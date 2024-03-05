@@ -13,6 +13,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import { isEqual } from "lodash";
+
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
@@ -192,60 +194,85 @@ export const McqQuestion = () => {
     const TypeId = event.target.value;
     setSelectedType(TypeId);
   };
+  
   const submitHandler = async (data) => {
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
-      formData.append("file", data.fileUpload[0]);
+        formData.append("file", data.fileUpload[0]);
     }
     if (!data.fileUpload || data.fileUpload === undefined) {
-      response = await axios.post("/mcqmany", { questions: questionsList });
-      navigate("/admindashboard/examlist");
-      toast.success("Question Added Sucess Fully ...");
+        try {
+            response = await axios.post("/mcqmany", { questions: questionsList });
+            navigate("/admindashboard/examlist");
+            toast.success("Question Added Successfully ...");
+        } catch (error) {
+            if (error.response.status === 409) {
+                toast.error(" Question already exists ...");
+            } else {
+                toast.error("An error occurred while adding the question ...");
+            }
+        }
     } else {
-      response = await axios.post("/mcqs", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      toast.success("Question Added Sucess Fully ...");
-      navigate("/admindashboard/examlist");
+        try {
+            response = await axios.post("/mcqs", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            navigate("/admindashboard/examlist");
+            toast.success("Question Added Successfully ...");
+        } catch (error) {
+            if (error.response.status === 409) {
+              console.log(error.response.data,"data");
+                toast.error("Question already exists ...");
+            } else {
+                toast.error("An error occurred while adding the question ...");
+            }
+        }
     }
 
     let mcq;
-    if (Array.isArray(response.data.data)) {
-      mcq = response.data.data.map((item) => item._id);
+    if (Array.isArray(response?.data?.data)) {
+        mcq = response.data.data.map((item) => item._id);
     } else {
-      mcq = response.data._id;
+        mcq = response?.data?._id;
     }
     if (id) {
-      const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
-        mcq,
-      });
+        try {
+            const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
+                mcq,
+            });
+        } catch (error) {
+            toast.error("An error occurred while updating the question ...");
+        }
     }
-  };
-  const handleAddQuestion = () => {
+};
+
+const handleAddQuestion = () => {
   const data = getValues();
   const isValid = validateQuestionData(data);
 
   if (isValid) {
-    if (
-      Subject &&
-      Stream !== "NA" &&
-      difficulty &&
-      std &&
-      Topic
-    ) {
-      setQuestionsList((prevList) => [
-        ...prevList,
-        { ...data, Subject, Stream, difficulty, std,Topic },
-      ]);
-    } else {
-      setQuestionsList((prevList) => [...prevList, { ...data }]);
-    }
+    // Check if the question already exists in the list
+    const isDuplicate = questionsList.some((question) =>
+      isEqual(question, data)
+    );
 
-    setTotalQuestions((prevTotal) => prevTotal - 1);
-    reset()
+    if (!isDuplicate) {
+      if (Subject && Stream !== "NA" && difficulty && std && Topic) {
+        setQuestionsList((prevList) => [
+          ...prevList,
+          { ...data, Subject, Stream, difficulty, std, Topic },
+        ]);
+      } else {
+        setQuestionsList((prevList) => [...prevList, { ...data }]);
+      }
+
+      setTotalQuestions((prevTotal) => prevTotal - 1);
+    } else {
+      toast.error("Question already exists in the list");
+    }
   }
 };
 
