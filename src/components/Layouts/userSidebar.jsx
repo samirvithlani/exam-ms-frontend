@@ -31,7 +31,7 @@ import {
     const navigate = useNavigate();
     const isMobile = useMediaQuery("(max-width:600px)");
     const drawerWidth = 250;
-    const partialWidth = 70; 
+    const partialWidth = 0; 
     const [isExpanded, setIsExpanded] = useState(true); 
     const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
   

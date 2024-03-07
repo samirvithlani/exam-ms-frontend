@@ -167,107 +167,106 @@ const CurrentExam = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      
-      <Typography
-          variant="h4"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
-        >
-          Exam List
-        </Typography>
+      <Paper sx={paperStyle} className="responsive-container">
 
+
+      <Typography
+        variant="h4"
+        sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+      >
+        Exam List
+      </Typography>
+
+      <Grid
+        container
+        item
+        xs={12}
+        sx={{
+          width: isMobile ? "60vw" : "80vw",
+          height: isMobile ? "50vh" : "90vh",
+          overflowX: "auto",
+        }}
+      >
+        <Grid item xs={12}>
+          <FormControl
+            sx={{
+              mt: 2,
+              ml: { xs: 0, md: 30 },
+              ...styles.fullWidthSelect,
+            }}
+          >
+            <InputLabel id="demo-simple-select-label">
+              Select Difficulty
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedDifficulty}
+              label="Difficulty"
+              onChange={handleDifficulty}
+            >
+              {difficulties.map((item) => (
+                <MenuItem key={item.id} value={item._id}>
+                  {item.difficulty}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl
+            sx={{
+              mt: 2,
+              ml: { xs: 0, md: 30 },
+              ...styles.fullWidthSelect,
+            }}
+          >
+            <InputLabel id="demo-simple-select-label">Select Std</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="std"
+              value={SelectedStandards}
+              label="Standard"
+              onChange={handelStd}
+            >
+              {standards.map((item) => (
+                <MenuItem key={item.id} value={item._id}>
+                  {item.std}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid
           container
           item
           xs={12}
           sx={{
-            width: isMobile ? "60vw" : "80vw",
-            height: isMobile ? "50vh" : "90vh",
+            width: isMobile ? "45vw" : "80vw",
+            height: isMobile ? "50vh" : "50vh",
             overflowX: "auto",
           }}
         >
-          {isLoading ? <CustomeLoader /> : null}
-          <Grid item xs={12}>
-            <FormControl
-              sx={{
-                mt: 2,
-                ml: { xs: 0, md: 30 },
-                ...styles.fullWidthSelect,
-              }}
-            >
-              <InputLabel id="demo-simple-select-label">
-                Select Difficulty
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedDifficulty}
-                label="Difficulty"
-                onChange={handleDifficulty}
-              >
-                {difficulties.map((item) => (
-                  <MenuItem key={item.id} value={item._id}>
-                    {item.difficulty}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl
-              sx={{
-                mt: 2,
-                ml: { xs: 0, md: 30 },
-                ...styles.fullWidthSelect,
-              }}
-            >
-              <InputLabel id="demo-simple-select-label">Select Std</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="std"
-                value={SelectedStandards}
-                label="Standard"
-                onChange={handelStd}
-              >
-                {standards.map((item) => (
-                  <MenuItem key={item.id} value={item._id}>
-                    {item.std}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            sx={{
-              width: isMobile ? "45vw" : "80vw",
-              height: isMobile ? "50vh" : "50vh",
-              overflowX: "auto",
+          {filteredExams.length > 0 ? (
+            <DataGrid
+            style={{
+              marginTop: 20,
+              fontWeight: "bold",
+              fontSize: 20,
+              fontFamily: "Lato",
             }}
-          >
-            {filteredExams.length > 0 ? (
-              <DataGrid
-              sx={{
-                border: "none",
-                fontFamily: "Lato",
-              }}
-                rows={filteredExams}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 20]}
-                disableSelectionOnClick
-              />
-            
-            ) 
-             : (
-              <p>No available exams</p>
-            )}
-
-          </Grid>
-        
+              rows={filteredExams}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 20]}
+              disableSelectionOnClick
+            />
+          ) : (
+            <p>No available exams</p>
+          )}
+        </Grid>
       </Grid>
-      
+      </Paper>
     </ThemeProvider>
   );
 };

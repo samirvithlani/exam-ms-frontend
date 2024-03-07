@@ -86,7 +86,7 @@ export default function SignUp() {
     }
   };
   const handleGoogleSignIn = () => {
-    window.location.href = "http://localhost:3000/google/callback";
+    window.location.href = "https://skidexam.web.app/google/callback";
     
   };
 
