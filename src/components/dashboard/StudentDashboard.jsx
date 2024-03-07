@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import Chart from "chart.js/auto";
+import Cookies from 'js-cookie'
 
 export const StudentDashboard = () => {
   const chartRef = useRef(null);
-
+  const[history,sethistory] = useState([]);
+  const[wallet,setwallet] = useState([])
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
   const cardStyle = {
@@ -16,6 +18,8 @@ export const StudentDashboard = () => {
 
   useEffect(() => {
     fetchData();
+    fetchUserExam();
+    fetchWalletData();
   }, []);
 
   const fetchData = async () => {
@@ -78,7 +82,28 @@ export const StudentDashboard = () => {
       console.error("Error fetching data:", error);
     }
   };
-
+  const fetchUserExam = async () => {
+        const _id = Cookies.get('_id');
+        try {
+          const response = await axios.get(`/userhistory/${_id}`);
+          const historylength = response.data.length
+          console.log(historylength);
+          sethistory(historylength); 
+        }catch(error){
+          console.log(error,"error");
+      }}
+    
+    const fetchWalletData = async () => {
+        try {
+            const response = await axios.get(`/transcation/${Cookies.get('_id')}`);
+            console.log(response.data.wallet.token);
+            if(response){
+            setwallet(response.data.wallet.token);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
   return (
     <div style={{ height: "100vh", overflowY: "auto" }}>
       <Grid
@@ -128,13 +153,14 @@ export const StudentDashboard = () => {
                   variant="h4"
                   sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
                 >
-                  Student Detail
+                  Exam History 
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ color: "black", fontFamily: "Lato" }}
                 >
-                  Total student in portal: {students}
+                Total Exam Given : {history}
+
                 </Typography>
               </div>
               <svg
@@ -197,13 +223,13 @@ export const StudentDashboard = () => {
                   variant="h4"
                   sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
                 >
-                  Student Detail
+                  Credit Detail
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ color: "black", fontFamily: "Lato" }}
                 >
-                  Total student in portal: {students}
+                  Total Credit: {wallet}
                 </Typography>
               </div>
               <svg
