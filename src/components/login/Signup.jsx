@@ -18,6 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import signUpImage from "../../assets/images/signup.jpg";
 import { useState } from "react";
 import signup from "../../assets/images/signup.svg";
+import { useEffect } from "react";
+import GoogleIcon from '@mui/icons-material/Google';
 
 const defaultTheme = createTheme({
   palette: {
@@ -83,6 +85,11 @@ export default function SignUp() {
       }
     }
   };
+  const handleGoogleSignIn = () => {
+    window.location.href = "http://localhost:3000/google/callback";
+    
+  };
+
   const textFieldStyle = { borderRadius: 8 };
 
   return (
@@ -234,6 +241,29 @@ export default function SignUp() {
                 >
                   Sign UP
                 </Button>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ ml: 1 }}>
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleGoogleSignIn}
+                  startIcon={<GoogleIcon />} 
+                >
+                  Sign up with Google
+                </Button>
+
+              </Box>
+          </Grid>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
                     <Link to={"/login"}>Already have an account? log in</Link>
