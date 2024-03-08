@@ -49,7 +49,7 @@ import {
       return () => {
         window.removeEventListener("resize", handleResize);
       };
-    }, [isExpanded]);
+    }, []);
 
       const handleOpenLogoutDialog = () => {
       setOpenLogoutDialog(true);
