@@ -37,20 +37,8 @@ import {
   
     useEffect(() => {
       
-      const handleResize = () => {
-        const screenWidth = window.innerWidth;
-        const isMobile = screenWidth <= 600;
-        setIsExpanded(!isMobile);
-      };
-  
-      handleResize(); // Set initial state
-      window.addEventListener("resize", handleResize);
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
+      setOpenLogoutDialog(false);
     }, []);
-
       const handleOpenLogoutDialog = () => {
       setOpenLogoutDialog(true);
     };
@@ -67,16 +55,9 @@ import {
       Cookies.remove("role");
       navigate("/login");
     };
-    const toggleSidebar = () => {
-      const screenWidth = window.innerWidth;
-      const isMobile = screenWidth <= 600;
-    
-      if (isMobile) {
-        setIsExpanded(false);
-      } else {
-        setIsExpanded(!isExpanded);
-      }
-    };
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
     const RouteArray = [
       {
         id: 1,
