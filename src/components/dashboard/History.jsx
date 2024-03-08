@@ -4,7 +4,17 @@ import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { Box, Grid, Typography, useTheme, Paper } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  useTheme,
+  Paper,
+  ThemeProvider,
+  createTheme,
+  useMediaQuery,
+  CssBaseline,
+} from "@mui/material";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { useDemoData } from "@mui/x-data-grid-generator";
 
@@ -22,6 +32,8 @@ const Historyofuser = () => {
     rowLength: 100,
     maxColumns: 6,
   });
+  const isMobile = useMediaQuery("(max-width:600px)");
+
   const columns = [
     { field: "displayid", headerName: "ID", width: 90 },
     { field: "name", headerName: "Exam Name", width: 200 },
@@ -53,7 +65,7 @@ const Historyofuser = () => {
     p: 2,
     display: "flex",
     flexDirection: "column",
-    height: "auto",
+    height: "600px",
     backgroundColor: "white", // Set the background color to grey
     m1: 2,
   };
@@ -78,54 +90,59 @@ const Historyofuser = () => {
     }
   };
 
+  const defaultTheme = createTheme();
   return (
-    <Grid style={{ height: 400, width: "100%" }}>
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
       <Paper sx={paperStyle} className="responsive-container">
-        {isLoading ? (
-          <CustomeLoader />
-        ) : (
-          <>
-            <Typography
-              variant="h1"
-              sx={{ fontSize: { xs: 30, sm: 40, md: 50 } }}
-            >
-              Past Exam{" "}
-            </Typography>
+        <Typography
+          variant="h4"
+          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+        >
+          Exam List
+        </Typography>
 
-            <Grid
-              container
-              item
-              xs={12}
+        <Grid
+          container
+          item
+          xs={12}
+          sx={{
+            width: isMobile ? "60vw" : "80vw",
+            height: isMobile ? "50vh" : "90vh",
+            overflowX: "auto",
+          }}
+        >
+          <Grid
+            container
+            item
+            xs={12}
+            sx={{
+              width: isMobile ? "45vw" : "80vw",
+              height: isMobile ? "50vh" : "50vh",
+              overflowX: "auto",
+            }}
+          >
+            
+            <DataGrid
+              autoHeight
               sx={{
-                width: "80vw",
-                height: "50vh",
-                overflowX: "auto",
-                [theme.breakpoints.down("sm")]: {
-                  width: "60vw ",
-                  height: "50vh",
-                },
+                border: "none",
+                fontFamily: "Lato",
+                height: "100%",
+                // overflowY:"auto"
               }}
-            >
-              <DataGrid
-                autoHeight
-                sx={{
-                  border: "none",
-                  fontFamily: "Lato",
-                  // overflowY:"auto"
-                }}
-                rows={histories}
-                columns={columns}
-                initialState={{
-                  ...data.initialState,
-                  pagination: { paginationModel: { pageSize: 5 } },
-                }}
-                disableSelectionOnClick
-              />
-            </Grid>
-          </>
-        )}
+              rows={histories}
+              columns={columns}
+              initialState={{
+                ...data.initialState,
+                pagination: { paginationModel: { pageSize: 5 } },
+              }}
+              disableSelectionOnClick
+            />
+          </Grid>
+        </Grid>
       </Paper>
-    </Grid>
+    </ThemeProvider>
   );
 };
 
