@@ -27,13 +27,25 @@ const CurrentExam = () => {
   const [standards, setstandards] = useState([]);
   const [SelectedStandards, setSelectedStandards] = useState("");
   const [userHistory, setUserHistory] = useState([]);
+  const[userdata,setUserdata] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchDifficultyLevels();
     fetchstd();
     fetchhistory();
+    fetchuser();
   }, []);
+  const fetchuser = async()=>{
+    const _id = Cookies.get("_id");
+    try {
+      const response = await axios.get(`/user/${_id}`);
+      console.log(response);
+      setUserdata(response.data)
+    } catch (error) {
+      
+    }
+  }
   const fetchstd = async () => {
     try {
       const response = await axios.get("/getstd");
@@ -70,7 +82,11 @@ const CurrentExam = () => {
     setSelectedStandards(stdId);
     fetchData(stdId, selectedDifficulty);
   };
-  const handleStartExam = (examId, examtype_id, totalmarks) => {
+  const handleStartExam = async (examId, examtype_id, totalmarks,credit) => {
+    if(userdata.walllet !== null){
+      const updatedcredit = userdata.wallet.token-credit
+      const response = await axios.put(`/wallet/${userdata.wallet._id}`,{token:updatedcredit})     
+    }
     navigate(`/userDasboard/question/${examId}`, {
       state: { examtype_id, totalmarks },
     });
@@ -103,6 +119,8 @@ const CurrentExam = () => {
     { field: "examTime", headerName: "Exam Time (in hours)", width: 200 },
     { field: "perQuestionTime", headerName: "Time per Question", width: 180 },
     { field: "totalmarks", headerName: "Total Marks", width: 100 },
+    { field: "credit", headerName: "Credit", width: 100 },
+
     {
       field: "actions",
       headerName: "Actions",
@@ -116,7 +134,8 @@ const CurrentExam = () => {
             handleStartExam(
               params.row.id,
               params.row.examtype_id,
-              params.row.totalmarks
+              params.row.totalmarks,
+              params.row.credit
             )
           }
         >
@@ -149,6 +168,7 @@ const CurrentExam = () => {
           topicId: exam.examtopic?._id || "N/A",
           difficultyId: exam.difficulty?._id || "NA",
           examtype_id: exam.examtype?._id || "N/A",
+          credit:exam?.credit || "N/A"
         }));
         setExamList(filteredData);
         setisLoading(false);
