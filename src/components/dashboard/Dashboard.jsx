@@ -261,9 +261,12 @@ const CurrentExam = () => {
               rowsPerPageOptions={[5, 10, 20]}
               disableSelectionOnClick
             />
+            
           ) : (
             <p>No available exams</p>
           )}
+          
+         
         </Grid>
       </Grid>
       </Paper>
