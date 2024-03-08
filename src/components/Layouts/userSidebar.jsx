@@ -37,8 +37,20 @@ import {
   
     useEffect(() => {
       
-      setOpenLogoutDialog(false);
-    }, []);
+      const handleResize = () => {
+        const screenWidth = window.innerWidth;
+        const isMobile = screenWidth <= 600;
+        setIsExpanded(!isMobile);
+      };
+  
+      handleResize(); // Set initial state
+      window.addEventListener("resize", handleResize);
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, [isExpanded]);
+
       const handleOpenLogoutDialog = () => {
       setOpenLogoutDialog(true);
     };
@@ -55,9 +67,16 @@ import {
       Cookies.remove("role");
       navigate("/login");
     };
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded);
-  };
+    const toggleSidebar = () => {
+      const screenWidth = window.innerWidth;
+      const isMobile = screenWidth <= 600;
+    
+      if (isMobile) {
+        setIsExpanded(false);
+      } else {
+        setIsExpanded(!isExpanded);
+      }
+    };
     const RouteArray = [
       {
         id: 1,
@@ -128,7 +147,6 @@ import {
           name = {'STUDENT PANEL'}
         ></AdminHeader>
         <CssBaseline />
-        
         <Box
           sx={{
             display: "flex",
