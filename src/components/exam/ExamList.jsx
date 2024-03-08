@@ -228,142 +228,140 @@ const ExamList = () => {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      {isLoading ? <CustomeLoader /> :
-      <Paper sx={paperStyle} className="responsive-container">
-        
-        <Typography
-          variant="h4"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
-        >
-          Exam List
-        </Typography>
-        <Grid
-          container
-          item
-          xs={12}
-          sx={{
-            
-            height: isMobile ? "50%" : "100%",
-            overflowX: "auto",
-          }}
-        >
-          <DataGrid
+      {isLoading ? (
+        <CustomeLoader />
+      ) : (
+        <Paper sx={paperStyle} className="responsive-container">
+          <Typography
+            variant="h4"
+            sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+          >
+            Exam List
+          </Typography>
+          <Grid
+            container
+            item
+            xs={12}
             sx={{
-              border: "none",
-              fontFamily: "Lato",
-              
-              
+              height: isMobile ? "50%" : "100%",
+              overflowX: "auto",
             }}
-            rows={examData}
-            columns={columns.map((column) => ({
-              ...column,
-              renderCell: (params) => {
-                if (column.field === "actions") {
+          >
+            <DataGrid
+              sx={{
+                border: "none",
+                fontFamily: "Lato",
+              }}
+              rows={examData}
+              columns={columns.map((column) => ({
+                ...column,
+                renderCell: (params) => {
+                  if (column.field === "actions") {
+                    return (
+                      <div className="responsive-container">
+                        <Tooltip title="View Exam" arrow>
+                          <IconButton
+                            aria-label="view"
+                            onClick={() =>
+                              handleView(
+                                params.row.id,
+                                params.row.Subject,
+                                params.row.Stream,
+                                params.row.Difficulty,
+                                params.row.Standard,
+                                params.row.examTopic,
+                                params.row.examType
+                              )
+                            }
+                          >
+                            <Visibility />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit Questions" arrow>
+                          <IconButton
+                            aria-label="edit"
+                            onClick={() => handleEdit(params.row.id)}
+                          >
+                            <Edit />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete Questions" arrow>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDelete(params.row.id)}
+                          >
+                            <DeleteOutline />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Add Questions" arrow>
+                          <IconButton
+                            aria-label="add"
+                            onClick={() =>
+                              handleAddQuestions(
+                                "mcq",
+                                params.row.id,
+                                params.row.Subject,
+                                params.row.Stream,
+                                params.row.Difficulty,
+                                params.row.Standard,
+                                params.row.subjectId,
+                                params.row.streamId,
+                                params.row.topicId,
+                                params.row.difficultyId,
+                                params.row.standardId,
+                                params.row.examTopic,
+                                params.row.examType,
+                                params.row.typeId,
+                                params.row.noOfQuestions
+                              )
+                            }
+                            color="primary"
+                          >
+                            <Add />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Generate Questions" arrow>
+                          <IconButton
+                            aria-label="add"
+                            onClick={() =>
+                              handleGenerateQuestions(
+                                params.row.topicId,
+                                params.row.noOfQuestions,
+                                params.row.id,
+                                params.row.difficultyId
+                              )
+                            }
+                            color="primary"
+                          >
+                            <Add />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
+                    );
+                  }
                   return (
-                    <div className="responsive-container">
-                      <Tooltip title="View Exam" arrow>
-                        <IconButton
-                          aria-label="view"
-                          onClick={() =>
-                            handleView(
-                              params.row.id,
-                              params.row.Subject,
-                              params.row.Stream,
-                              params.row.Difficulty,
-                              params.row.Standard,
-                              params.row.examTopic,
-                              params.row.examType
-                            )
-                          }
-                        >
-                          <Visibility />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Edit Questions" arrow>
-                        <IconButton
-                          aria-label="edit"
-                          onClick={() => handleEdit(params.row.id)}
-                        >
-                          <Edit />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Delete Questions" arrow>
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => handleDelete(params.row.id)}
-                        >
-                          <DeleteOutline />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Add Questions" arrow>
-                        <IconButton
-                          aria-label="add"
-                          onClick={() =>
-                            handleAddQuestions(
-                              "mcq",
-                              params.row.id,
-                              params.row.Subject,
-                              params.row.Stream,
-                              params.row.Difficulty,
-                              params.row.Standard,
-                              params.row.subjectId,
-                              params.row.streamId,
-                              params.row.topicId,
-                              params.row.difficultyId,
-                              params.row.standardId,
-                              params.row.examTopic,
-                              params.row.examType,
-                              params.row.typeId,
-                              params.row.noOfQuestions
-                            )
-                          }
-                          color="primary"
-                        >
-                          <Add />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Generate Questions" arrow>
-                        <IconButton
-                          aria-label="add"
-                          onClick={() =>
-                            handleGenerateQuestions(
-                              params.row.topicId,
-                              params.row.noOfQuestions,
-                              params.row.id,
-                              params.row.difficultyId
-                            )
-                          }
-                          color="primary"
-                        >
-                          <Add />
-                        </IconButton>
-                      </Tooltip>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        fontFamily: "Lato",
+                      }}
+                    >
+                      {params.value}
                     </div>
                   );
-                }
-                return (
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: 20,
-                      fontFamily: "Lato",
-                    }}
-                  >
-                    {params.value}
-                  </div>
-                );
-              },
-            }))}
-            initialState={{
-              ...data.initialState,
-              pagination: { paginationModel: { pageSize: 5 } },
-            }}
-            rowHeight={80}
-          />
-          <ToastContainer />
-        </Grid>
-      </Paper>
-}
+                },
+              }))}
+              initialState={{
+                ...data.initialState,
+                pagination: { paginationModel: { pageSize: 5 } },
+              }}
+              rowHeight={80}
+            />
+            <ToastContainer />
+          </Grid>
+        </Paper>
+      )}
     </ThemeProvider>
   );
 };

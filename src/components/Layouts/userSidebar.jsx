@@ -128,6 +128,7 @@ import {
           name = {'STUDENT PANEL'}
         ></AdminHeader>
         <CssBaseline />
+        
         <Box
           sx={{
             display: "flex",
@@ -209,19 +210,19 @@ import {
             </Box>
           </Drawer>
           <Box
-            component="main"
-            sx={{
-              width: "100%",
-              mt: "50px",
-              height: "100%",
-              // backgroundColor:"rgb(240,235,247)",
-              // borderRadius: "8px",
-              // transition: "width 0.2s ease-in-out",
-            }}
-          >
-            {/* <Toolbar /> */}
-            <Outlet />
-          </Box>
+          component="main"
+          sx={{
+            width: "100%",
+            mt: "50px",
+            height: "100%",
+            // backgroundColor:"rgb(240,235,247)",
+            // borderRadius: "8px",
+            // transition: "width 0.2s ease-in-out",
+          }}
+        >
+          {/* <Toolbar /> */}
+          <Outlet />
+        </Box>
         </Box>
         <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
           <DialogTitle>Confirm Logout</DialogTitle>
