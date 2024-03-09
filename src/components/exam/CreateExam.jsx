@@ -93,6 +93,12 @@ export const CreateExam = () => {
         message: "difficulty is required.",
       },
     },
+    credit: {
+      required: {
+        value: true,
+        message: "credit is required.",
+      },
+    },
   };
   useEffect(() => {
     fetchTypes();
@@ -366,6 +372,21 @@ export const CreateExam = () => {
                 readOnly
                 {...register("totalmarks", validationSchema.totalmarks)}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="given-title"
+                name="credit"
+                required
+                fullWidth
+                id="credit"
+                label="credit"
+                autoFocus
+                {...register("credit", validationSchema.credit)}
+              />
+              {errors.credit && (
+                <span style={{ color: "red" }}>{errors.credit.message}</span>
+              )}
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>

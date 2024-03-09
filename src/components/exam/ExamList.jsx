@@ -38,15 +38,17 @@ const columns = [
   { field: "name", headerName: "Exam Name", width: 200 },
   { field: "examType", headerName: "Exam Type", width: 70 },
   { field: "examTopic", headerName: "Exam Topic", width: 200 },
-  { field: "Subject", headerName: "Subject", width: 150 },
-  { field: "Stream", headerName: "Stream", width: 100 },
+  { field: "Subject", headerName: "Subject", width: 100 },
+  { field: "Stream", headerName: "Stream", width: 80 },
   { field: "Standard", headerName: "Standard", width: 100 },
   { field: "Difficulty", headerName: "Difficulty", width: 100 },
+  { field: "credit", headerName: "credit", width: 50 },
+
   // { field: "noOfQuestions", headerName: "No. of Questions", width: 70 },
   // { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
   // { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
   // { field: "totalmarks", headerName: "Total Marks", width: 70 },
-  { field: "actions", headerName: "Actions", width: 260 },
+  { field: "actions", headerName: "Actions", width: 200 },
 ];
 
 const ExamList = () => {
@@ -100,6 +102,7 @@ const ExamList = () => {
           streamId: exam.stream?._id || "NA",
           standardId: exam.std ? exam.std._id : "NA",
           typeId: exam.examtype?._id || "N/A",
+          credit:exam?.credit || 'N/A',
         }));
         setExamData(filteredData);
         setisLoading(false);
