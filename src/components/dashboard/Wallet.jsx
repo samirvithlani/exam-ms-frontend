@@ -38,7 +38,7 @@ export const Wallet = () => {
                             Transaction ID: {data.TranscationId}
                         </Typography>
                         <Typography variant="h6" fontWeight="bold" margin="10px 0">
-                            Wallet Token: {data.wallet.token}
+                            Wallet Credit: {data.wallet.token}
                         </Typography>
                     </div>
                 )

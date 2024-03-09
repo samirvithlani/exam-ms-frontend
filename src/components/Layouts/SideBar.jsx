@@ -177,6 +177,13 @@ export const SideBar = () => {
       linkUrl: "userprofile",
       activeMenuFor: ["userprofile"],
     },
+    {
+      id: 18,
+      name: "allquestion",
+      linkUrl: "allquestion",
+      activeMenuFor: ["allquestion"],
+      logoImage: ListIcon,
+    },
   ];
   const filteredRouteArray = RouteArray.filter(
     (route) =>
