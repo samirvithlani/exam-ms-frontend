@@ -3,14 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
-import { Box,Grid,Typography ,useTheme,Paper} from '@mui/material';
+import { Box, Grid, Typography, useTheme, Paper, TextField } from '@mui/material';
 import { useDemoData } from '@mui/x-data-grid-generator';
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 
 const StudentList = () => {
-    const navigate = useNavigate();
-  const [students, setstudents] = useState([]);
-  const [isLoading, setisLoading] = useState(false)
+  const navigate = useNavigate();
+  const [students, setStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [creditToAdd, setCreditToAdd] = useState('');
+  const[User,setUser] = useState('')
   const theme = useTheme();
 
   const { data } = useDemoData({
@@ -18,102 +21,100 @@ const StudentList = () => {
     rowLength: 100,
     maxColumns: 6,
   });
-  const paperStyle = {
-    p: 2,
-    display: "flex",
-    flexDirection: "column",
-    height: "auto",
-    backgroundColor: "white", 
-    m1: 2,
-  };
+
   useEffect(() => {
-fetchdata();
+    fetchdata();
   }, []);
-const fetchdata = async()=>{
-  setisLoading(true)
 
-let response = await axios.get('/user')
-const facultyData = response.data.filter(user => user.role.role === 'student');
-let filterdata = facultyData.map((faculty,index)=>({
-    displayid: index+1,
-    id:faculty._id,
-    firstname:faculty.firstname,
-    email:faculty.email,
-    role:faculty.role?.role,
-    status:faculty.status
-}))
-setstudents(filterdata);
-setisLoading(false)
+  const fetchdata = async () => {
+    setIsLoading(true);
 
-}
-const columns = [
+    let response = await axios.get('/user');
+    const facultyData = response.data.filter(user => user.role.role === 'student');
+    let filterdata = facultyData.map((faculty, index) => ({
+      id: faculty._id,
+      displayid: index + 1,
+      firstname: faculty.firstname,
+      email: faculty.email,
+      role: faculty.role?.role,
+      status: faculty.status,
+      credit: faculty.credit // Assuming each user object has a 'credit' property
+    }));
+    setStudents(filterdata);
+    setIsLoading(false);
+  }
+
+  const handleAddCredit = async (userId) => {
+    console.log(creditToAdd,"credit");
+    console.log(userId,"userid");
+    const user = await axios.get(`/user/${userId}`)
+    setUser(user.data.wallet._id)
+    if(user){
+      const data = {token:creditToAdd}
+    const addcredit = await axios.put(`/wallet/${User}`,data)
+    }
+    setCreditToAdd('');
+    setSelectedUserId(null);
+  }
+
+  const columns = [
     { field: 'displayid', headerName: 'ID', width: 90 },
     { field: 'firstname', headerName: 'Name', width: 200 },
     { field: 'email', headerName: 'Email', width: 300 },
     { field: 'role', headerName: 'Role', width: 300 },
     { field: 'status', headerName: 'Status', width: 300 },
-    
-  ]
-  return (
-    <Paper sx={paperStyle} className="responsive-container">
     {
-      isLoading ? <CustomeLoader/> : null
-    }
-    <Grid style={{ height: 400, width: '100%' }}>
-   
-    <Typography
-          variant="h4"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
-        >
-          Student List
-        </Typography>
-    <Grid
-  container
-  item
-  xs={12}
-  sx={{
-    width: "80vw", 
-    height: "50vh", 
-    overflowX: "auto",
-    [theme.breakpoints.down("sm")]: {
-      width: "90vw",
-      height: "50vh",
+      field: 'credit', headerName: 'Credit', width: 150,
+      renderCell: (params) => (
+        <>
+          {selectedUserId === params.row.id ? (
+            <Box display="flex" alignItems="center">
+              <TextField
+                value={creditToAdd}
+                onChange={(e) => setCreditToAdd(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleAddCredit(params.row.id)}
+                disabled={!creditToAdd}
+              >
+                Add
+              </Button>
+            </Box>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setSelectedUserId(params.row.id)}
+            >
+              Add Credit
+            </Button>
+          )}
+        </>
+      )
     },
-  }}
->
-    <DataGrid
-    sx={{
-      border: "none",
-      fontFamily: "Lato",
-    }}
-      rows={students}
-      columns={columns.map((column)=>({
-        ...column,
-        renderCell:(params)=>{
-          return(
-            <div 
-            style={{
-              fontWeight: "bold",
-              fontSize: 20,
-              fontFamily: "Lato",
-            }}
-          >
-           {params.value}
-            </div>
-          )
-        }
-      }))}
-      initialState={{
-        ...data.initialState,
-        pagination: { paginationModel: { pageSize: 5} },
-      }}
-      rowHeight={80}
+  ];
 
-    />
-  </Grid>
-  </Grid>
-</Paper>
-);
+  return (
+    <Paper sx={{ p: 2, display: "flex", flexDirection: "column", height: "auto", backgroundColor: "white", m1: 2 }} className="responsive-container">
+      {isLoading ? <CustomeLoader /> : null}
+
+      <Typography variant="h4" sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}>Student List</Typography>
+
+      <Grid style={{ height: 400, width: '100%' }}>
+        <Grid container item xs={12} sx={{ width: "80vw", height: "50vh", overflowX: "auto", [theme.breakpoints.down("sm")]: { width: "90vw", height: "50vh" } }}>
+          <DataGrid
+            sx={{ border: "none", fontFamily: "Lato" }}
+            rows={students}
+            columns={columns}
+            initialState={{ ...data.initialState, pagination: { paginationModel: { pageSize: 5 } } }}
+            rowHeight={80}
+          />
+        </Grid>
+      </Grid>
+    </Paper>
+  );
 };
 
 export default StudentList;
