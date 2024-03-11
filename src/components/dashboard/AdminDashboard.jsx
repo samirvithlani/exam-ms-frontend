@@ -10,6 +10,7 @@ Chart.register(ArcElement);
 export const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
+  const[question,setQuestion] = useState([]);
   const cardStyle = {
     border: "2  px solid #ddd",
     borderRadius: "20px",
@@ -50,10 +51,13 @@ export const AdminDashboard = () => {
   const fetchdata = async () => {
     const studentsResponse = await axios.get("/user");
     const examResponse = await axios.get("/Exam");
+    const question = await axios.get("/mcq")
+    const totalQuestions = question?.data.length;
     const studentsCount = studentsResponse.data.length;
     const examsCount = examResponse.data.length;
     setStudents(studentsCount);
     setExamData(examsCount);
+    setQuestion(totalQuestions)
   };
 
   return (
@@ -255,13 +259,13 @@ export const AdminDashboard = () => {
               variant="h4"
               sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
             >
-              Exam Detail
+              Question Detail
             </Typography>
             <Typography
               variant="h6"
               sx={{ color: "black", fontFamily: "Lato" }}
             >
-              Total no of exam in portal:{examData}
+              Total no of question in portal:{question}
             </Typography>
           </Grid>
         </Grid>

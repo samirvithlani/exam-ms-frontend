@@ -29,6 +29,7 @@ const CurrentExam = () => {
   const [userHistory, setUserHistory] = useState([]);
   const[userdata,setUserdata] = useState([]);
   const navigate = useNavigate();
+  const _id = Cookies.get("_id");
 
   useEffect(() => {
     fetchDifficultyLevels();
@@ -86,13 +87,15 @@ const CurrentExam = () => {
     if(userdata.walllet !== null){
       const updatedcredit = userdata.wallet.token-credit
       const response = await axios.put(`/wallet/${userdata.wallet._id}`,{token:updatedcredit})     
+      const data = {user:_id,walletType:userdata.wallet.walletType,wallet:userdata.wallet._id,Transcation_history:`Debit ${credit} from wallet`}
+      const transction = await axios.post('/transcation',data)
+      console.log(transction,"transction");
     }
     navigate(`/userDasboard/question/${examId}`, {
       state: { examtype_id, totalmarks },
     });
   };
   const fetchhistory = async () => {
-    const _id = Cookies.get("_id");
     try {
       const response = await axios.get(`/userhistory/${_id}`);
       let data = response.data.map((item) => item.exam_id._id);

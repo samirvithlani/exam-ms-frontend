@@ -36,6 +36,7 @@ import { checkAuthToken } from "../../util/util";
 import UserProfile from "../Layouts/UserProfile";
 import { StudentDashboard } from "../dashboard/StudentDashboard";
 import { Wallet } from "../dashboard/Wallet";
+import Allquestions from "../exam/AllQuestion";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -93,6 +94,7 @@ const MainRouter = ({ children }) => {
           path:"wallet",
           element:<Wallet/>
         },
+        
       ],
     },
     {
@@ -219,6 +221,10 @@ const MainRouter = ({ children }) => {
           path:"userprofile",
           element:<UserProfile/>
         },
+        {
+          path:"allquestion",
+          element:<Allquestions/>
+        }
       ],
     },
 
