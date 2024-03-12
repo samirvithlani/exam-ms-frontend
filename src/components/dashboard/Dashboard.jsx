@@ -83,11 +83,11 @@ const CurrentExam = () => {
     setSelectedStandards(stdId);
     fetchData(stdId, selectedDifficulty);
   };
-  const handleStartExam = async (examId, examtype_id, totalmarks,credit) => {
+  const handleStartExam = async (examId, examtype_id, totalmarks,credit,name) => {
     if(userdata.walllet !== null){
       const updatedcredit = userdata.wallet.token-credit
       const response = await axios.put(`/wallet/${userdata.wallet._id}`,{token:updatedcredit})     
-      const data = {user:_id,walletType:userdata.wallet.walletType,wallet:userdata.wallet._id,Transcation_history:`Debit ${credit} from wallet`}
+      const data = {user:_id,walletType:userdata.wallet.walletType,wallet:userdata.wallet._id,Transcation_history:`Debit ${credit} credit from wallet for ${name} exam`}
       const transction = await axios.post('/transcation',data)
       console.log(transction,"transction");
     }
@@ -138,7 +138,8 @@ const CurrentExam = () => {
               params.row.id,
               params.row.examtype_id,
               params.row.totalmarks,
-              params.row.credit
+              params.row.credit,
+              params.row.name
             )
           }
         >
