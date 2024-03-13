@@ -45,12 +45,11 @@ const StudentList = () => {
   }
 
   const handleAddCredit = async (userId) => {
-    console.log(creditToAdd,"credit");
-    console.log(userId,"userid");
+   
     const user = await axios.get(`/user/${userId}`)
     setUser(user.data.wallet._id)
     if(user){
-      const data = {token:creditToAdd}
+      const data = {token:user.data.wallet.token +  parseFloat(creditToAdd)};
     const addcredit = await axios.put(`/wallet/${User}`,data)
     }
     setCreditToAdd('');

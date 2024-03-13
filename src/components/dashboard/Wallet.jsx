@@ -5,10 +5,12 @@ import Typography from '@mui/material/Typography';
 
 export const Wallet = () => {
     const [data, setData] = useState(null);
+    const [credit, setCredit] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchData();
+        wallet();
     }, []);
 
     const fetchData = async () => {
@@ -22,6 +24,15 @@ export const Wallet = () => {
         }
     };
 
+    const wallet = async () => {
+        try {
+            const response = await axios.get(`/user/${Cookies.get('_id')}`)
+            setCredit(response.data.wallet.token)
+        } catch (error) {
+            console.log(error, "error");
+        }
+    }
+
     return (
         <div style={{ maxWidth: '600px', margin: 'auto', padding: '20px' }}>
             {loading ? (
@@ -29,18 +40,32 @@ export const Wallet = () => {
                     Loading...
                 </Typography>
             ) : (
-                data && (
-                    <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <Typography variant="h6" fontWeight="bold" margin="10px 0">
-                            Transaction History: {data.Transcation_history}
+                data && data.length > 0 ? (
+                    <div style={{ width: '100%', padding: '10px', boxSizing: 'border-box' }}>
+                        <Typography variant="h6" fontWeight="bold" margin="10px 0">
+                            Total Credit : {credit}
                         </Typography>
                         <Typography variant="h6" fontWeight="bold" margin="10px 0">
-                            Transaction ID: {data.TranscationId}
+                            Transaction History
                         </Typography>
-                        <Typography variant="h6" fontWeight="bold" margin="10px 0">
-                            Wallet Credit: {data.wallet.token}
-                        </Typography>
+                        <ul style={{ listStyleType: 'none', padding: 0 }}>
+                            {data.map(transaction => (
+                                <li key={transaction._id}>
+                                    <Typography variant="subtitle1">
+                                        Transaction ID: {transaction.TranscationId}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        History: {transaction.Transcation_history}
+                                    </Typography>
+                                    <hr style={{ margin: '10px 0' }} />
+                                </li>
+                            ))}
+                        </ul>
                     </div>
+                ) : (
+                    <Typography variant="subtitle1">
+                        No data found.
+                    </Typography>
                 )
             )}
         </div>
