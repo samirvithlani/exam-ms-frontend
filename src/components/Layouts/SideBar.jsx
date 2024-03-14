@@ -179,9 +179,16 @@ export const SideBar = () => {
     },
     {
       id: 18,
-      name: "allquestion",
+      name: "All question",
       linkUrl: "allquestion",
       activeMenuFor: ["allquestion"],
+      logoImage: ListIcon,
+    },
+    {
+      id: 19,
+      name: "Credit Request List",
+      linkUrl: "creditRequestList",
+      activeMenuFor: ["creditRequestList"],
       logoImage: ListIcon,
     },
   ];

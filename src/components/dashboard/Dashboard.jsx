@@ -44,7 +44,7 @@ const CurrentExam = () => {
       console.log(response);
       setUserdata(response.data)
     } catch (error) {
-      
+      console.log(error);
     }
   }
   const fetchstd = async () => {
