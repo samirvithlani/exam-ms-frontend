@@ -62,37 +62,7 @@ const StudentList = () => {
     { field: 'email', headerName: 'Email', width: 300 },
     { field: 'role', headerName: 'Role', width: 300 },
     { field: 'status', headerName: 'Status', width: 300 },
-    {
-      field: 'credit', headerName: 'Credit', width: 150,
-      renderCell: (params) => (
-        <>
-          {selectedUserId === params.row.id ? (
-            <Box display="flex" alignItems="center">
-              <TextField
-                value={creditToAdd}
-                onChange={(e) => setCreditToAdd(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleAddCredit(params.row.id)}
-                disabled={!creditToAdd}
-              >
-                Add
-              </Button>
-            </Box>
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setSelectedUserId(params.row.id)}
-            >
-              Add Credit
-            </Button>
-          )}
-        </>
-      )
-    },
+    
   ];
 
   return (

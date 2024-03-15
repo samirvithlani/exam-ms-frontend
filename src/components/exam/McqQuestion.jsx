@@ -135,105 +135,103 @@ export const McqQuestion = () => {
     }
   };
 
-  const fetchTypes = async () => {
-    try {
-      const response = await axios.get("/type");
-      setTypes(response.data.result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  const fetchstd = async () => {
-    try {
-      const response = await axios.get("/getstd");
-      setstandards(response.data.data);
-    } catch (error) {
-      console.log(error, "error");
-    }
-  };
-  const handleStreamChange = async (event) => {
-    const streamId = event.target.value;
-    setSelectedStream(streamId);
-    setSelectedSubject("");
-    setSelectedTopic("");
-    fetchSubjects(streamId, "");
-  };
-  const handelDifficulty = async (event) => {
-    const difficultyId = event.target.value;
-    setselecteddefficultie(difficultyId);
-  };
-  const handelStd = async (event) => {
-    const stdId = event.target.value;
-    setSelectedStandards(stdId);
-    try {
-      const response = await axios.get(`/std/${stdId}`);
-      const stds = response.data.data;
-      const std = stds.map((item) => item.std);
-      setstd(std);
-      if (parseInt(std) > 10) {
-        fetchStreams(stdId);
+    const fetchTypes = async () => {
+      try {
+        const response = await axios.get("/type");
+        setTypes(response.data.result);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    const fetchstd = async () => {
+      try {
+        const response = await axios.get("/getstd");
+        setstandards(response.data.data);
+      } catch (error) {
+        console.log(error, "error");
+      }
+    };
+    const handleStreamChange = async (event) => {
+      const streamId = event.target.value;
+      setSelectedStream(streamId);
+      setSelectedSubject("");
+      setSelectedTopic("");
+      fetchSubjects(streamId, "");
+    };
+    const handelDifficulty = async (event) => {
+      const difficultyId = event.target.value;
+      setselecteddefficultie(difficultyId);
+    };
+    const handelStd = async (event) => {
+      const stdId = event.target.value;
+      setSelectedStandards(stdId);
+      try {
+        const response = await axios.get(`/std/${stdId}`);
+        const stds = response.data.data;
+        const std = stds.map((item) => item.std);
+        setstd(std);
+        if (parseInt(std) > 10) {
+          fetchStreams(stdId);
+        } else {
+          setStreams([]);
+          fetchSubjects("", stdId);
+        }
+      } catch (error) {
+        console.error(error, "Error fetching std information");
+      } 
+      setSelectedStream("");
+    };
+    const handleSubjectChange = async (event) => {
+      const subjectId = event.target.value;
+      setSelectedSubject(subjectId);
+      setSelectedTopic("");
+      fetchTopics(SelectedStandards, subjectId);
+    };
+    const handelTopicChange = async (event) => {
+      const TopicId = event.target.value;
+      setSelectedTopic(TopicId);
+    };
+    const handelTypeChange = async (event) => {
+      const TypeId = event.target.value;
+      setSelectedType(TypeId);
+    };
+    
+    const submitHandler = async (data) => {
+      let response;
+      const formData = new FormData();
+      if (data.fileUpload && data.fileUpload[0]) {
+          formData.append("file", data.fileUpload[0]);
+      }
+      if (!data.fileUpload || data.fileUpload === undefined) {
+          try {
+              response = await axios.post("/mcqmany", { questions: questionsList });
+              navigate("/admindashboard/examlist");
+              toast.success("Question Added Successfully ...");
+          } catch (error) {
+              if (error.response.status === 409) {
+                  toast.error(" Question already exists ...");
+              } else {
+                  toast.error("An error occurred while adding the question ...");
+              }
+          }
       } else {
-        setStreams([]);
-        fetchSubjects("", stdId);
+          try {
+              response = await axios.post("/mcqs", formData, {
+                  headers: {
+                      "Content-Type": "multipart/form-data",
+                  },
+              });
+              navigate("/admindashboard/examlist");
+              toast.success("Question Added Successfully ...");
+          } catch (error) {
+              if (error.response.status === 409) {
+                console.log(error.response.data,"data");
+                  toast.error("Question already exists ...");
+              } else {
+                  toast.error("An error occurred while adding the question ...");
+              }
+          }
       }
-    } catch (error) {
-      console.error(error, "Error fetching std information");
-    }
-    setSelectedStream("");
-  };
-  const handleSubjectChange = async (event) => {
-    const subjectId = event.target.value;
-    setSelectedSubject(subjectId);
-    setSelectedTopic("");
-    fetchTopics(SelectedStandards, subjectId);
-  };
-  const handelTopicChange = async (event) => {
-    const TopicId = event.target.value;
-    setSelectedTopic(TopicId);
-  };
-  const handelTypeChange = async (event) => {
-    const TypeId = event.target.value;
-    setSelectedType(TypeId);
-  };
-
-  const submitHandler = async (data) => {
-    console.log(data, "submit");
-
-    let response;
-    const formData = new FormData();
-    if (data.fileUpload && data.fileUpload[0]) {
-      formData.append("file", data.fileUpload[0]);
-    }
-    if (!data.fileUpload || data.fileUpload === undefined) {
-      try {
-        response = await axios.post("/mcqmany", { questions: questionsList });
-        navigate("/admindashboard/examlist");
-        toast.success("Question Added Successfully ...");
-      } catch (error) {
-        if (error.response.status === 409) {
-          toast.error(" Question already exists ...");
-        } else {
-          toast.error("An error occurred while adding the question ...");
-        }
-      }
-    } else {
-      try {
-        response = await axios.post("/mcqs", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        navigate("/admindashboard/examlist");
-        toast.success("Question Added Successfully ...");
-      } catch (error) {
-        if (error.response.status === 409) {
-          console.log(error.response.data, "data");
-          toast.error("Question already exists ...");
-        } else {
-          toast.error("An error occurred while adding the question ...");
-        }
-      }
-    }
 
     let mcq;
     if (Array.isArray(response?.data?.data)) {
@@ -703,26 +701,26 @@ export const McqQuestion = () => {
                 </div>
               ))}
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                disabled={totalQuestions !== 0 && !isNaN(totalQuestions)}
-              >
-                SUBMIT
-              </Button>
-            </>
-          )}
-          {selectedOption === "file" && (
-            <>
-              <input
-                type="file"
-                name="fileUpload"
-                accept=".csv,.xlsx,.xls"
-                onChange={(event) => handleFileChange(event)}
-                {...register("fileUpload")}
-              />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  disabled={totalQuestions !== 0  && !isNaN(totalQuestions)}
+                  >
+                  SUBMIT
+                </Button>
+              </>
+            )}
+            {selectedOption === "file" && (
+              <>
+                <input
+                  type="file"
+                  name="fileUpload"
+                  accept=".csv,.xlsx,.xls"
+                  onChange={(event) => handleFileChange(event)}
+                  {...register("fileUpload")}
+                />
 
               <Button
                 type="submit"

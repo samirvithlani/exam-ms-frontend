@@ -37,6 +37,7 @@ import UserProfile from "../Layouts/UserProfile";
 import { StudentDashboard } from "../dashboard/StudentDashboard";
 import { Wallet } from "../dashboard/Wallet";
 import Allquestions from "../exam/AllQuestion";
+import CreditRequestList from "../login/CreditRequest";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -224,6 +225,10 @@ const MainRouter = ({ children }) => {
         {
           path:"allquestion",
           element:<Allquestions/>
+        },
+        {
+          path:"creditRequestList",
+          element:<CreditRequestList/>
         }
       ],
     },
