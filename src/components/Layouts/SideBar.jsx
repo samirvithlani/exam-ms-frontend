@@ -256,7 +256,7 @@ export const SideBar = () => {
               >
                 <ListItemButton>
                   <ListItemIcon>
-                    <Avatar sx={{ bgcolor: "rgb(94,114,228)" }}>
+                    <Avatar sx={{ bgcolor: "#010080",width: 24, height: 24 }}>
                       {res?.logoImage && <res.logoImage />}
                     </Avatar>
                   </ListItemIcon>
@@ -272,7 +272,7 @@ export const SideBar = () => {
           <Box sx={{ marginTop: "auto" }}>
             <Button
               variant="contained"
-              sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+              sx={{ color: "#whitesmoke", bgcolor: "#010080" }}
               startIcon={<ExitToAppIcon />}
               onClick={handleOpenLogoutDialog}
               fullWidth

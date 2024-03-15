@@ -58,7 +58,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "rgb(94,114,228)",
+          backgroundColor: "#010080",
           color: "#6B7A99",
           boxShadow: 0,
           borderBottom: "2px solid #F0F0F0",

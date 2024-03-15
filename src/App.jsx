@@ -9,11 +9,12 @@ import { useEffect } from 'react'
 function App() {
   const token = Cookies.get("token")
   const [count, setCount] = useState(0)
-  axios.defaults.baseURL = "https://exambackendms.onrender.com/";
+  axios.defaults.baseURL = "https://exam-ms-royal.onrender.com/";
   useEffect(() => {
     axios.interceptors.request.use(
       (config) => {
         const token = Cookies.get('token');
+        console.log(token)
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }

@@ -7,18 +7,20 @@ import {
   Tooltip,
 } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
+import "../../assets/css/loadercust.css";
 
 export const CustomeLoader = () => {
-  return(
-  <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", // Set the height of the container to 100% of the viewport height
-      }}
-    >
-      <CircularProgress />
+  return (
+    <div class="banter-loader">
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
+      <div class="banter-loader__box"></div>
     </div>
-  )
+  );
 };

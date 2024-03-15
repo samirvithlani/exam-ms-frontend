@@ -84,7 +84,7 @@ export const AdminDashboard = () => {
           mt: 2,
           ml: 0.1,
           p: 2,
-          background: "rgb(94,114,228)",
+          background: "#010080",
           pt: 10,
           gap: 1,
         }}
@@ -108,7 +108,7 @@ export const AdminDashboard = () => {
             <div>
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={{ color: "#282828", fontFamily: "Lato" }}
               >
                 Student Detail
               </Typography>
@@ -177,7 +177,7 @@ export const AdminDashboard = () => {
             <div>
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={{ color: "#282828", fontFamily: "Lato" }}
               >
                 Student Detail
               </Typography>
@@ -226,7 +226,7 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+              sx={{ color: "#282828", fontFamily: "Lato" }}
             >
               Exam Detail
             </Typography>
@@ -257,7 +257,7 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+              sx={{ color: "#282828", fontFamily: "Lato" }}
             >
               Question Detail
             </Typography>
@@ -295,13 +295,13 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+              sx={{ color: "#282828", fontFamily: "Lato" }}
             >
               Portal Detail
             </Typography>
             <Typography variant="body1"></Typography>
             <Grid xs={12} sm={6.1} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
-              <Pie
+              {/* <Pie
                 data={data}
                 options={{
                   plugins: {
@@ -315,7 +315,7 @@ export const AdminDashboard = () => {
                     },
                   },
                 }}
-              />
+              /> */}
             </Grid>
           </Grid>
         </Grid>
@@ -341,7 +341,7 @@ export const AdminDashboard = () => {
             direction="column"
             spacing={0}
           >
-            <Typography variant="h4">Card 4</Typography>
+            <Typography variant="h4">Studets Detail</Typography>
             <Typography variant="body1"></Typography>
           </Grid>
         </Grid>

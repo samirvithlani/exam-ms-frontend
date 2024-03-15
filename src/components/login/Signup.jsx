@@ -242,7 +242,7 @@ export default function SignUp() {
                   Sign UP
                 </Button>
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ ml: 1 }}>
-            <Box
+            {/* <Box
               sx={{
                 marginTop: 8,
                 display: "flex",
@@ -262,7 +262,7 @@ export default function SignUp() {
                   Sign up with Google
                 </Button>
 
-              </Box>
+              </Box> */}
           </Grid>
                 <Grid container justifyContent="flex-end">
                   <Grid item>

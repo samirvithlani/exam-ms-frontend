@@ -22,10 +22,10 @@ const CurrentExam = () => {
   const [isLoading, setisLoading] = useState(false);
 
   const [difficulties, setDifficulties] = useState([]);
-  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("easy");
   const [examList, setExamList] = useState([]);
   const [standards, setstandards] = useState([]);
-  const [SelectedStandards, setSelectedStandards] = useState("");
+  const [SelectedStandards, setSelectedStandards] = useState("other");
   const [userHistory, setUserHistory] = useState([]);
   const[userdata,setUserdata] = useState([]);
   const navigate = useNavigate();
@@ -85,9 +85,9 @@ const CurrentExam = () => {
   };
   const handleStartExam = async (examId, examtype_id, totalmarks,credit,name) => {
     if(userdata.walllet !== null){
-      const updatedcredit = userdata.wallet.token-credit
-      const response = await axios.put(`/wallet/${userdata.wallet._id}`,{token:updatedcredit})     
-      const data = {user:_id,walletType:userdata.wallet.walletType,wallet:userdata.wallet._id,Transcation_history:`Debit ${credit} credit from wallet for ${name} exam`}
+      const updatedcredit = userdata?.wallet?.token-credit
+      const response = await axios.put(`/wallet/${userdata.wallet?._id}`,{token:updatedcredit})     
+      const data = {user:_id,walletType:userdata.wallet?.walletType,wallet:userdata.wallet?._id,Transcation_history:`Debit ${credit} credit from wallet for ${name} exam`}
       const transction = await axios.post('/transcation',data)
       console.log(transction,"transction");
     }

@@ -328,10 +328,10 @@ const ExamList = () => {
                             aria-label="add"
                             onClick={() =>
                               handleGenerateQuestions(
-                                params.row.topicId,
-                                params.row.noOfQuestions,
-                                params.row.id,
-                                params.row.difficultyId
+                                params.row?.topicId,
+                                params.row?.noOfQuestions,
+                                params.row?.id,
+                                params.row?.difficultyId
                               )
                             }
                             color="primary"
