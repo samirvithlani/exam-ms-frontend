@@ -178,7 +178,7 @@
         }
       } catch (error) {
         console.error(error, "Error fetching std information");
-      }
+      } 
       setSelectedStream("");
     };
     const handleSubjectChange = async (event) => {
@@ -702,12 +702,12 @@
                 ))}
 
                 <Button
-                  type="submit"
+                  type="button" 
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  disabled={totalQuestions !== 0  && !isNaN(totalQuestions)}
-                  >
+                  onClick={() => submitHandler(getValues())} 
+                >
                   SUBMIT
                 </Button>
               </>
