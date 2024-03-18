@@ -185,7 +185,7 @@ const ExamList = () => {
     try {
       const filteredQuestions = allQuestions.filter(
         (question) =>
-          question.Topic._id === topicId && question.difficulty === difficultyId
+          question.Topic._id === topicId || question.difficulty === difficultyId
       );
       if (filteredQuestions.length < noOfQuestions) {
         toast.error("Insufficient questions available for this topic.");
