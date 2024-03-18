@@ -184,8 +184,17 @@ const ExamList = () => {
   ) => {
     try {
       const filteredQuestions = allQuestions.filter(
-        (question) =>
-          question.Topic._id === topicId || question.difficulty === difficultyId
+        (question) =>{
+          // console.log("question",question)
+          console.log("topicId",topicId)
+          console.log("question topic id....",question.Topic._id)
+          console.log("difficultyId",difficultyId)
+          // console.log("difficultyId",difficultyId)
+          // console.log("question.Topic._id",question.Topic._id)
+          // console.log("question.difficulty",question.difficulty)
+          console.log("&&",question.Topic._id === topicId && question.difficulty === difficultyId)
+         return question.Topic._id === topicId && question.difficulty === difficultyId
+        }
       );
       if (filteredQuestions.length < noOfQuestions) {
         toast.error("Insufficient questions available for this topic.");
