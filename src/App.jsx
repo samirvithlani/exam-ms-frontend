@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 function App() {
   const token = Cookies.get("token")
   const [count, setCount] = useState(0)
-  axios.defaults.baseURL = "https://exam-ms-royal.onrender.com/";
+  axios.defaults.baseURL = "https://exambackendms.onrender.com/";
   useEffect(() => {
     axios.interceptors.request.use(
       (config) => {

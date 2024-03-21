@@ -1,255 +1,263 @@
-  import {
-    Box,
-    Button,
-    createTheme,
-    Grid,
-    InputLabel,
-    TextField,
-    ThemeProvider,
-    Typography,
-    FormControl,
-    FormControlLabel,
-    Select,
-    MenuItem,
-    IconButton
-  } from "@mui/material";
-  import axios from "axios";
-  import { isEqual } from "lodash";
+import {
+  Box,
+  Button,
+  createTheme,
+  Grid,
+  InputLabel,
+  TextField,
+  ThemeProvider,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  Select,
+  MenuItem,
+  IconButton,
+  FormLabel,
+  RadioGroup,
+  Radio,
+} from "@mui/material";
+import axios from "axios";
+import { isEqual } from "lodash";
 
-  import React, { useEffect } from "react";
-  import { useForm } from "react-hook-form";
-  import { useNavigate, useParams, useLocation } from "react-router-dom";
-  import { useState } from "react";
-  import { ToastContainer, toast } from "react-toastify";
-  import "react-toastify/dist/ReactToastify.css";
-  import "../../assets/layouts/layout.module.css";
-  import { MySnackBar } from "../MySnackBar";
-  import { RemoveCircleOutline } from "@mui/icons-material"; 
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../assets/layouts/layout.module.css";
+import { MySnackBar } from "../MySnackBar";
+import { RemoveCircleOutline } from "@mui/icons-material";
 
-  export const McqQuestion = () => {
-    const { id } = useParams();
-    const location = useLocation();
-      const [options, setOptions] = useState(["", "", "", ""]);
+export const McqQuestion = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const [options, setOptions] = useState(["", "", "", ""]);
 
-    const [selectedOption, setSelectedOption] = useState("");
-    const [streams, setStreams] = useState([]);
-    const [selectedStream, setSelectedStream] = useState("");
-    const [selectStream, setSelectStream] = useState("");
-    const [selectedSubject, setSelectedSubject] = useState("");
-    const [selectSubject, setSelectSubject] = useState("");
-    const [selectedTopic, setSelectedTopic] = useState("");
-    const [selectTopic, setSelectTopic] = useState("");
-    const [difficultes, setdefficulties] = useState([]);
-    const [selecteddiificulty, setselecteddefficultie] = useState("");
-    const [selectedType, setSelectedType] = useState("");
-    const [selectdiificulty, setselectdefficultie] = useState("");
-    const [selectType, setSelectType] = useState("");
-    const [subjects, setSubjects] = useState([]);
-    const [SelectedStandards, setSelectedStandards] = useState("");
-    const [SelectStandards, setSelectStandards] = useState("");
-    const [standards, setstandards] = useState([]);
-    const [topics, setTopics] = useState([]);
-    const [stds, setstd] = useState("");
-    const [types, setTypes] = useState([]);
-    const [questionsList, setQuestionsList] = useState([]);
-    const subject = location.state?.subject;
-    const stream = location.state?.stream;
-    const Difficulty = location.state?.difficulty;
-    const difficulty = location.state?.difficultyId;
-    const std = location.state?.standardId;
-    const standard = location.state?.standard;
-    const topic = location.state?.topic;
-    const Subject = location.state?.subjectId;
-    const Topic = location.state?.topicId;
-    const Stream = location.state?.streamId;
-    const subjectId = location.state?.subjectId;
-    const streamId = location.state?.streamId;
-    const difficultyId = location.state?.difficultyId;
-    const standardId = location.state?.standardId;
-    const topicId = location.state?.topicId;
-    const type = location.state?.types;
-    const typeId = location.state?.typeId;
-    const noOfQuestions = location.state?.noOfQuestions
-    const [totalQuestions, setTotalQuestions] = useState(noOfQuestions);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [streams, setStreams] = useState([]);
+  const [selectedStream, setSelectedStream] = useState("");
+  const [selectStream, setSelectStream] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectSubject, setSelectSubject] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState("");
+  const [selectTopic, setSelectTopic] = useState("");
+  const [difficultes, setdefficulties] = useState([]);
+  const [selecteddiificulty, setselecteddefficultie] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [selectdiificulty, setselectdefficultie] = useState("");
+  const [selectType, setSelectType] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [SelectedStandards, setSelectedStandards] = useState("");
+  const [SelectStandards, setSelectStandards] = useState("");
+  const [standards, setstandards] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [stds, setstd] = useState("");
+  const [types, setTypes] = useState([]);
+  const [questionsList, setQuestionsList] = useState([]);
+  const subject = location.state?.subject;
+  const stream = location.state?.stream;
+  const Difficulty = location.state?.difficulty;
+  const difficulty = location.state?.difficultyId;
+  const std = location.state?.standardId;
+  const standard = location.state?.standard;
+  const topic = location.state?.topic;
+  const Subject = location.state?.subjectId;
+  const Topic = location.state?.topicId;
+  const Stream = location.state?.streamId;
+  const subjectId = location.state?.subjectId;
+  const streamId = location.state?.streamId;
+  const difficultyId = location.state?.difficultyId;
+  const standardId = location.state?.standardId;
+  const topicId = location.state?.topicId;
+  const type = location.state?.types;
+  const typeId = location.state?.typeId;
+  const noOfQuestions = location.state?.noOfQuestions;
+  const [totalQuestions, setTotalQuestions] = useState(noOfQuestions);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [isMultiselectedQuestion, setIsMultiselect] = useState("");
 
-    useEffect(() => {
-      setSelectStream(streamId);
-      setselectdefficultie(difficultyId);
-      setSelectStandards(standardId);
-      setSelectSubject(subjectId);
-      setSelectTopic(topicId);
-      setSelectType(typeId);
-      fetchstd();
-      fetchTypes();
-      fetchdifficulty();
-    }, []);
-    const handleOptionChange = (event) => {
-      setSelectedOption(event.target.value);
-    };
-    const handleAddOption = () => {
-      if (options.length < 8) {
-        setOptions((prevOptions) => [...prevOptions, ""]);
+  // Function to handle multiselect change
+
+  useEffect(() => {
+    setSelectStream(streamId);
+    setselectdefficultie(difficultyId);
+    setSelectStandards(standardId);
+    setSelectSubject(subjectId);
+    setSelectTopic(topicId);
+    setSelectType(typeId);
+    fetchstd();
+    fetchTypes();
+    fetchdifficulty();
+  }, []);
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+  const handleAddOption = () => {
+    if (options.length < 8) {
+      setOptions((prevOptions) => [...prevOptions, ""]);
+    } else {
+      setButtonDisabled(true);
+    }
+  };
+  const handleRemoveOption = (index) => {
+    setOptions((prevOptions) => prevOptions.filter((_, i) => i !== index));
+    setButtonDisabled(false);
+  };
+  const defaultTheme = createTheme();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  });
+  const navigate = useNavigate();
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+    }
+  };
+  const fetchdifficulty = async () => {
+    try {
+      const response = await axios.get("/difficulty");
+      let data = response.data;
+      setdefficulties(data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+  const fetchStreams = async (stdid) => {
+    try {
+      const response = await axios.get(`/stream/${stdid}`);
+      setStreams(response.data);
+    } catch (error) {
+      console.error("Error fetching streams:", error);
+    }
+  };
+  const fetchSubjects = async (streamId, stdid) => {
+    try {
+      if (stdid) {
+        let response = await axios.get(`/subjects/${stdid}`);
+        setSubjects(response.data);
       } else {
-        setButtonDisabled(true);
+        const response = await axios.get(`/subject/${streamId}`);
+        setSubjects(response.data.result);
       }
-    };
-    const handleRemoveOption = (index) => {
-      setOptions((prevOptions) => prevOptions.filter((_, i) => i !== index));
-      setButtonDisabled(false);
-    };
-    const defaultTheme = createTheme();
-    const {
-      register,
-      handleSubmit,
-      getValues,
-      reset,
-      formState: { errors },
-    } = useForm({
-      mode: "onChange",
-    });
-    const navigate = useNavigate();
-    const handleFileChange = (event) => {
-      const selectedFile = event.target.files[0];
-      if (selectedFile) {
-      }
-    };
-    const fetchdifficulty = async () => {
-      try {
-        const response = await axios.get("/difficulty");
-        let data = response.data;
-        setdefficulties(data);
-      } catch (error) {
-        console.log(error, "error");
-      }
-    };
-    const fetchStreams = async (stdid) => {
-      try {
-        const response = await axios.get(`/stream/${stdid}`);
-        setStreams(response.data);
-      } catch (error) {
-        console.error("Error fetching streams:", error);
-      }
-    };
-    const fetchSubjects = async (streamId, stdid) => {
-      try {
-        if (stdid) {
-          let response = await axios.get(`/subjects/${stdid}`);
-          setSubjects(response.data);
-        } else {
-          const response = await axios.get(`/subject/${streamId}`);
-          setSubjects(response.data.result);
-        }
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    };
-    const fetchTopics = async (stdId, subjectId) => {
-      try {
-        const response = await axios.get(`/Topics/${stdId}/${subjectId}`);
-        setTopics(response.data.result);
-      } catch (error) {
-        console.log("Error fetching topics : ", error);
-      }
-    };
+    } catch (error) {
+      console.error("Error fetching subjects:", error);
+    }
+  };
+  const fetchTopics = async (stdId, subjectId) => {
+    try {
+      const response = await axios.get(`/Topics/${stdId}/${subjectId}`);
+      setTopics(response.data.result);
+    } catch (error) {
+      console.log("Error fetching topics : ", error);
+    }
+  };
 
-    const fetchTypes = async () => {
-      try {
-        const response = await axios.get("/type");
-        setTypes(response.data.result);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    const fetchstd = async () => {
-      try {
-        const response = await axios.get("/getstd");
-        setstandards(response.data.data);
-      } catch (error) {
-        console.log(error, "error");
-      }
-    };
-    const handleStreamChange = async (event) => {
-      const streamId = event.target.value;
-      setSelectedStream(streamId);
-      setSelectedSubject("");
-      setSelectedTopic("");
-      fetchSubjects(streamId, "");
-    };
-    const handelDifficulty = async (event) => {
-      const difficultyId = event.target.value;
-      setselecteddefficultie(difficultyId);
-    };
-    const handelStd = async (event) => {
-      const stdId = event.target.value;
-      setSelectedStandards(stdId);
-      try {
-        const response = await axios.get(`/std/${stdId}`);
-        const stds = response.data.data;
-        const std = stds.map((item) => item.std);
-        setstd(std);
-        if (parseInt(std) > 10) {
-          fetchStreams(stdId);
-        } else {
-          setStreams([]);
-          fetchSubjects("", stdId);
-        }
-      } catch (error) {
-        console.error(error, "Error fetching std information");
-      } 
-      setSelectedStream("");
-    };
-    const handleSubjectChange = async (event) => {
-      const subjectId = event.target.value;
-      setSelectedSubject(subjectId);
-      setSelectedTopic("");
-      fetchTopics(SelectedStandards, subjectId);
-    };
-    const handelTopicChange = async (event) => {
-      const TopicId = event.target.value;
-      setSelectedTopic(TopicId);
-    };
-    const handelTypeChange = async (event) => {
-      const TypeId = event.target.value;
-      setSelectedType(TypeId);
-    };
-    
-    const submitHandler = async (data) => {
-      let response;
-      const formData = new FormData();
-      if (data.fileUpload && data.fileUpload[0]) {
-          formData.append("file", data.fileUpload[0]);
-      }
-      if (!data.fileUpload || data.fileUpload === undefined) {
-          try {
-              response = await axios.post("/mcqmany", { questions: questionsList });
-              navigate("/admindashboard/examlist");
-              toast.success("Question Added Successfully ...");
-          } catch (error) {
-              if (error.response.status === 409) {
-                  toast.error(" Question already exists ...");
-              } else {
-                  toast.error("An error occurred while adding the question ...");
-              }
-          }
+  const fetchTypes = async () => {
+    try {
+      const response = await axios.get("/type");
+      setTypes(response.data.result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const fetchstd = async () => {
+    try {
+      const response = await axios.get("/getstd");
+      setstandards(response.data.data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+  const handleStreamChange = async (event) => {
+    const streamId = event.target.value;
+    setSelectedStream(streamId);
+    setSelectedSubject("");
+    setSelectedTopic("");
+    fetchSubjects(streamId, "");
+  };
+  const handelDifficulty = async (event) => {
+    const difficultyId = event.target.value;
+    setselecteddefficultie(difficultyId);
+  };
+  const handelStd = async (event) => {
+    const stdId = event.target.value;
+    setSelectedStandards(stdId);
+    try {
+      const response = await axios.get(`/std/${stdId}`);
+      const stds = response.data.data;
+      const std = stds.map((item) => item.std);
+      setstd(std);
+      if (parseInt(std) > 10) {
+        fetchStreams(stdId);
       } else {
-          try {
-              response = await axios.post("/mcqs", formData, {
-                  headers: {
-                      "Content-Type": "multipart/form-data",
-                  },
-              });
-              navigate("/admindashboard/examlist");
-              toast.success("Question Added Successfully ...");
-          } catch (error) {
-              if (error.response.status === 409) {
-                console.log(error.response.data,"data");
-                  toast.error("Question already exists ...");
-              } else {
-                  toast.error("An error occurred while adding the question ...");
-              }
-          }
+        setStreams([]);
+        fetchSubjects("", stdId);
       }
+    } catch (error) {
+      console.error(error, "Error fetching std information");
+    }
+    setSelectedStream("");
+  };
+  const handleSubjectChange = async (event) => {
+    const subjectId = event.target.value;
+    setSelectedSubject(subjectId);
+    setSelectedTopic("");
+    fetchTopics(SelectedStandards, subjectId);
+  };
+  const handelTopicChange = async (event) => {
+    const TopicId = event.target.value;
+    setSelectedTopic(TopicId);
+  };
+  const handelTypeChange = async (event) => {
+    const TypeId = event.target.value;
+    setSelectedType(TypeId);
+  };
+  const handleMultiselectChange = (event) => {
+    setIsMultiselect(event.target.value === "true");
+  };
+  const submitHandler = async (data) => {
+    let response;
+    const formData = new FormData();
+    if (data.fileUpload && data.fileUpload[0]) {
+      formData.append("file", data.fileUpload[0]);
+    }
+    if (!data.fileUpload || data.fileUpload === undefined) {
+      try {
+        response = await axios.post("/mcqmany", { questions: questionsList });
+        navigate("/admindashboard/examlist");
+        toast.success("Question Added Successfully ...");
+      } catch (error) {
+        if (error.response.status === 409) {
+          toast.error(" Question already exists ...");
+        } else {
+          toast.error("An error occurred while adding the question ...");
+        }
+      }
+    } else {
+      try {
+        response = await axios.post("/mcqs", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        navigate("/admindashboard/examlist");
+        toast.success("Question Added Successfully ...");
+      } catch (error) {
+        if (error.response.status === 409) {
+          console.log(error.response.data, "data");
+          toast.error("Question already exists ...");
+        } else {
+          toast.error("An error occurred while adding the question ...");
+        }
+      }
+    }
 
     let mcq;
     if (Array.isArray(response?.data?.data)) {
@@ -279,13 +287,28 @@
       );
 
       if (!isDuplicate) {
+        const questionWithMultiselect = {
+          ...data,
+          isMultiselectedQuestion,
+        };
+
         if (Subject && Stream !== "NA" && difficulty && std && Topic) {
           setQuestionsList((prevList) => [
             ...prevList,
-            { ...data, Subject, Stream, difficulty, std, Topic },
+            {
+              ...questionWithMultiselect,
+              Subject,
+              Stream,
+              difficulty,
+              std,
+              Topic,
+            },
           ]);
         } else {
-          setQuestionsList((prevList) => [...prevList, { ...data }]);
+          setQuestionsList((prevList) => [
+            ...prevList,
+            { ...questionWithMultiselect },
+          ]);
         }
 
         toast.success("Question added to list");
@@ -296,6 +319,8 @@
         setSelectedType("");
         setselecteddefficultie("");
         setSelectedStandards("");
+        setIsMultiselect("");
+        setOptions((prevOptions) => ["","","",""]);
         reset();
       } else {
         toast.error("Question already exists in the list");
@@ -466,8 +491,29 @@
               {errors.question && (
                 <span style={{ color: "red" }}>{errors.question.message}</span>
               )}
-
-                {options.map((option, index) => (
+              <Grid item xs={3}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Multiselect</FormLabel>
+                  <RadioGroup
+                    aria-label="multiselect"
+                    name="multiselect"
+                    value={String(isMultiselectedQuestion)}
+                    onChange={handleMultiselectChange}
+                  >
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="True"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="False"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              {options.map((option, index) => (
                 <div key={index}>
                   <InputLabel htmlFor={`Option${index + 1}`}>
                     {`Option${index + 1}`}
@@ -478,7 +524,7 @@
                     fullWidth
                     id={`Option${index + 1}`}
                     label={`Option${index + 1}`}
-                    autoFocus
+                    // autoFocus
                     {...register(`Option${index + 1}`)}
                   />
                   {index >= 4 && (
@@ -502,54 +548,53 @@
               >
                 Add Option
               </Button>
-                <InputLabel htmlFor="correctOption">CorrectOption</InputLabel>
-                <TextField
-                  autoComplete="given-title"
-                  name="correctOption"
-                  // required
-                  fullWidth
-                  id="correctOption"
-                  label="correctOption"
-                  type="Number"
-                  autoFocus
-                  {...register("correctOption")}
-                />
-                {errors.correctOption && (
-                  <span style={{ color: "red" }}>
-                    {errors.correctOption.message}
-                  </span>
+              <InputLabel htmlFor="correctOption">CorrectOption</InputLabel>
+              <TextField
+                autoComplete="given-title"
+                name="correctOption"
+                // required
+                fullWidth
+                id="correctOption"
+                label="correctOption"
+                type="String"
+                {...register("correctOption")}
+              />
+              {errors.correctOption && (
+                <span style={{ color: "red" }}>
+                  {errors.correctOption.message}
+                </span>
+              )}
+              <Grid container spacing={2}>
+                {SelectStandards ? (
+                  <></>
+                ) : (
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select Std
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="std"
+                        value={SelectedStandards}
+                        label="Stream"
+                        {...register("std", validationSchema.stdandard)}
+                        onChange={handelStd}
+                      >
+                        {errors.std && (
+                          <span style={{ color: "red" }}>
+                            {errors.std.message}
+                          </span>
+                        )}
+                        {standards.map((item) => (
+                          <MenuItem key={item.id} value={item._id}>
+                            {item.std}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 )}
-                <Grid container spacing={2}>
-                  {SelectStandards ? (
-                    <></>
-                  ) : (
-                    <Grid item xs={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Select Std
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="std"
-                          value={SelectedStandards}
-                          label="Stream"
-                          {...register("std", validationSchema.stdandard)}
-                          onChange={handelStd}
-                        >
-                          {errors.std && (
-                            <span style={{ color: "red" }}>
-                              {errors.std.message}
-                            </span>
-                          )}
-                          {standards.map((item) => (
-                            <MenuItem key={item.id} value={item._id}>
-                              {item.std}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
 
                 {stds > 10 && (
                   <Grid item xs={12}>
@@ -696,25 +741,25 @@
               ))}
 
                 <Button
-                  type="submit"
+                  type="button" 
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  disabled={totalQuestions !== 0  && !isNaN(totalQuestions)}
-                  >
+                  onClick={() => submitHandler(getValues())} 
+                >
                   SUBMIT
                 </Button>
-              </>
-            )}
-            {selectedOption === "file" && (
-              <>
-                <input
-                  type="file"
-                  name="fileUpload"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={(event) => handleFileChange(event)}
-                  {...register("fileUpload")}
-                />
+            </>
+          )}
+          {selectedOption === "file" && (
+            <>
+              <input
+                type="file"
+                name="fileUpload"
+                accept=".csv,.xlsx,.xls"
+                onChange={(event) => handleFileChange(event)}
+                {...register("fileUpload")}
+              />
 
               <Button
                 type="submit"

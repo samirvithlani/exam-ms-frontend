@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useParams } from 'react-router-dom';
 
 export const ViewAnswer = () => {
@@ -10,84 +11,81 @@ export const ViewAnswer = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
-  const optionMapping = {
-    1: 'Option 1',
-    2: 'Option 2',
-    3: 'Option 3',
-    4: 'Option 4',
-    '1': 'Option 1',
-    '2': 'Option 2',
-    '3': 'Option 3',
-    '4': 'Option 4',
-    
-  };
+
   const fetchData = async () => {
+    
     try {
       const response = await axios.get(`/answers/${id}`);
-      const filterData = response.data.flatMap(answer =>
-        answer.mcq_answers.map(mcqAnswer => ({
-          id: mcqAnswer._id,
-          question: mcqAnswer.question.question || 'NA',
-          option1: mcqAnswer.question.Option1 || 'NA',
-          option2: mcqAnswer.question.Option2 || 'NA',
-          option3: mcqAnswer.question.Option3 || 'NA',
-          option4: mcqAnswer.question.Option4 || 'NA',
-          givenanswer: optionMapping[mcqAnswer.givenanswer] || 'NA',
-        correctOption: optionMapping[mcqAnswer.question.correctOption] || 'NA',
-          status: getStatus(mcqAnswer.givenanswer, mcqAnswer.question.correctOption)
-        }))
-      );
-      setMcqAnswers(filterData);
+      setMcqAnswers(response.data);
     } catch (error) {
       console.log('Error', error);
     }
   };
-  
-  const getStatus = (givenAnswer, correctOption) => {
-    return givenAnswer == correctOption ? 'Correct' : 'Incorrect';
-  };
-  const getRowClassName = (params) => {
-    return params.row.status === 'Correct' ? 'correct-row' : 'incorrect-row';
-  };
-  const columns = [
-    { field: 'question', headerName: 'Question', width: 400 },
-    { field: 'option1', headerName: 'Option 1', width: 150 },
-    { field: 'option2', headerName: 'Option 2', width: 150 },
-    { field: 'option3', headerName: 'Option 3', width: 150 },
-    { field: 'option4', headerName: 'Option 4', width: 150 },
-    { field: 'givenanswer', headerName: 'Given Answer', width: 150 },
-    { field: 'correctOption', headerName: 'CorrectAnswer', width: 150 },
-    { field: 'status', headerName: 'Status', width: 150 },
-  ];
-  function CustomToolbar() {
-    return (
-      <GridToolbarContainer>
-        <GridToolbarExport />
-      </GridToolbarContainer>
-    );
-  }
-  return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid 
-      rows={mcqAnswers} 
-      columns={columns} 
-      pageSize={5} 
-      getRowClassName={getRowClassName}
-      slots={{
-        toolbar:CustomToolbar
-      }}
-      />
-       <style>
-        {`
-          .correct-row {
-            background-color: lightgreen; 
-          }
+ 
 
-          .incorrect-row {
-            background-color: lightcoral; 
-          }
-        `}
-      </style>
+  return (
+    <div>
+      {mcqAnswers.map((answer, index) => (
+        <Accordion
+          key={index}
+          
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`question${index}-content`}
+            id={`question${index}-header`}
+          >
+            <Typography>{answer.exam_id.name}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>
+              {answer.mcq_answers.map((mcqAnswer, mcqIndex) => (
+                <Accordion key={mcqIndex}
+                style={{
+                  backgroundColor: mcqAnswer.givenanswer === mcqAnswer.question.correctOption ? 'lightgreen' : 'lightcoral'
+                }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`option${mcqIndex}-content`}
+                    id={`option${mcqIndex}-header`}
+                    
+                  >
+                    <Typography>{mcqAnswer.question.question}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ul>
+                      {Object.keys(mcqAnswer.question).map((key) => {
+                        if (key.startsWith('Option')) {
+                          return (
+                            <li
+                              key={key}
+                              style={{
+                                color: mcqAnswer.givenanswer === mcqAnswer.question.correctOption ? 'green' : 'red'
+                              }}
+                            >
+                              {mcqAnswer.givenanswer === key ? (
+                                <strong>{mcqAnswer.question[key]}</strong>
+                              ) : (
+                                mcqAnswer.question[key]
+                              )}
+                              {mcqAnswer.givenanswer === key ? ' (Given Answer)' : null}
+                              {mcqAnswer.question.correctOption === key ? ' (Correct Answer)' : null}
+                            </li>
+                          );
+                        }
+                        return null;
+                      })}
+                    </ul>
+                    <Typography>Given Answer: {mcqAnswer.givenanswer}</Typography>
+                    <Typography>Correct Answer: {mcqAnswer.question.correctOption}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              ))}
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </div>
   );
 };
