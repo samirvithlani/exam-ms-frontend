@@ -32,7 +32,7 @@ const CreditRequestList = () => {
   const fetchdata = async () => {
     setIsLoading(true);
 
-    let response = await axios.get('http://localhost:3000/credit');
+    let response = await axios.get('/credit');
     const Data = response.data
     console.log(Data,"data");
     let filterdata = Data.map((credit, index) => ({
@@ -50,7 +50,7 @@ const CreditRequestList = () => {
 
   const handleAddCredit = async (creditid,userId) => {
     console.log(creditid,userId,"userId");
-    await axios.put(`http://localhost:3000/credit/${creditid}`,{status:"Approved"})
+    await axios.put(`/credit/${creditid}`,{status:"Approved"})
     const users = await axios.get(`/user/${userId}`)
     setid(users?.data?._id)
     const data = {user:users.data?._id,walletType:user?.wallet?.walletType,wallet:user?.wallet?._id,Transcation_history:`Account credited with ${creditToAdd} `}

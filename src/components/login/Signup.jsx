@@ -16,10 +16,12 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import signUpImage from "../../assets/images/signup.jpg";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import signup from "../../assets/images/signup.svg";
 import { useEffect } from "react";
 import GoogleIcon from '@mui/icons-material/Google';
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 const defaultTheme = createTheme({
   palette: {
@@ -37,6 +39,9 @@ export default function SignUp() {
     password: true,
     phone: true,
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
+const recaptchaRef = useRef();
   const handleFieldChange = (fieldName, value) => {
     setValidation((prevValidation) => ({
       ...prevValidation,
@@ -45,6 +50,12 @@ export default function SignUp() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!recaptchaValue) {
+      toast.error("Please complete the reCAPTCHA verification.");
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
     const data = new FormData(event.currentTarget);
     const userData = {
       firstname: data.get("firstname"),
@@ -71,7 +82,9 @@ export default function SignUp() {
       const { message } = response.data;
       if (response.status === 200) {
         toast.success(message);
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 10000);
       } else {
         console.error("Signup failed");
       }
@@ -83,6 +96,8 @@ export default function SignUp() {
       } else {
         console.error("Error occurred:", error);
       }
+    }finally {
+      setIsLoading(false); 
     }
   };
   const handleGoogleSignIn = () => {
@@ -232,12 +247,21 @@ export default function SignUp() {
                       }
                     />
                   </Grid>
+                  <Grid item xs={12}>
+
+                  <ReCAPTCHA
+                   ref={recaptchaRef}
+                   sitekey="6LfCPaspAAAAAJh2RAvJ-PjabheJKelnmNDUSr74"
+                    onChange={(value) => setRecaptchaValue(value)}
+                  />
+                  </Grid>
                 </Grid>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  disabled={isLoading} 
                 >
                   Sign UP
                 </Button>

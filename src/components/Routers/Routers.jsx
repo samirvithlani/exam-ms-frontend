@@ -38,6 +38,8 @@ import { StudentDashboard } from "../dashboard/StudentDashboard";
 import { Wallet } from "../dashboard/Wallet";
 import Allquestions from "../exam/AllQuestion";
 import CreditRequestList from "../login/CreditRequest";
+import ForgotPassword from "../login/ForgotPassword";
+import ResetPassword from "../login/ResetPassword";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -51,6 +53,16 @@ const MainRouter = ({ children }) => {
       path: "/login",
       element: <Login />,
       errorElement: <div>404</div>,
+    },
+    {
+      path:'/forgotpassword',
+      element:<ForgotPassword/>,
+      errorElement:<div>404</div>
+    },
+    {
+      path:'/resetpassword',
+      element:<ResetPassword/>,
+      errorElement:<div>404</div>
     },
     {
       path: "user/:id",

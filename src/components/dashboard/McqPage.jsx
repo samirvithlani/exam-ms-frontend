@@ -18,7 +18,11 @@
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const examtype_id = location.state?.examtype_id;
     const totalmarks = location.state?.totalmarks;
+    const examName = location.state?.name;
+    const credit = location.state?.credit;
+    const Userdata = location.state?.userdata;
 
+    console.log(examName,'credit',credit,"=====",Userdata,"------");
     useEffect(() => {
       fetchQuestions();
     }, [id]);
@@ -99,6 +103,13 @@
           success: "Exam completed Successfully!",
           error: "Failed to complete Exam. Please try again.",
         });
+        if(Userdata.walllet !== null){
+          const updatedcredit = Userdata?.wallet?.token-credit
+          const response = await axios.put(`/wallet/${Userdata.wallet?._id}`,{token:updatedcredit})     
+          const data = {user:_id,walletType:Userdata.wallet?.walletType,wallet:Userdata.wallet?._id,Transcation_history:`Debit ${credit} credit from wallet for ${examName} exam`}
+          const transction = await axios.post('/transcation',data)
+          console.log(transction,"transction");
+        }
         navigate('/userDasboard/history')
       } catch (error) {
         console.log(error, "erroro");

@@ -49,7 +49,7 @@ export const Wallet = () => {
         console.log("Entered Credit:", enteredCredit);
         try {
             const data = {user:user,requestedCredit:Number(enteredCredit)};
-            const response = await axios.post("http://localhost:3000/credit",data)
+            const response = await axios.post("/credit",data)
             const tran = {user:user,walletType:userdata.wallet.walletType,wallet:userdata.wallet._id,Transcation_history:`Request ${enteredCredit} credit `}
             const transction = await axios.post('/transcation',tran)
         } catch (error) {

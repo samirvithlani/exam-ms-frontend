@@ -86,13 +86,12 @@ export default function Login() {
           navigate("/facultyDashboard");
         } else {
           navigate("/adminDashboard");
-
-          //navigate("/adminDashboard");
         }
       } else {
         console.error("Signup failed");
       }
     } catch (error) {
+      debugger
       setisLoading(false);
       if (error.response && error.response.status === 401) {
         const errorMessage = error.response.data.message;
@@ -203,6 +202,9 @@ export default function Login() {
                     <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
                   </Grid>
                 </Grid>
+                  <Grid item>
+                  <Link to = {"/forgotpassword"}>{"ForgotPassword?"}</Link>
+                  </Grid>
               </Box>
             </Box>
           </Grid>

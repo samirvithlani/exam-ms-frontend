@@ -15,6 +15,7 @@ import { useMediaQuery, Paper } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { Typography } from "@mui/material";
+import MCQQuestionsPage from "./McqPage";
 
 const CurrentExam = () => {
   const theme = useTheme();
@@ -84,15 +85,9 @@ const CurrentExam = () => {
     fetchData(stdId, selectedDifficulty);
   };
   const handleStartExam = async (examId, examtype_id, totalmarks,credit,name) => {
-    if(userdata.walllet !== null){
-      const updatedcredit = userdata?.wallet?.token-credit
-      const response = await axios.put(`/wallet/${userdata.wallet?._id}`,{token:updatedcredit})     
-      const data = {user:_id,walletType:userdata.wallet?.walletType,wallet:userdata.wallet?._id,Transcation_history:`Debit ${credit} credit from wallet for ${name} exam`}
-      const transction = await axios.post('/transcation',data)
-      console.log(transction,"transction");
-    }
+    
     navigate(`/userDasboard/question/${examId}`, {
-      state: { examtype_id, totalmarks },
+      state: { examtype_id, totalmarks ,credit,name,userdata},
     });
   };
   const fetchhistory = async () => {
