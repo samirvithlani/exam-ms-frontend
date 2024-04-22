@@ -40,6 +40,9 @@ import Allquestions from "../exam/AllQuestion";
 import CreditRequestList from "../login/CreditRequest";
 import ForgotPassword from "../login/ForgotPassword";
 import ResetPassword from "../login/ResetPassword";
+import { GridList } from "../login/GridList";
+import { ExamDetails } from "../login/ExamDetails";
+import { SubjectList } from "../login/SubjectList";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -172,6 +175,11 @@ const MainRouter = ({ children }) => {
           errorElement: <div>404</div>,
         },
         {
+          path:"subjectlist",
+          element : <SubjectList/>,
+          errorElement: <div>404</div>
+        },
+        {
           path: "facultylist",
           element: <UserGrid />,
           errorElement: <div>404</div>,
@@ -241,6 +249,14 @@ const MainRouter = ({ children }) => {
         {
           path:"creditRequestList",
           element:<CreditRequestList/>
+        },
+        {
+          path:"subject/:id",
+          element:<GridList/>
+        },
+        {
+          path:"examdetails/:id",
+          element:<ExamDetails/>
         }
       ],
     },
