@@ -205,18 +205,7 @@ export const SideBar = () => {
       activeMenuFor: ["creditRequestList"],
       logoImage: ListIcon,
     },
-    {
-      id:20,
-      name:"List",
-      linkUrl:"list",
-      activeMenuFor:["list"],
-      logoImage:ListIcon,
-      children: subjects.map((subject) => ({
-        id: subject._id,
-        name: subject.name,
-        linkUrl: `/adminDashboard/subject/${subject._id}`, // Assuming subject links are like '/subject/:id'
-      })),
-    },
+   
     {
       id: 21,
       name: "Exam Details",
