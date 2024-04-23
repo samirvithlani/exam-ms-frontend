@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, List, ListItem, ListItemText, Avatar } from '@mui/material'; // Removed IconButton import
+import { Grid, Box, List, ListItem, ListItemText, Avatar } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-export const SubjectList     = () => {
+
+export const SubjectList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [subject, setsubjects] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
-    fetchsubject();
+    fetchSubjects();
   }, [id]);
-  const fetchsubject = async () =>{
+
+  const fetchSubjects = async () => {
     try {
       const response = await axios.get("/subject");
-      console.log(response.data,"data");
-      setsubjects(response.data)
+      setSubjects(response.data);
     } catch (error) {
-      console.log(error,"error");
+      console.log(error, "error");
     }
-   
-  }
+  };
+
   const handleClick = (subjectID) => {
-    console.log("Clicked on exam ID:", subjectID);
-  navigate(`/adminDashboard/subject/${subjectID}`)
+    console.log("Clicked on subject ID:", subjectID);
+    navigate(`/adminDashboard/subject/${subjectID}`);
   };
 
   const getAvatarLetter = (name) => {
@@ -31,23 +32,23 @@ export const SubjectList     = () => {
   };
 
   return (
-    <Grid container spacing={2} style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
-      {subject && (
-        <Grid item xs={12}>
-          <List style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {subject.map((item) => (
-              <ListItem key={item._id} style={{ backgroundColor: '#ffffff', borderRadius: '10px', margin: '5px', padding: '10px', textAlign: 'center' }}>
-                <Avatar >{getAvatarLetter(item.name)}</Avatar>
-                <ListItemText primary={item.name} onClick={()=>handleClick(item._id)} />
-                {/* <div onClick={() => handleClick(item._id)} style={{ cursor: 'pointer' }}> */}
-                  {/* Your clickable content */}
-                  {/* Click me
-                </div> */}
-              </ListItem>
-            ))}
-          </List>
+    <Grid container spacing={2} style={{ padding: '20px' }}>
+      {subjects.map((item) => (
+        <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Box
+            bgcolor="white"
+            border="1px solid #ccc"
+            borderRadius="5px" // Adjust border radius as desired
+            padding="10px"
+            textAlign="center"
+            onClick={() => handleClick(item._id)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Avatar>{getAvatarLetter(item.name)}</Avatar>
+            <ListItemText primary={item.name} />
+          </Box>
         </Grid>
-      )}
+      ))}
     </Grid>
   );
 };

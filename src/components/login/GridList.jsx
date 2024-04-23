@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, List, ListItem, ListItemText, Avatar } from '@mui/material'; // Removed IconButton import
+import { Grid, Box, List, ListItem, ListItemText, Avatar } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 export const GridList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const GridList = () => {
 
   const handleClick = (examId) => {
     console.log("Clicked on exam ID:", examId);
-  navigate(`/adminDashboard/examdetails/${examId}`)
+    navigate(`/adminDashboard/examdetails/${examId}`);
   };
 
   const getAvatarLetter = (name) => {
@@ -30,23 +31,25 @@ export const GridList = () => {
   };
 
   return (
-    <Grid container spacing={2} style={{ backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '10px' }}>
-      {exam && (
-        <Grid item xs={12}>
-          <List style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {exam.map((item) => (
-              <ListItem key={item.id} style={{ backgroundColor: '#ffffff', borderRadius: '10px', margin: '5px', padding: '10px', textAlign: 'center' }}>
-                <Avatar >{getAvatarLetter(item.name)}</Avatar>
-                <ListItemText primary={item.name} onClick={()=>handleClick(item._id)} />
-                {/* <div onClick={() => handleClick(item._id)} style={{ cursor: 'pointer' }}> */}
-                  {/* Your clickable content */}
-                  {/* Click me
-                </div> */}
-              </ListItem>
-            ))}
-          </List>
+    <Grid container spacing={2} style={{ padding: '20px' }}>
+      {exam && exam.map((item) => (
+        <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} xl={2}>
+          <Box
+            bgcolor="white"
+            border="1px solid #ccc"
+            borderRadius="5px"
+            padding="10px"
+            textAlign="center"
+            onClick={() => handleClick(item._id)}
+            boxShadow="0 2px 4px rgba(0,0,0,0.1)" // Add shadow here
+
+            style={{ cursor: 'pointer' }}
+          >
+            <Avatar>{getAvatarLetter(item.name)}</Avatar>
+            <ListItemText primary={item.name} />
+          </Box>
         </Grid>
-      )}
+      ))}
     </Grid>
   );
 };
