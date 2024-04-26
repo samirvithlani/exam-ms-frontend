@@ -9,17 +9,20 @@ import {
   ListItemText
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
-export const ExamDetails = () => {
+export const UserExamDetails = () => {
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
+  const[userdata,setUserdata] = useState([]);
 
  const navigate = useNavigate()
   const { id } = useParams();
   useEffect(() => {
     fetchexams();
     fetchallquestion();
+    fetchuser();
   }, [id]);
   const fetchallquestion = async () => {
     try {
@@ -31,113 +34,26 @@ export const ExamDetails = () => {
   };
   const fetchexams = async () => {
     const response = await axios.get(`/exam/${id}`);
-    console.log(response);
+    // console.log(response);
     setQuestions(response.data);
   };
-  
-  const handleView = (
-    id,
-    subject,
-    stream,
-    difficulty,
-    standard,
-    topic,
-    type
-  ) => {
-    navigate(`/adminDashboard/viewexam/${id}`, {
-      state: { subject, stream, difficulty, standard, topic, type },
+  const fetchuser = async()=>{
+    const _id = Cookies.get("_id");
+    try {
+      const response = await axios.get(`/user/${_id}`);
+      // console.log(response);
+      setUserdata(response.data)
+    } catch (error) {
+      console.log(error,"error");
+    }
+  }
+  const handleStartExam = async (examId, examtype_id, totalmarks,credit,name) => {
+    
+    navigate(`/userDasboard/question/${examId}`, {
+      state: { examtype_id, totalmarks ,credit,name,userdata},
     });
   };
-
-  const handleEdit = (id) => {
-    navigate(`/adminDashboard/update-exam/${id}`);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await toast.promise(axios.delete(`/exam/${id}`), {
-        pending: "Deleting Exam...",
-        success: "Exam Deleted Successfully!",
-        error: "Failed to create Exam. Please try again.",
-      });
-    } catch (error) {
-      console.log("Error while deleting exam:", error);
-    }
-  };
-  const handleGenerateQuestions = async (
-    topicId,
-    noOfQuestions,
-    id,
-    difficultyId
-  ) => {
-    try {
-      const filteredQuestions = allQuestions.filter(
-        (question) =>{
-          
-         return question.Topic._id === topicId && question.difficulty === difficultyId
-        }
-      );
-      if (filteredQuestions.length < noOfQuestions) {
-        toast.error("Insufficient questions available for this topic.");
-        return;
-      }
-      const shuffledQuestions = filteredQuestions.sort(
-        () => 0.5 - Math.random()
-      );
-      const mcq = shuffledQuestions.slice(0, noOfQuestions);
-      const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
-        mcq,
-      });
-      toast.success("Questions generated successfully!");
-    } catch (error) {
-      console.log(error);
-      console.error("Error generating questions:", error);
-      toast.error("Failed to generate questions. Please try again.");
-    }
-  };
-  const handleAddQuestions = async (
-    type,
-    id,
-    subject,
-    stream,
-    difficulty,
-    standard,
-    subjectId,
-    streamId,
-    topicId,
-    difficultyId,
-    standardId,
-    topic,
-    types,
-    typeId,
-    noOfQuestions
-  ) => {
-    let data = await axios.get(`/exam/${id}`);
-    if (data.data.mcq.length === noOfQuestions) {
-      return alert("Question limit reached. Cannot add more questions.");
-    }
-    if (type === "mcq") {
-      navigate(`/adminDashboard/mcqquestion/${id}`, {
-        state: {
-          subject,
-          stream,
-          difficulty,
-          standard,
-          subjectId,
-          streamId,
-          topicId,
-          difficultyId,
-          standardId,
-          topic,
-          types,
-          typeId,
-          noOfQuestions,
-        },
-      });
-    } else {
-      navigate("/adminDashboard");
-    }
-  };
+  
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -323,53 +239,16 @@ export const ExamDetails = () => {
       <Grid item xs={12}>
         {/* Action buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={() => handleView(
-            id,
-            questions.subject?.name,
-            questions.stream?.name,
-            questions.difficulty?.difficulty,
-            questions.std?.std,
-            questions.examtopic?.name,
-            questions.examtype?.type
-          )}>
-            View Exam
-          </Button>
-          <Button variant="contained" color="secondary" sx={{ mr: 1 }} onClick={() => handleEdit(id)}>
-            Edit Exam
-          </Button>
-          <Button variant="contained" color="error" sx={{ mr: 1 }} onClick={() => handleDelete(id)}>
-            Delete Exam
-          </Button>
-          <Button variant="contained" color="primary" onClick={() => handleGenerateQuestions(
-            questions.examtopic?._id,
-            questions.noOfQuestions,
-            id,
-            questions.difficulty?._id
-          )}>
-            Generate Questions
-          </Button>
-          <Button variant="contained" color="primary" 
-          onClick={() =>
-            handleAddQuestions(
-              "mcq",
-              id,
-              questions?.subject?.name,
-              questions?.stream?.name,
-              questions?.difficulty?.difficulty,
-              questions?.std?.std,
-              questions?.subject?._id,
-              questions?.stream?._id,
-              questions.examtopic?._id,
-              questions.difficulty?._id,
-              questions?.std?._id,
-              questions?.examtopic?.name,
-              questions?.examtype?.type,
-              questions?.examtype?._id,
-              questions.noOfQuestions
-            )
-          }
-          >
-          Add Questions
+        <Button variant="contained" color="secondary" sx={{ mr: 1 }} 
+        onClick={()=>handleStartExam(
+            questions?._id,
+            questions.examtype?._id,
+            questions.totalmarks,
+            questions?.credit,
+            questions?.name
+
+        )}>
+            Start Exam
           </Button>
         </Box>
       </Grid>

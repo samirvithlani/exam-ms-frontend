@@ -43,6 +43,9 @@ import ResetPassword from "../login/ResetPassword";
 import { GridList } from "../login/GridList";
 import { ExamDetails } from "../login/ExamDetails";
 import { SubjectList } from "../login/SubjectList";
+import {  UserExamList } from "../login/UserExamLIst";
+import { ExamSubjectList } from "../exam/ExamSubjectList";
+import { UserExamDetails } from "../exam/UserExamDetails";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -110,6 +113,14 @@ const MainRouter = ({ children }) => {
           path:"wallet",
           element:<Wallet/>
         },
+        {
+          path:"subject",
+          element:<UserExamList/>
+        },
+        {
+          path:"examdetails/:id",
+          element:<UserExamDetails/>
+        }
         
       ],
     },
@@ -148,6 +159,9 @@ const MainRouter = ({ children }) => {
           element: <StudentList />,
           errorElement: <div>404</div>,
         },
+        
+         
+        
       ],
     },
     {

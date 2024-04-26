@@ -71,9 +71,9 @@ import {
         id: 2,
         name: "Current Exam",
         logoImage: ListIcon,
-        linkUrl: "currentexam",
+        linkUrl: "subject",
         textColor: "#7D8FB3",
-        activeMenuFor: ["currentexam"],
+        activeMenuFor: ["subject"],
       },
       {
         id: 3,
@@ -111,14 +111,27 @@ import {
         linkUrl: "wallet",
         activeMenuFor: ["wallet"],
       },
-      
+      {
+        id:8,
+        name:"subjects",
+        linkUrl:"subjects",
+        activeMenuFor:["subjects"]
+      },
+      {
+        id:8,
+        name:"Exam Details",
+        linkUrl:"examdetails",
+        activeMenuFor:["examdetails"]
+      },
     ];
     const filteredRouteArray = RouteArray.filter(
       (route) =>
        route.name !== "Answer"&& 
        route.name !== "Question"&&
        route.name != "userprofile"&&
-       route.name !== "wallet"
+       route.name !== "wallet"&&
+       route.name !== "subjects" &&
+       route.name !== "Exam Details"
        );
     return (
       <div>

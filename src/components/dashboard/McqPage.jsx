@@ -80,7 +80,7 @@
     
     
     const handleSubmit = async () => {
-      debugger
+      // debugger
       const _id = Cookies.get('_id');
       const mcqAnswers = [];
       questions.forEach(question => {
