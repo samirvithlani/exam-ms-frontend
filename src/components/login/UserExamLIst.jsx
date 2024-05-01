@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, List, ListItem, ListItemText, Avatar } from '@mui/material';
+import { Grid, Box, List, ListItem, ListItemText, Avatar, Select, MenuItem } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,68 +8,163 @@ import Cookies from "js-cookie";
 export const UserExamList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [exams, setexams] = useState([]);
+  const [exams, setExams] = useState([]);
   const [userHistory, setUserHistory] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [difficulties, setDifficulties] = useState([]);
+  const [standards, setStandards] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const [selectedStandard, setSelectedStandard] = useState('');
 
   const _id = Cookies.get("_id");
-  
-  useEffect(() => {
-    Exams();
-    fetchhistory()
-  }, [id]);
 
-  const Exams = async () => {
+  useEffect(() => {
+    fetchSubjects();
+    fetchDifficulties();
+    fetchStandards();
+    fetchHistory();
+    fetchExams();
+  }, [id, selectedSubject, selectedDifficulty, selectedStandard]);
+
+  const fetchSubjects = async () => {
     try {
-      const response = await axios.get("/exam");
-      // console.log(response.data);
-      setexams  (response.data);
+      const response = await axios.get("/subject");
+      setSubjects(response.data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchDifficulties = async () => {
+    try {
+      const response = await axios.get("/difficulty");
+      setDifficulties(response.data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchStandards = async () => {
+    try {
+      const response = await axios.get("/getstd");
+      console.log(response,"reso")
+      setStandards(response.data.data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchHistory = async () => {
+    try {
+      const response = await axios.get(`/userhistory/${_id}`);
+      const data = response.data.map((item) => item.exam_id._id);
+      setUserHistory(data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchExams = async () => {
+    debugger
+    try {
+      let url = "/getExambyFilter?";
+      if (selectedStandard) url += `std=${selectedStandard}&`;
+      if (selectedSubject) url += `subject=${selectedSubject}&`;
+      if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
+
+      const response = await axios.get(url);
+      setExams(response.data.data);
     } catch (error) {
       console.log(error, "error");
     }
   };
 
   const handleClick = (subjectID) => {
-    // console.log("Clicked on subject ID:", subjectID);
     navigate(`/userDasboard/examdetails/${subjectID}`);
   };
-  const fetchhistory = async () => {
-    try {
-      const response = await axios.get(`/userhistory/${_id}`);
-      let data = response.data.map((item) => item.exam_id._id);
-      setUserHistory(data);
-    } catch (err) {
-      console.log(err, "error");
-    }
-  };
   const filterExamsByHistory = () => {
-    return exams.filter((exam) => !userHistory.includes(exam._id));
-  };
+        return exams.filter((exam) => !userHistory.includes(exam._id));
+      };
   const getAvatarLetter = (name) => {
     return name.charAt(0).toUpperCase();
   };
   const filteredExams = filterExamsByHistory();
+
+ const resetFilter = async ()=>{
+  setSelectedStandard("");
+  setSelectedSubject("");
+  setSelectedDifficulty("")
+  const response = await ("/getExambyFilter")
+ }
   return (
     <>
-    <h2>Recently Added Exam</h2>
+      <h2>Recently Added Exam</h2>
 
-    <Grid container spacing={2} style={{ padding: '20px' }}>
-      {filteredExams.map((item) => (
-        <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
-          <Box
-            bgcolor="white"
-            border="1px solid #ccc"
-            borderRadius="5px" // Adjust border radius as desired
-            padding="10px"
-            textAlign="center"
-            onClick={() => handleClick(item._id)}
-            style={{ cursor: 'pointer' }}
-          >
-            <Avatar>{getAvatarLetter(item.name)}</Avatar>
-            <ListItemText primary={item.name} />
-          </Box>
-        </Grid>
+      <Grid container spacing={2} style={{ padding: '20px' }}>
+      <Grid item xs={12}>
+  <Box display="flex" marginBottom="20px">
+    <select
+      value={selectedStandard}
+      onChange={(e) => setSelectedStandard(e.target.value)}
+      style={{ marginRight: '10px' }}
+    >
+      <option value="">Select Standard</option>
+      {standards.map((standard) => (
+        <option key={standard._id} value={standard._id}>
+          {standard.std}
+        </option>
       ))}
+    </select>
+    <select
+      value={selectedSubject}
+      onChange={(e) => setSelectedSubject(e.target.value)}
+      style={{ marginRight: '10px' }}
+    >
+      <option value="">Select Subject</option>
+      {subjects.map((subject) => (
+        <option key={subject._id} value={subject._id}>
+          {subject.name}
+        </option>
+      ))}
+    </select>
+    <select
+      value={selectedDifficulty}
+      onChange={(e) => setSelectedDifficulty(e.target.value)}
+      style={{ marginRight: '10px' }}
+    >
+      <option value="">Select Difficulty</option>
+      {difficulties.map((difficulty) => (
+        <option key={difficulty._id} value={difficulty._id}>
+          {difficulty.difficulty}
+        </option>
+      ))}
+    </select>
+    <button onClick={resetFilter}>Reset Filter</button>
+  </Box>
+</Grid>
+        {filteredExams.length > 0 ? (
+       filteredExams.map((item) => (
+    <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Box
+        bgcolor="white"
+        border="1px solid #ccc"
+        borderRadius="5px"
+        padding="10px"
+        textAlign="center"
+        onClick={() => handleClick(item._id)}
+        style={{ cursor: 'pointer' }}
+      >
+        <Avatar>{getAvatarLetter(item.name)}</Avatar>
+        <ListItemText primary={item.name} />
+      </Box>
     </Grid>
+  ))
+) : (
+  <h1>No Exams Found!</h1>
+)}
+
+      </Grid>
     </>
   );
 };
