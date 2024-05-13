@@ -48,7 +48,7 @@ export const UserExamList = () => {
   const fetchStandards = async () => {
     try {
       const response = await axios.get("/getstd");
-      console.log(response,"reso")
+      // console.log(response,"reso")
       setStandards(response.data.data);
     } catch (error) {
       console.log(error, "error");

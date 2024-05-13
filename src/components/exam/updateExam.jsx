@@ -195,7 +195,7 @@
               success: "Exam Update Successfully!",
               error: "Failed to Update Exam. Please try again.",
             });
-            navigate('/adminDashboard/examlist'); 
+            navigate('/admindashboard/subjectlist'); 
 
         } catch (error) {
           console.error("Error updating exam:", error);

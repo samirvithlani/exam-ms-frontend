@@ -243,7 +243,7 @@ export const CreateExam = () => {
         success: "Exam Created Successfully!",
         error: "Failed to create Exam. Please try again.",
       });
-      navigate("/admindashboard/examlist");
+      navigate("/admindashboard/subjectlist");
       reset();
       setSelectedStandards("");
       setselecteddefficultie("");
