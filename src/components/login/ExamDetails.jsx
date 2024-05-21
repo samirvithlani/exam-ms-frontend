@@ -33,6 +33,7 @@ export const ExamDetails = () => {
     const response = await axios.get(`/exam/${id}`);
     console.log(response);
     setQuestions(response.data);
+
   };
   
   const handleView = (
@@ -64,30 +65,50 @@ export const ExamDetails = () => {
       console.log("Error while deleting exam:", error);
     }
   };
+  
   const handleGenerateQuestions = async (
     topicId,
     noOfQuestions,
     id,
     difficultyId
   ) => {
+
+    
     try {
+      const existingExamResponse = await axios.get(`/exam/${id}`);
+      const existingExam = existingExamResponse.data;
+  
+      // Check how many more questions are needed
+      const currentQuestionCount = existingExam.mcq.length;
+      const additionalQuestionsNeeded = noOfQuestions - currentQuestionCount;
+  
+      if (additionalQuestionsNeeded <= 0) {
+        toast.info("Sufficient questions already available.");
+        return;
+      }
+  
       const filteredQuestions = allQuestions.filter(
-        (question) =>{
-          
-         return question.Topic._id === topicId && question.difficulty === difficultyId
-        }
+              (question) =>{
+                
+               return question.Topic._id === topicId && question.difficulty === difficultyId
+              }
+            
       );
-      if (filteredQuestions.length < noOfQuestions) {
+  
+      if (filteredQuestions.length < additionalQuestionsNeeded) {
         toast.error("Insufficient questions available for this topic.");
         return;
       }
-      const shuffledQuestions = filteredQuestions.sort(
-        () => 0.5 - Math.random()
-      );
-      const mcq = shuffledQuestions.slice(0, noOfQuestions);
+  
+      const shuffledQuestions = filteredQuestions.sort(() => 0.5 - Math.random());
+      const newQuestions = shuffledQuestions.slice(0, additionalQuestionsNeeded);
+  
+      const updatedQuestions = [ ...newQuestions];
+  
       const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
-        mcq,
+        mcq: updatedQuestions,
       });
+      console.log(updateQuestionResponse, "update question response");
       toast.success("Questions generated successfully!");
     } catch (error) {
       console.log(error);
@@ -95,6 +116,7 @@ export const ExamDetails = () => {
       toast.error("Failed to generate questions. Please try again.");
     }
   };
+  
   const handleAddQuestions = async (
     type,
     id,
@@ -342,7 +364,7 @@ export const ExamDetails = () => {
           </Button>
           <Button variant="contained" color="primary" onClick={() => handleGenerateQuestions(
             questions.examtopic?._id,
-            questions.noOfQuestions,
+            questions.noofquestions,
             id,
             questions.difficulty?._id
           )}>
