@@ -253,7 +253,7 @@ const recaptchaRef = useRef();
 
                   <ReCAPTCHA
                    ref={recaptchaRef}
-                   sitekey="6LfCPaspAAAAAJh2RAvJ-PjabheJKelnmNDUSr74"
+                   sitekey="6LdxxukpAAAAAM_jYKu2zRotH0QyiYucU1q4ipWr"
                     onChange={(value) => setRecaptchaValue(value)}
                   />
                   </Grid>
