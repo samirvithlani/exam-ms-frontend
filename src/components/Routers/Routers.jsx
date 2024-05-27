@@ -46,6 +46,7 @@ import { SubjectList } from "../login/SubjectList";
 import {  UserExamList } from "../login/UserExamLIst";
 import { ExamSubjectList } from "../exam/ExamSubjectList";
 import { UserExamDetails } from "../exam/UserExamDetails";
+import GoogleCallback from "../login/GoogleCallback";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -53,6 +54,11 @@ const MainRouter = ({ children }) => {
     {
       path: "/",
       element: <SignUp />,
+      errorElement: <div>404</div>,
+    },
+    {
+      path: "/google/callback",
+      element: <GoogleCallback />,
       errorElement: <div>404</div>,
     },
     {

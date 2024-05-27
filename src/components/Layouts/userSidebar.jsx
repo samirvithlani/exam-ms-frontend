@@ -26,6 +26,7 @@ import {
   import {Button} from "@mui/material";
   import ExitToAppIcon from "@mui/icons-material/ExitToApp";
   import HomeIcon from '@mui/icons-material/Home';
+  import { useParams } from "react-router-dom";
 
   export const UserSideBar = () => {
     const navigate = useNavigate();
@@ -34,7 +35,8 @@ import {
     const partialWidth = 0; 
     const [isExpanded, setIsExpanded] = useState(true); 
     const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
-  
+    const { token } = useParams();
+  console.log(token ,"token");
     useEffect(() => {
       
       setOpenLogoutDialog(false);

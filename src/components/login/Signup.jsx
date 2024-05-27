@@ -83,7 +83,7 @@ const recaptchaRef = useRef();
       if (response.status === 200) {
         toast.success(message);
         setTimeout(() => {
-          navigate("/login");
+          navigate("/login"); 
         }, 10000);
       } else {
         console.error("Signup failed");
@@ -101,10 +101,12 @@ const recaptchaRef = useRef();
     }
   };
   const handleGoogleSignIn = () => {
-    window.location.href = "https://skidexam.web.app/google/callback";
+    // window.location.href = "http://localhost:3000/google/callback";
+    window.location.href = "https://exam-ms.onrender.com/google/callback";
+
     
   };
-
+ 
   const textFieldStyle = { borderRadius: 8 };
 
   return (
