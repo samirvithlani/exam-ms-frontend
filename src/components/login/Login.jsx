@@ -46,6 +46,10 @@ export default function Login() {
       [fieldName]: !!value,
     }));
   };
+  const handleGoogleSignIn = () => {
+    // window.location.href = "http://localhost:3000/google/callback";
+    window.location.href = "https://exam-ms.onrender.com/google/callback"
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     setisLoading(true);
@@ -197,6 +201,29 @@ export default function Login() {
                 >
                   Log In
                 </Button>
+                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ ml: 1 }}>
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              
+                <Button
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleGoogleSignIn}
+                  // startIcon={<GoogleIcon />} 
+                >
+                  Sign up with Google
+                </Button>
+
+              </Box>
+          </Grid>
                 <Grid container>
                   <Grid item>
                     <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
