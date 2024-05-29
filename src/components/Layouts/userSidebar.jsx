@@ -158,7 +158,7 @@ import {
                 position: "inherit",
                 borderRight: 0,
                 width: isExpanded ? drawerWidth : partialWidth,
-                height: "100%", // Set height to 100% of the viewport height
+                height: "650px", // Set height to 100% of the viewport height
                 flexShrink: 0,
                 overflowX: "hidden",
                 border: "5px solid #F0F0F0",
@@ -198,7 +198,7 @@ import {
                 >
                   <ListItemButton>
                     <ListItemIcon>
-                      <Avatar sx={{ bgcolor: "rgb(94,114,228)" }}>
+                      <Avatar sx={{ bgcolor: "rgb(1,0,128)" }}>
                         {res?.logoImage && <res.logoImage />}
                       </Avatar>
                     </ListItemIcon>
@@ -214,7 +214,7 @@ import {
             <Box sx={{ marginTop: "auto" }}>
               <Button
                 variant="contained"
-                sx={{ color: "#whitesmoke", bgcolor: deepPurple[500] }}
+                sx={{ color: "#whitesmoke", bgcolor: "rgb(1,0,128)" }}
                 startIcon={<ExitToAppIcon />}
                 onClick={handleOpenLogoutDialog}
                 fullWidth

@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import Chart from "chart.js/auto";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import { PieComponent } from "../charts/PieComponent";
+import "../../assets/css/chart.css";
 
 export const StudentDashboard = () => {
   const chartRef = useRef(null);
-  const[history,sethistory] = useState([]);
-  const[wallet,setwallet] = useState([])
+  const [history, sethistory] = useState([]);
+  const [wallet, setwallet] = useState([]);
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
   const cardStyle = {
@@ -30,80 +32,33 @@ export const StudentDashboard = () => {
       const examsCount = examResponse.data.length;
       setStudents(studentsCount);
       setExamData(examsCount);
-
-      // Destroy previous chart instance before rendering a new one
-      if (chartRef.current !== null && chartRef.current !== undefined) {
-        chartRef.current.destroy();
-      }
-      // Render the chart
-      const ctx = document.getElementById("myChart");
-      chartRef.current = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-          datasets: [
-            {
-              label: "# of Votes",
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-              ],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: "Users Gained between 2016-2020",
-            },
-            legend: {
-              display: true,
-              position: "bottom",
-            },
-          },
-        },
-      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   const fetchUserExam = async () => {
-        const _id = Cookies.get('_id');
-        try {
-          const response = await axios.get(`/userhistory/${_id}`);
-          const historylength = response.data.length
-          console.log(historylength);
-          sethistory(historylength); 
-        }catch(error){
-          console.log(error,"error");
-      }}
-    
-    const fetchWalletData = async () => {
-        try {
-            const response = await axios.get(`/transcation/${Cookies.get('_id')}`);
-            console.log(response.data.wallet.token);
-            if(response){
-            setwallet(response.data.wallet.token);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const _id = Cookies.get("_id");
+    try {
+      const response = await axios.get(`/userhistory/${_id}`);
+      const historylength = response.data.length;
+      console.log(historylength);
+      sethistory(historylength);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchWalletData = async () => {
+    try {
+      const response = await axios.get(`/transcation/${Cookies.get("_id")}`);
+      console.log(response.data.wallet.token);
+      if (response) {
+        setwallet(response.data.wallet.token);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div style={{ height: "100vh", overflowY: "auto" }}>
       <Grid
@@ -127,7 +82,7 @@ export const StudentDashboard = () => {
             // mt: 2,
             ml: 0.1,
             p: 2,
-            background: "rgb(94,114,228)",
+            background: "rgb(1,0,128)",
             pt: 10,
             gap: 1,
           }}
@@ -153,14 +108,13 @@ export const StudentDashboard = () => {
                   variant="h4"
                   sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
                 >
-                  Exam History 
+                  Exam History
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ color: "black", fontFamily: "Lato" }}
                 >
-                Total Exam Given : {history}
-
+                  Total Exam Given : {history}
                 </Typography>
               </div>
               <svg
@@ -343,11 +297,16 @@ export const StudentDashboard = () => {
                 Portal Detail
               </Typography>
               <Typography variant="body1"></Typography>
-              <Grid xs={12} sm={6.1} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
-                <canvas
-                  id="myChart"
-                  style={{ width: "100%", height: "100%" }}
-                />
+              <Grid
+                xs={12}
+                sm={12}
+                md={6.1}
+                lg={6.1}
+                xl={6.1}
+                sx={{ mt: 2 }}
+                
+              >
+                <PieComponent chartType="pie" />
               </Grid>
             </Grid>
           </Grid>
@@ -374,7 +333,17 @@ export const StudentDashboard = () => {
               spacing={0}
             >
               <Typography variant="h4">Card 4</Typography>
-              <Typography variant="body1"></Typography>
+              <Grid
+                xs={12}
+                sm={6.1}
+                md={6.1}
+                lg={6.1}
+                xl={6.1}
+                sx={{ mt: 2 }}
+                
+              >
+                <PieComponent chartType="bar" />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

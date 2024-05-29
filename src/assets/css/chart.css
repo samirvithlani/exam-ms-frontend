@@ -1,0 +1,15 @@
+/* For mobile devices */
+@media only screen and (max-width: 768px) {
+    .chart-container {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* For desktop devices */
+@media only screen and (min-width: 769px) {
+    .chart-container {
+        max-width: 600px; /* Adjust as needed */
+        height: 400px; /* Adjust as needed */
+    }
+}
