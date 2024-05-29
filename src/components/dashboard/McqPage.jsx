@@ -21,8 +21,8 @@
     const examName = location.state?.name;
     const credit = location.state?.credit;
     const Userdata = location.state?.userdata;
+    const [isSubmitting, setIsSubmitting] = useState(false); // State for button disable
 
-    console.log(examName,'credit',credit,"=====",Userdata,"------");
     useEffect(() => {
       fetchQuestions();
     }, [id]);
@@ -81,6 +81,8 @@
     
     const handleSubmit = async () => {
       // debugger
+      setIsSubmitting(true); // Disable button
+
       const _id = Cookies.get('_id');
       const mcqAnswers = [];
       questions.forEach(question => {
@@ -112,6 +114,8 @@
         }
         navigate('/userDasboard/history')
       } catch (error) {
+        setIsSubmitting(false); // Disable button
+
         console.log(error, "erroro");
       }
     };
@@ -179,9 +183,9 @@
               </Grid>
             ))}
           </Grid>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit Answers
-          </Button>
+          <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting}>
+          Submit Answers
+        </Button>
           <ToastContainer />
         </Paper>
       </div>

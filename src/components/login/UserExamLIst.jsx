@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
+import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 export const UserExamList = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export const UserExamList = () => {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [selectedStandard, setSelectedStandard] = useState('');
-
+  const[isloading,setisloading] = useState(false);
   const _id = Cookies.get("_id");
 
   useEffect(() => {
@@ -66,15 +67,20 @@ export const UserExamList = () => {
   };
 
   const fetchExams = async () => {
-    debugger
+    
     try {
       let url = "/getExambyFilter?";
       if (selectedStandard) url += `std=${selectedStandard}&`;
       if (selectedSubject) url += `subject=${selectedSubject}&`;
       if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
-
+      setisloading(true)
       const response = await axios.get(url);
+      if(response.status===200){
+        setisloading(false)
+      }
+      
       setExams(response.data.data);
+
     } catch (error) {
       console.log(error, "error");
     }
@@ -102,6 +108,9 @@ export const UserExamList = () => {
       <h2>Recently Added Exam</h2>
 
       <Grid container spacing={2} style={{ padding: '20px' }}>
+      {
+            isloading ? <CustomeLoader /> : null
+          }
       <Grid item xs={12}>
   <Box display="flex" marginBottom="20px">
     <select
@@ -156,7 +165,7 @@ export const UserExamList = () => {
         style={{ cursor: 'pointer' }}
       >
         <Avatar>{getAvatarLetter(item.name)}</Avatar>
-        <ListItemText primary={item.name} />
+        <ListItemText primary={item.name}   style={{ cursor: 'pointer' }} />
       </Box>
     </Grid>
   ))

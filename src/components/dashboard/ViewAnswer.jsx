@@ -13,7 +13,6 @@ export const ViewAnswer = () => {
   }, [id]);
 
   const fetchData = async () => {
-    
     try {
       const response = await axios.get(`/answers/${id}`);
       setMcqAnswers(response.data);
@@ -21,37 +20,36 @@ export const ViewAnswer = () => {
       console.log('Error', error);
     }
   };
- 
 
   return (
     <div>
       {mcqAnswers.map((answer, index) => (
-        <Accordion
-          key={index}
-          
-        >
+        <Accordion key={index}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`question${index}-content`}
             id={`question${index}-header`}
           >
-            <Typography>{answer.exam_id.name}</Typography>
+            <Typography> {answer.exam_id.name}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <div>
               {answer.mcq_answers.map((mcqAnswer, mcqIndex) => (
-                <Accordion key={mcqIndex}
-                style={{
-                  backgroundColor: mcqAnswer.givenanswer === mcqAnswer.question.correctOption ? 'lightgreen' : 'lightcoral'
-                }}
+                <Accordion
+                  key={mcqIndex}
+                  style={{
+                    backgroundColor:
+                      mcqAnswer.givenanswer === mcqAnswer.question.correctOption
+                        ? 'lightgreen'
+                        : 'lightcoral'
+                  }}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={`option${mcqIndex}-content`}
                     id={`option${mcqIndex}-header`}
-                    
                   >
-                    <Typography>{mcqAnswer.question.question}</Typography>
+                    <Typography>{`${mcqIndex + 1}. ${mcqAnswer.question.question}`}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
@@ -61,7 +59,8 @@ export const ViewAnswer = () => {
                             <li
                               key={key}
                               style={{
-                                color: mcqAnswer.givenanswer === mcqAnswer.question.correctOption ? 'green' : 'red'
+                                color:
+                                  mcqAnswer.givenanswer === mcqAnswer.question.correctOption ? 'green' : 'red'
                               }}
                             >
                               {mcqAnswer.givenanswer === key ? (

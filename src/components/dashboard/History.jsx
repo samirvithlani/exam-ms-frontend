@@ -95,6 +95,9 @@ const Historyofuser = () => {
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <Paper sx={paperStyle} className="responsive-container">
+      {
+            isLoading ? <CustomeLoader /> : null
+          }
         <Typography
           variant="h4"
           sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
