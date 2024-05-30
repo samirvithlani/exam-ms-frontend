@@ -195,7 +195,7 @@ export const UserExamList = () => {
             </Grid>
           ))
         ) : (
-          <Typography variant="h6" color="error">
+          <Typography variant="h6" color="error" sx={{textAlign:"center"}}>
             No Exams Found!
           </Typography>
         )}

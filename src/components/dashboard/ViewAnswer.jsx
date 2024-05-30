@@ -56,7 +56,7 @@ export const ViewAnswer = () => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 2 }}>
+      <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
         Exam Summary
       </Typography>
       {/* Main container box */}
