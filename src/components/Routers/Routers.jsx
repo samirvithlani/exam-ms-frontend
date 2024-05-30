@@ -43,7 +43,7 @@ import ResetPassword from "../login/ResetPassword";
 import { GridList } from "../login/GridList";
 import { ExamDetails } from "../login/ExamDetails";
 import { SubjectList } from "../login/SubjectList";
-import {  UserExamList } from "../login/UserExamLIst";
+import { UserExamList } from "../login/UserExamLIst";
 import { ExamSubjectList } from "../exam/ExamSubjectList";
 import { UserExamDetails } from "../exam/UserExamDetails";
 import GoogleCallback from "../login/GoogleCallback";
@@ -67,67 +67,71 @@ const MainRouter = ({ children }) => {
       errorElement: <div>404</div>,
     },
     {
-      path:'/forgotpassword',
-      element:<ForgotPassword/>,
-      errorElement:<div>404</div>
+      path: "/forgotpassword",
+      element: <ForgotPassword />,
+      errorElement: <div>404</div>,
     },
     {
-      path:'/resetpassword',
-      element:<ResetPassword/>,
-      errorElement:<div>404</div>
+      path: "/resetpassword",
+      element: <ResetPassword />,
+      errorElement: <div>404</div>,
     },
     {
       path: "user/:id",
       element: <UserRegistration />,
-    },  
+    },
     {
-      path: "/userDasboard",
-      element: <UserSideBar />,
-      errorElement: <div>404</div>,
+      element: <PrivateRoutes />,
       children: [
         {
-          path: "",
-           //element:<Dashboard/>,
-           element:<StudentDashboard/>,
+          path: "/userDasboard",
+          element: <UserSideBar />,
           errorElement: <div>404</div>,
-        },
-        {
-          path: "currentexam",
-          element: <CurrentExam />,
-          errorElement: <div>404</div>,
-        },
+          children: [
+            {
+              path: "",
+              //element:<Dashboard/>,
+              element: <StudentDashboard />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "currentexam",
+              element: <CurrentExam />,
+              errorElement: <div>404</div>,
+            },
 
-        {
-          path: "history",
-          element: <Historyofuser />,
+            {
+              path: "history",
+              element: <Historyofuser />,
+            },
+            {
+              path: "viewAnswers/:id",
+              element: <ViewAnswer />,
+              errorElement: <div>400</div>,
+            },
+            {
+              path: "question/:id",
+              element: <MCQQuestionsPage />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "userprofile",
+              element: <UserProfile />,
+            },
+            {
+              path: "wallet",
+              element: <Wallet />,
+            },
+            {
+              path: "subject",
+              element: <UserExamList />,
+            },
+            {
+              path: "examdetails/:id",
+              element: <UserExamDetails />,
+            },
+          ],
         },
-        {
-          path: "viewAnswers/:id",
-          element: <ViewAnswer />,
-          errorElement: <div>400</div>,
-        },
-        {
-          path: "question/:id",
-          element: <MCQQuestionsPage />,
-          errorElement: <div>404</div>,
-        },
-        {
-          path:"userprofile",
-          element:<UserProfile/>
-        },
-        {
-          path:"wallet",
-          element:<Wallet/>
-        },
-        {
-          path:"subject",
-          element:<UserExamList/>
-        },
-        {
-          path:"examdetails/:id",
-          element:<UserExamDetails/>
-        }
-        
       ],
     },
     {
@@ -165,9 +169,6 @@ const MainRouter = ({ children }) => {
           element: <StudentList />,
           errorElement: <div>404</div>,
         },
-        
-         
-        
       ],
     },
     {
@@ -181,8 +182,6 @@ const MainRouter = ({ children }) => {
           path: "",
           element: <AdminDashboard />,
           errorElement: <div>404</div>,
-          
-          
         },
         {
           path: "createexam",
@@ -195,9 +194,9 @@ const MainRouter = ({ children }) => {
           errorElement: <div>404</div>,
         },
         {
-          path:"subjectlist",
-          element : <SubjectList/>,
-          errorElement: <div>404</div>
+          path: "subjectlist",
+          element: <SubjectList />,
+          errorElement: <div>404</div>,
         },
         {
           path: "facultylist",
@@ -248,7 +247,7 @@ const MainRouter = ({ children }) => {
         {
           path: "viewExam/:id",
           element: <ViewExam />,
-          errorElement:<div>404</div>
+          errorElement: <div>404</div>,
         },
         {
           path: "update-exam/:id",
@@ -259,25 +258,25 @@ const MainRouter = ({ children }) => {
           element: <AddRole />,
         },
         {
-          path:"userprofile",
-          element:<UserProfile/>
+          path: "userprofile",
+          element: <UserProfile />,
         },
         {
-          path:"allquestion",
-          element:<Allquestions/>
+          path: "allquestion",
+          element: <Allquestions />,
         },
         {
-          path:"creditRequestList",
-          element:<CreditRequestList/>
+          path: "creditRequestList",
+          element: <CreditRequestList />,
         },
         {
-          path:"subject/:id",
-          element:<GridList/>
+          path: "subject/:id",
+          element: <GridList />,
         },
         {
-          path:"examdetails/:id",
-          element:<ExamDetails/>
-        }
+          path: "examdetails/:id",
+          element: <ExamDetails />,
+        },
       ],
     },
 
