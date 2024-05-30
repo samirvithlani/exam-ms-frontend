@@ -48,7 +48,7 @@ export default function Login() {
   };
   const handleGoogleSignIn = () => {
     // window.location.href = "http://localhost:3000/google/callback";
-    window.location.href = "https://exam-ms.onrender.com/google/callback"
+    window.location.href = "https://exam-ms.onrender.com/google/callback";
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,135 +111,148 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {isLoading  ?  <CustomeLoader /> :
-      <>
-      <CssBaseline />
+      {isLoading ? (
+        <CustomeLoader />
+      ) : (
+        <>
+          <CssBaseline />
 
-      <Grid
-        container
-        spacing={2}
-        width="100%"
-        sx={{
-          borderRadius: "8px",
-          mt: 2,
-          ml: 0.1,
-          p: 2,
-        }}
-      >
-        <Grid container style={{ height: "100vh" }}>
           <Grid
-            item
-            xs={6}
-            sm={6}
-            md={6}
-            lg={6}
-            xl={6}
-            sx={{ ml: 1, textAlign: "center" }}
+            container
+            spacing={2}
+            width="100%"
+            sx={{
+              borderRadius: "8px",
+              mt: 2,
+              ml: 0.1,
+              p: 2,
+            }}
           >
-            <img
-              src={loginpagImage3}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </Grid>
-         <Grid item xs={12} sm={5} md={5} lg={5} xl={5} sx={{ ml: 1 }}>
-            <Box
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
-              <Typography
-                component="h1"
-                variant="h5"
-                sx={{ fontFamily: "Lato" }}
+            <Grid container style={{ height: "100vh" }}>
+              <Grid
+                item
+                xs={6}
+                sm={6}
+                md={6}
+                lg={6}
+                xl={6}
+                sx={{ ml: 1, textAlign: "center" }}
               >
-                Log in
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{ mt: 1 }}
-              >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  error={!validation.email}
-                  helperText={!validation.email && "Email is required"}
-                  onChange={(e) => handleFieldChange("email", e.target.value)}
+                <img
+                  src={loginpagImage3}
+                  style={{ width: "100%", height: "100%" }}
                 />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  error={!validation.password}
-                  helperText={!validation.password && "Password is required"}
-                  onChange={(e) =>
-                    handleFieldChange("password", e.target.value)
-                  }
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+              </Grid>
+              <Grid item xs={12} sm={5} md={5} lg={5} xl={5} sx={{ ml: 1 }}>
+                <Box
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
-                  Log In
-                </Button>
-                <Grid item xs={12} sm={6} md={6} lg={6} xl={6} sx={{ ml: 1 }}>
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={handleGoogleSignIn}
-                  // startIcon={<GoogleIcon />} 
-                >
-                  Sign up with Google
-                </Button>
-
-              </Box>
+                  <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
+                  <Typography
+                    component="h1"
+                    variant="h5"
+                    sx={{ fontFamily: "Lato" }}
+                  >
+                    Log in
+                  </Typography>
+                  <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    sx={{ mt: 1 }}
+                  >
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                      autoFocus
+                      error={!validation.email}
+                      helperText={!validation.email && "Email is required"}
+                      onChange={(e) =>
+                        handleFieldChange("email", e.target.value)
+                      }
+                    />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      error={!validation.password}
+                      helperText={
+                        !validation.password && "Password is required"
+                      }
+                      onChange={(e) =>
+                        handleFieldChange("password", e.target.value)
+                      }
+                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      Log In
+                    </Button>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={6}
+                      lg={6}
+                      xl={6}
+                      sx={{ ml: 1 }}
+                    >
+                      <Box
+                        sx={{
+                          marginTop: 1,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          type="button"
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 1, mb: 2 }}
+                          onClick={handleGoogleSignIn}
+                          // startIcon={<GoogleIcon />}
+                        >
+                          LOGIN with Google
+                        </Button>
+                      </Box>
+                    </Grid>
+                    <Grid container>
+                      <Grid item>
+                        <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
+                      </Grid>
+                    </Grid>
+                    <Grid item>
+                      <Link to={"/forgotpassword"}>{"ForgotPassword?"}</Link>
+                    </Grid>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
           </Grid>
-                <Grid container>
-                  <Grid item>
-                    <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
-                  </Grid>
-                </Grid>
-                  <Grid item>
-                  <Link to = {"/forgotpassword"}>{"ForgotPassword?"}</Link>
-                  </Grid>
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
 
-      <ToastContainer />
-      </>    }
+          <ToastContainer />
+        </>
+      )}
     </ThemeProvider>
   );
 }
