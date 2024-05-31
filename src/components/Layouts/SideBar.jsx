@@ -40,16 +40,20 @@ export const SideBar = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
   const [subjects, setsubjects] = useState([]);
   const [expandedSubject, setExpandedSubject] = useState(null);
-
+  const [Loading,setisloading] = useState(false)
   useEffect(() => {
     setOpenLogoutDialog(false);
-    fetchsubject()
+    // fetchsubject()
   }, []);
  const fetchsubject = async () =>{
   try {
+    setisloading(true)
     const response = await axios.get("/subject");
-    console.log(response.data,"data");
-    setsubjects(response.data)
+    if(response.status===200){
+      setsubjects(response.data)
+      setisloading(false)
+    }
+    // console.log(response.data,"data");
   } catch (error) {
     console.log(error,"error");
   }

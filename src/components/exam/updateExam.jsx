@@ -151,7 +151,6 @@
     const { register, handleSubmit ,reset} = useForm();
 
     const submitHandler = async (data) => {
-      // debugger
       console.log(examData,"exam data");
       const updatedFields = {};
       console.log(nameValue,"name value");
@@ -170,7 +169,6 @@
       if (perQuestionMarksValue !== examData.perQuestionmarks) {
         updatedFields.perQuestionmarks = perQuestionMarksValue;
       }
-      // debugger
     if(examData.stream){
       if(selectedStream !== examData.stream.name){
           updatedFields.stream = selectedStream

@@ -80,7 +80,6 @@
     
     
     const handleSubmit = async () => {
-      // debugger
       setIsSubmitting(true); // Disable button
 
       const _id = Cookies.get('_id');

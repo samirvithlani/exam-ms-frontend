@@ -31,7 +31,6 @@ export const ExamDetails = () => {
   };
   const fetchexams = async () => {
     const response = await axios.get(`/exam/${id}`);
-    console.log(response);
     setQuestions(response.data);
 
   };

@@ -95,7 +95,6 @@ export default function Login() {
         console.error("Signup failed");
       }
     } catch (error) {
-      // debugger
       setisLoading(false);
       if (error.response && error.response.status === 401) {
         const errorMessage = error.response.data.message;

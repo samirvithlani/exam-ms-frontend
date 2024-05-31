@@ -7,7 +7,6 @@ function GoogleCallback() {
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get("token");
     if (token) {
-      debugger
       // const decodedData = atob(token); // decode the string
 
     const decodetoken = jwtDecode(token)

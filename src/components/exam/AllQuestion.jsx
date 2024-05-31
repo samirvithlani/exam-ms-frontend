@@ -5,6 +5,7 @@ import axios from 'axios';
 
 function MCQQuestion({ question, options }) {
   return (
+    
     <Accordion>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -18,7 +19,6 @@ function MCQQuestion({ question, options }) {
           {options.map((option, index) => (
             <ListItem key={index}>
               <ListItemText primary={`• ${option}`} />
-
             </ListItem>
           ))}
         </List>
@@ -28,19 +28,31 @@ function MCQQuestion({ question, options }) {
 }
 
 function App() {
-    const [question,setquestion] = useState([])
-    useEffect(()=>{
-        fetchData()
-    },[])
-    const fetchData = async() =>{
-      const response = await  axios.get('/mcq')
-      setquestion(response.data)
-    }
+  const [questions, setQuestions] = useState([]);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/mcq');
+      const numberedQuestions = response.data.map((question, index) => ({
+        ...question,
+        question: `${index + 1}. ${question.question}`
+      }));
+      setQuestions(numberedQuestions);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <div>
-      {question.map((question, index) => (
+      <Typography variant="h4" gutterBottom>
+        All Question List
+      </Typography>
+      {questions.map((question, index) => (
         <MCQQuestion 
           key={index}
           question={question.question} 
@@ -49,7 +61,7 @@ function App() {
             question.Option2,
             question.Option3,
             question.Option4
-          ]} 
+          ]}
         />
       ))}
     </div>
