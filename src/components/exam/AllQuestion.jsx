@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import {
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import axios from "axios";
+import QuestionList from "../CustomeCopmonent/QuestionList";
 
 function MCQQuestion({ question, options }) {
   return (
-    
     <Accordion>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -36,10 +44,10 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('/mcq');
+      const response = await axios.get("/mcq");
       const numberedQuestions = response.data.map((question, index) => ({
         ...question,
-        question: `${index + 1}. ${question.question}`
+        question: `${index + 1}. ${question.question}`,
       }));
       setQuestions(numberedQuestions);
     } catch (error) {
@@ -53,14 +61,15 @@ function App() {
         All Question List
       </Typography>
       {questions.map((question, index) => (
-        <MCQQuestion 
+        <QuestionList
           key={index}
-          question={question.question} 
+          question={question.question}
+          type={question.type} // Assuming each question has a "type" field
           options={[
             question.Option1,
             question.Option2,
             question.Option3,
-            question.Option4
+            question.Option4,
           ]}
         />
       ))}

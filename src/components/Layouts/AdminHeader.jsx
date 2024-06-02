@@ -22,7 +22,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
-const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
+const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
     setAnchorEl(event.currentTarget);
   };
   useEffect(() => {
-        setOpenLogoutDialog(false);
+    setOpenLogoutDialog(false);
   }, []);
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -50,9 +50,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
     Cookies.remove("id", { path: "" });
     navigate("/login");
   };
- const handlewallet =()=>{
-  navigate("/userDasboard/wallet")
- }
+  const handlewallet = () => {
+    navigate("/userDasboard/wallet");
+  };
   return (
     <Box className="main-box">
       <AppBar
@@ -66,7 +66,13 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
       >
         <Container maxWidth="fluid">
           <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-            <IconButton onClick={toggleSidebar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleSidebar}
+              sx={{ color: isExpanded ? "#fff" : "#fff" }} // Change color based on sidebar state
+            >
               {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
             <Typography
@@ -77,13 +83,20 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
             </Typography>
             <Box sx={{ width: "100px" }}></Box>
             <div style={{ flexGrow: 1 }} />
-            <IconButton color="rgb(255 255 255)" sx={{color:"rgb(255 255 255)"}}>
+            <IconButton
+              color="rgb(255 255 255)"
+              sx={{ color: "rgb(255 255 255)" }}
+            >
               <NotificationsIcon />
             </IconButton>
-            <IconButton color="white" onClick={handleMenuClick} sx={{color:"rgb(255 255 255)"}}>
+            <IconButton
+              color="white"
+              onClick={handleMenuClick}
+              sx={{ color: "rgb(255 255 255)" }}
+            >
               <AccountCircleIcon />
             </IconButton>
-            <IconButton color="white"  onClick={handlewallet}>
+            <IconButton color="white" onClick={handlewallet}>
               <AccountBalanceWalletIcon />
             </IconButton>
             <Menu
@@ -93,7 +106,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
             >
               <MenuItem
                 component={Link}
-                to={name === 'STUDENT PANEL' ? '/userDasboard' : '/adminDashboard'}
+                to={
+                  name === "STUDENT PANEL" ? "/userDasboard" : "/adminDashboard"
+                }
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Home</Typography>
@@ -101,8 +116,11 @@ const AdminHeader = ({ isExpanded, toggleSidebar ,name}) => {
               <MenuItem
                 component={Link}
                 // to="/adminDashboard/userprofile"
-                to={name === 'STUDENT PANEL' ? '/userDasboard/userprofile' : '/adminDashboard/userprofile'}
-
+                to={
+                  name === "STUDENT PANEL"
+                    ? "/userDasboard/userprofile"
+                    : "/adminDashboard/userprofile"
+                }
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Profile</Typography>
