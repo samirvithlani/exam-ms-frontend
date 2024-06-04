@@ -3,12 +3,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -18,8 +14,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import GoogleIcon from "@mui/icons-material/Google";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
-import { Paper } from "@mui/material";
+import loginImage from "../../assets/images/loginImage3.svg";
+import { Link } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -28,10 +27,7 @@ const defaultTheme = createTheme({
     },
   },
 });
-import loginpagImage from "../../assets/images/loginpage.jpg";
-import loginpagImage1 from "../../assets/images/loginpage1.png";
-import loginpagImage2 from "../../assets/images/loginpage2.svg";
-import loginpagImage3 from "../../assets/images/loginImage3.svg";
+
 export default function Login() {
   const [isLogin, setisLogin] = useState(false);
   const [isLoading, setisLoading] = React.useState(false);
@@ -40,16 +36,18 @@ export default function Login() {
     email: true,
     password: true,
   });
+
   const handleFieldChange = (fieldName, value) => {
     setValidation((prevValidation) => ({
       ...prevValidation,
       [fieldName]: !!value,
     }));
   };
+
   const handleGoogleSignIn = () => {
-    // window.location.href = "http://localhost:3000/google/callback";
     window.location.href = "https://exam-ms.onrender.com/google/callback";
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setisLoading(true);
@@ -70,6 +68,7 @@ export default function Login() {
     setValidation(updatedValidation);
 
     if (!isValid) {
+      setisLoading(false);
       return;
     }
     try {
@@ -78,34 +77,31 @@ export default function Login() {
       if (response.status === 200) {
         setisLogin(true);
         setisLoading(false);
-        // toast.success(message);
         const { _id, name, role, token } = response.data;
         Cookies.set("_id", _id);
         Cookies.set("name", name);
         Cookies.set("token", token);
         Cookies.set("role", role);
-        if (role == "student") {
-          navigate("/userDasboard");
-        } else if (role == "faculty") {
+        if (role === "student") {
+          navigate("/userDashboard");
+        } else if (role === "faculty") {
           navigate("/facultyDashboard");
         } else {
           navigate("/adminDashboard");
         }
       } else {
-        console.error("Signup failed");
+        console.error("Login failed");
       }
     } catch (error) {
       setisLoading(false);
       if (error.response && error.response.status === 401) {
         const errorMessage = error.response.data.message;
         toast.error(errorMessage);
-        console.error("Server responded with a 400 error:", errorMessage);
+        console.error("Server responded with a 401 error:", errorMessage);
       } else {
-        setisLoading(false);
         console.error("Error occurred:", error);
       }
     }
-    // navigate('/dashboard')
   };
 
   return (
@@ -115,140 +111,122 @@ export default function Login() {
       ) : (
         <>
           <CssBaseline />
-
-          <Grid
-            container
-            spacing={2}
-            width="100%"
-            sx={{
-              borderRadius: "8px",
-              mt: 2,
-              ml: 0.1,
-              p: 2,
-            }}
-          >
-            <Grid container style={{ height: "100vh" }}>
-              <Grid
-                item
-                xs={6}
-                sm={6}
-                md={6}
-                lg={6}
-                xl={6}
-                sx={{ ml: 1, textAlign: "center" }}
-              >
-                <img
-                  src={loginpagImage3}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={5} md={5} lg={5} xl={5} sx={{ ml: 1 }}>
-                <Box
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}></Avatar>
-                  <Typography
-                    component="h1"
-                    variant="h5"
-                    sx={{ fontFamily: "Lato" }}
-                  >
-                    Log in
-                  </Typography>
+          <Container component="main" maxWidth="md">
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <img
+                    src={loginImage}
+                    alt="login"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
                   <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{ mt: 1 }}
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
                   >
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      autoFocus
-                      error={!validation.email}
-                      helperText={!validation.email && "Email is required"}
-                      onChange={(e) =>
-                        handleFieldChange("email", e.target.value)
-                      }
-                    />
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      error={!validation.password}
-                      helperText={
-                        !validation.password && "Password is required"
-                      }
-                      onChange={(e) =>
-                        handleFieldChange("password", e.target.value)
-                      }
-                    />
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
+                    <Avatar sx={{ m: 1, bgcolor: "#673AB7" }}>
+                      <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography
+                      component="h1"
+                      variant="h5"
+                      sx={{ fontFamily: "Lato" }}
                     >
-                      Log In
-                    </Button>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={6}
-                      lg={6}
-                      xl={6}
-                      sx={{ ml: 1 }}
+                      Log in
+                    </Typography>
+                    <Box
+                      component="form"
+                      onSubmit={handleSubmit}
+                      noValidate
+                      sx={{ mt: 1 }}
                     >
-                      <Box
-                        sx={{
-                          marginTop: 1,
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        error={!validation.email}
+                        helperText={!validation.email && "Email is required"}
+                        onChange={(e) =>
+                          handleFieldChange("email", e.target.value)
+                        }
+                      />
+                      <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        error={!validation.password}
+                        helperText={
+                          !validation.password && "Password is required"
+                        }
+                        onChange={(e) =>
+                          handleFieldChange("password", e.target.value)
+                        }
+                      />
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
                       >
-                        <Button
-                          type="button"
-                          fullWidth
-                          variant="contained"
-                          sx={{ mt: 1, mb: 2 }}
-                          onClick={handleGoogleSignIn}
-                          // startIcon={<GoogleIcon />}
-                        >
-                          LOGIN with Google
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid container>
-                      <Grid item>
-                        <Link to={"/"}>{"Don't have an account? Sign Up"}</Link>
+                        Log In
+                      </Button>
+                      <Button
+                        type="button"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        sx={{ mb: 1 }}
+                        onClick={handleGoogleSignIn}
+                        startIcon={<GoogleIcon />}
+                      >
+                        Log in with Google
+                      </Button>
+                      <Grid container justifyContent="flex-end">
+                        <Grid item>
+                          <Typography>
+                            <Link to="/">
+                              {"Don't have an account? Sign Up"}
+                            </Link>
+                          </Typography>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                    <Grid item>
-                      <Link to={"/forgotpassword"}>{"ForgotPassword?"}</Link>
-                    </Grid>
+                      <Grid container justifyContent="flex-end">
+                        <Grid item>
+                          <Typography>
+                            <Link to="/forgotpassword">
+                              {"Forgot password?"}
+                            </Link>
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Box>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-
+            </Box>
+          </Container>
           <ToastContainer />
         </>
       )}
