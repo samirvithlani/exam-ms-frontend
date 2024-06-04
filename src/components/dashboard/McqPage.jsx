@@ -132,7 +132,9 @@
             {questions.map((question) => (
               <Grid item xs={12} key={question._id}>
                 <Typography variant="h6" gutterBottom>
-                  {question.question}
+                  {/* {question.question} */}
+                  <div dangerouslySetInnerHTML={{ __html: question.question }} />
+
                 </Typography>
                 <FormControl component="fieldset">
                   {question.isMultiselectedQuestion ? (

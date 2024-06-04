@@ -80,7 +80,7 @@ export const ViewExam = () => {
       {questions.map((question) => (
         <Grid item key={question.id} xs={12} style={{ ...QuestioncardStyle }}>
           <Typography variant="h6" gutterBottom>
-            {question.question}
+          <div dangerouslySetInnerHTML={{ __html: question.question }} />
           </Typography>
           <ul style={{ padding: 0, margin: 0, listStyleType: "none" }}>
             <li>

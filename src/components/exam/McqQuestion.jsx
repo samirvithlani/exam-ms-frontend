@@ -15,10 +15,13 @@ import {
   FormLabel,
   RadioGroup,
   Radio,
+  TextareaAutosize
 } from "@mui/material";
 import axios from "axios";
 import { isEqual } from "lodash";
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import "../../assets/layouts/layout.module.css";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
@@ -76,6 +79,7 @@ export const McqQuestion = () => {
   const [totalQuestions, setTotalQuestions] = useState(noOfQuestions);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isMultiselectedQuestion, setIsMultiselect] = useState("");
+  const [question, setQuestion] = useState(""); // State to store the question content
 
   // Function to handle multiselect change
 
@@ -94,6 +98,7 @@ export const McqQuestion = () => {
     setSelectedOption(event.target.value);
   };
   const handleAddOption = () => {
+    // console.log(data,"data");
     if (options.length < 8) {
       setOptions((prevOptions) => [...prevOptions, ""]);
     } else {
@@ -101,9 +106,18 @@ export const McqQuestion = () => {
     }
   };
   const handleRemoveOption = (index) => {
-    setOptions((prevOptions) => prevOptions.filter((_, i) => i !== index));
+    setOptions((prevOptions) => {
+      const updatedOptions = prevOptions.filter((_, i) => i !== index);
+      // If the removed option is the correct option, clear the correct option value as well
+      if (index === 0) {
+        setSelectedOption("");
+      }
+      return updatedOptions;
+    });
     setButtonDisabled(false);
+    reset() // Make sure to reset the buttonDisabled state
   };
+  
   const defaultTheme = createTheme();
   const {
     register,
@@ -198,6 +212,7 @@ export const McqQuestion = () => {
         fetchStreams(stdId);
       } else {
         setStreams([]);
+        setSelectedStream("");
         fetchSubjects("", stdId);
       }
     } catch (error) {
@@ -223,6 +238,9 @@ export const McqQuestion = () => {
     setIsMultiselect(event.target.value === "true");
   };
   const submitHandler = async (data) => {
+    // debugger
+    console.log(questionsList);
+    debugger
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
@@ -231,7 +249,7 @@ export const McqQuestion = () => {
     if (!data.fileUpload || data.fileUpload === undefined) {
       try {
         response = await axios.post("/mcqmany", { questions: questionsList });
-        navigate("/admindashboard/examlist");
+        navigate("/admindashboard/subjectlist");
         toast.success("Question Added Successfully ...");
       } catch (error) {
         if (error.response.status === 409) {
@@ -247,7 +265,7 @@ export const McqQuestion = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        navigate("/admindashboard/examlist");
+        navigate("/admindashboard/subjectlist");
         toast.success("Question Added Successfully ...");
       } catch (error) {
         if (error.response.status === 409) {
@@ -278,6 +296,9 @@ export const McqQuestion = () => {
 
   const handleAddQuestion = () => {
     const data = getValues();
+    
+    console.log(question,"question");
+    console.log(data,"data")
     const isValid = validateQuestionData(data);
 
     if (isValid) {
@@ -290,13 +311,17 @@ export const McqQuestion = () => {
         const questionWithMultiselect = {
           ...data,
           isMultiselectedQuestion,
+          question: question
         };
-
+         const questions = {
+          question
+         }
         if (Subject && Stream !== "NA" && difficulty && std && Topic) {
           setQuestionsList((prevList) => [
             ...prevList,
             {
               ...questionWithMultiselect,
+              // questions,
               Subject,
               Stream,
               difficulty,
@@ -307,6 +332,8 @@ export const McqQuestion = () => {
         } else {
           setQuestionsList((prevList) => [
             ...prevList,
+            // questions,
+            // {question:question},
             { ...questionWithMultiselect },
           ]);
         }
@@ -326,6 +353,10 @@ export const McqQuestion = () => {
         toast.error("Question already exists in the list");
       }
     }
+  };
+  const handleQuestionChange = (content) => {
+    console.log(content,"content");
+    setQuestion(content);
   };
 
   const validateQuestionData = (data) => {
@@ -478,19 +509,8 @@ export const McqQuestion = () => {
                 </Grid>
               )}
               <InputLabel htmlFor="question">Question</InputLabel>
-              <TextField
-                autoComplete="given-title"
-                name="question"
-                // required
-                fullWidth
-                id="question"
-                label="question"
-                autoFocus
-                {...register("question")}
-              />
-              {errors.question && (
-                <span style={{ color: "red" }}>{errors.question.message}</span>
-              )}
+              <ReactQuill value={question} onChange={setQuestion} />
+
               <Grid item xs={3}>
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Multiselect</FormLabel>
@@ -731,14 +751,21 @@ export const McqQuestion = () => {
               </Button>
 
               {/* Display the list of added questions */}
-              {questionsList.map((question, index) => (
+              {questionsList.map((questions, index) => (
                 <div key={index}>
+
                   <Typography variant="subtitle1">
                     Question {index + 1}:
                   </Typography>
-                  <pre>{JSON.stringify(question, null, 2)}</pre>
+                  {/* <pre>{String.raw`${question.question}`}</pre>  */}
+                  <pre>question:<div dangerouslySetInnerHTML={{ __html: question }} /></pre>
+
+                  <pre>
+                    
+                    {JSON.stringify(questions, null, 2)}</pre>
                 </div>
               ))}
+                                  {/* <div dangerouslySetInnerHTML={{ __html: question }} /> */}
 
                 <Button
                   type="submit" 

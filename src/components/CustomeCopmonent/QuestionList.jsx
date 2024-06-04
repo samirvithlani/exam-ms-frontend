@@ -48,7 +48,9 @@ const QuestionList = ({ question, type, options }) => {
         aria-controls="panel-content"
         id="panel-header"
       >
-        <Typography>{question}</Typography>
+        <div dangerouslySetInnerHTML={{ __html: question }} />
+
+        {/* <Typography>{question}</Typography> */}
       </AccordionSummary>
       <AccordionDetails>
         {renderOptions()}

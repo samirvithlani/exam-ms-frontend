@@ -24,12 +24,15 @@ export const UserExamDetails = () => {
     setisLoading(true);
     try {
       const response = await axios.get("/mcq");
+      if(response.status===200){
+        setisLoading(false);
+
+      }
       setAllQuestions(response.data);
     } catch (error) {
       console.log("error ", error);
       setisLoading(false);
     }
-    setisLoading(false);
   };
   const fetchexams = async () => {
     setisLoading(true);

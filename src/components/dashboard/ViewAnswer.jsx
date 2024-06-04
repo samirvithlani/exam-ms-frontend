@@ -141,7 +141,9 @@ export const ViewAnswer = () => {
                     aria-controls={`option${mcqIndex}-content`}
                     id={`option${mcqIndex}-header`}
                   >
-                    <Typography>{`${mcqIndex + 1}. ${mcqAnswer.question.question}`}</Typography>
+                                                      <div dangerouslySetInnerHTML={{ __html: mcqAnswer.question.question }} />
+{/*  */}
+                    {/* <Typography>{`${mcqIndex + 1}. ${mcqAnswer.question.question}`}</Typography> */}
                   </AccordionSummary>
                   <AccordionDetails>
                     <ul>
