@@ -294,19 +294,11 @@ export const StudentDashboard = () => {
                 variant="h4"
                 sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
               >
-                Portal Detail
+                Number of Exams Taken by Subject
               </Typography>
               <Typography variant="body1"></Typography>
-              <Grid
-                xs={12}
-                sm={12}
-                md={6.1}
-                lg={6.1}
-                xl={6.1}
-                sx={{ mt: 2 }}
-                
-              >
-                <PieComponent chartType="pie" />
+              <Grid xs={12} sm={12} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
+                <PieComponent chartType="pie" apiToCall="subject" />
               </Grid>
             </Grid>
           </Grid>
@@ -332,17 +324,14 @@ export const StudentDashboard = () => {
               direction="column"
               spacing={0}
             >
-              <Typography variant="h4">Card 4</Typography>
-              <Grid
-                xs={12}
-                sm={6.1}
-                md={6.1}
-                lg={6.1}
-                xl={6.1}
-                sx={{ mt: 2 }}
-                
+              <Typography
+                variant="h4"
+                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
               >
-                <PieComponent chartType="bar" />
+                Subject Wise Exam Marks
+              </Typography>
+              <Grid xs={12} sm={6.1} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
+                <PieComponent chartType="bar" apiToCall="examMarks" />
               </Grid>
             </Grid>
           </Grid>
