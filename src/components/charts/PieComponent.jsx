@@ -1,33 +1,114 @@
-import { Box } from '@mui/material';
-import React from 'react';
-import { Pie, Line, Bar } from 'react-chartjs-2';
+import { Box, Typography } from "@mui/material";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Pie, Line, Bar } from "react-chartjs-2";
+import Cookies from "js-cookie";
 
-export const PieComponent = ({ chartType }) => {
-    const data = {
-        labels: ['Group A', 'Group B', 'Group C', 'Group D'],
-        datasets: [
-            {
-                label: 'Data',
-                data: [400, 300, 300, 200],
-                backgroundColor: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'],
-            },
-        ],
-    };
+export const PieComponent = ({ chartType, apiToCall }) => {
+  const [chartData, setChartData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const options = {
-        responsive: true,
-        
-        //maintainAspectRatio: false, // Let CSS handle aspect ratio
-    };
-
-    switch (chartType) {
-        case 'pie':
-            return <Box sx={{width:"100%",minWidth:"220px",height:"auto"}}> <Pie data={data} options={options} /></Box>;
-        case 'line':
-            return <Line data={data} options={options} />;
-        case 'bar':
-            return <Box sx={{width:"100%",minWidth:"220px",height:"auto"}}> <Bar data={data} options={options} /></Box>;
-        default:
-            return null; // Render nothing if an invalid chart type is provided
+  useEffect(() => {
+    // Call the appropriate function based on the prop value
+    if (apiToCall === "examMarks") {
+      getLoogedinUserDataExamMarksVise();
+    } else if (apiToCall === "subject") {
+      getLoggedInUserDataSubjectVise();
     }
+  }, [apiToCall]);
+
+  const getLoogedinUserDataExamMarksVise = async () => {
+    const _id = Cookies.get("_id");
+
+    try {
+      const response = await axios.get("/chart2/" + _id);
+      const dataFromApi = response.data;
+
+      if (dataFromApi && dataFromApi.length > 0) {
+        const labels = dataFromApi.map(item => item.examName);
+        const data = dataFromApi.map(item => item.marks);
+
+        const newData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Exam Marks",
+              data: data,
+              backgroundColor: ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"],
+            },
+          ],
+        };
+        setChartData(newData);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
+
+  const getLoggedInUserDataSubjectVise = async () => {
+    const _id = Cookies.get("_id");
+
+    try {
+      const response = await axios.get("/chart1/" + _id);
+      const dataFromApi = response.data;
+
+      if (dataFromApi && dataFromApi.length > 0) {
+        const labels = dataFromApi.map(item => item.subject);
+        const data = dataFromApi.map(item => item.totalExams);
+
+        const newData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Exam Count",
+              data: data,
+              backgroundColor: ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"],
+            },
+          ],
+        };
+        setChartData(newData);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
+
+  const options = {
+    responsive: true,
+  };
+
+  if (isLoading) {
+    return <Typography variant="body1">Loading...</Typography>;
+  }
+
+  if (!chartData || (chartData.labels.length === 0 && chartData.datasets[0].data.length === 0)) {
+    return <Typography variant="body1">Not enough data to show chart.</Typography>;
+  }
+
+  switch (chartType) {
+    case "pie":
+      return (
+        <Box sx={{ width: "100%", minWidth: "220px", height: "auto" }}>
+          <Pie data={chartData} options={options} />
+        </Box>
+      );
+    case "line":
+      return <Line data={chartData} options={options} />;
+    case "bar":
+      return (
+        <Box sx={{ width: "100%", minWidth: "220px", height: "auto"}}>
+          <Bar data={chartData} options={options} />
+        </Box>
+      );
+    default:
+      return null; // Render nothing if an invalid chart type is provided
+  }
 };
