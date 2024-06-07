@@ -118,7 +118,9 @@
         console.log(error, "erroro");
       }
     };
-
+    const HtmlLabel = ({ html }) => (
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    );
     return (
       <div>
         <Paper sx={paperStyle} className="responsive-container">
@@ -151,7 +153,9 @@
                                   onChange={(e) => handleAnswerChange(question._id, e.target.checked ? [...selectedAnswers[question._id], optionNumber] : selectedAnswers[question._id].filter(item => item !== optionNumber))}
                                 />
                               }
-                              label={question[key]}
+                              // label={question[key]}
+                              label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+
                             />
                           );
                         }
@@ -172,7 +176,9 @@
                               key={optionNumber}
                               value={optionNumber}
                               control={<Radio />}
-                              label={question[key]}
+                              // label={question[key]}
+                              label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+
                             />
                           );
                         }

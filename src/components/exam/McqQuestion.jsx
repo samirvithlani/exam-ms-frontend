@@ -105,6 +105,7 @@ export const McqQuestion = () => {
       setButtonDisabled(true);
     }
   };
+  
   const handleRemoveOption = (index) => {
     setOptions((prevOptions) => {
       const updatedOptions = prevOptions.filter((_, i) => i !== index);
@@ -237,6 +238,8 @@ export const McqQuestion = () => {
   const handleMultiselectChange = (event) => {
     setIsMultiselect(event.target.value === "true");
   };
+ 
+  
   const submitHandler = async (data) => {
     // debugger
     console.log(questionsList);
@@ -296,9 +299,9 @@ export const McqQuestion = () => {
 
   const handleAddQuestion = () => {
     const data = getValues();
-    
-    console.log(question,"question");
-    console.log(data,"data")
+    // console.log(options,"options ")
+    // console.log(question,"question");
+    // console.log(data,"data")
     const isValid = validateQuestionData(data);
 
     if (isValid) {
@@ -308,10 +311,17 @@ export const McqQuestion = () => {
       );
 
       if (!isDuplicate) {
+        
+        const optionsObject = options.reduce((acc, option, index) => {
+          acc[`Option${index + 1}`] = option; 
+          return acc;
+        }, {});
+        // console.log(optionsObject,"opject");
         const questionWithMultiselect = {
           ...data,
           isMultiselectedQuestion,
-          question: question
+          question: question,
+          ...optionsObject
         };
          const questions = {
           question
@@ -348,7 +358,8 @@ export const McqQuestion = () => {
         setSelectedStandards("");
         setIsMultiselect("");
         setOptions((prevOptions) => ["","","",""]);
-        reset();
+        setQuestion('')
+        // reset();
       } else {
         toast.error("Question already exists in the list");
       }
@@ -424,7 +435,13 @@ export const McqQuestion = () => {
     borderRadius: "15px",
     height: "100%",
   };
-
+  const handleOptionTextChange = (index, value) => {
+    setOptions((prevOptions) => {
+      const updatedOptions = [...prevOptions];
+      updatedOptions[index] = value;
+      return updatedOptions;
+    });
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <MySnackBar />
@@ -538,7 +555,7 @@ export const McqQuestion = () => {
                   <InputLabel htmlFor={`Option${index + 1}`}>
                     {`Option${index + 1}`}
                   </InputLabel>
-                  <TextField
+                  {/* <TextField
                     autoComplete="given-title"
                     name={`Option${index + 1}`}
                     fullWidth
@@ -546,7 +563,13 @@ export const McqQuestion = () => {
                     label={`Option${index + 1}`}
                     // autoFocus
                     {...register(`Option${index + 1}`)}
-                  />
+                  /> */}
+                  <ReactQuill
+                      value={option}
+                      onChange={(value) => handleOptionTextChange(index, value)}
+                      placeholder={`Enter option ${index + 1} here`}
+                      style={{ width: '90%' }}
+                    />
                   {index >= 4 && (
                     <IconButton
                       aria-label="remove-option"
@@ -758,10 +781,12 @@ export const McqQuestion = () => {
                     Question {index + 1}:
                   </Typography>
                   {/* <pre>{String.raw`${question.question}`}</pre>  */}
-                  <pre>question:<div dangerouslySetInnerHTML={{ __html: question }} /></pre>
+                  {/* <pre>question:<div dangerouslySetInnerHTML={{ __html:questions.question }} /></pre> */}
+                  <pre>options:<div dangerouslySetInnerHTML={{ __html:questions.option }} /></pre>
+
 
                   <pre>
-                    
+                  question:<div dangerouslySetInnerHTML={{ __html:questions.question }} />
                     {JSON.stringify(questions, null, 2)}</pre>
                 </div>
               ))}

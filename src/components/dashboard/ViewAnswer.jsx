@@ -53,7 +53,9 @@ export const ViewAnswer = () => {
       color: 'white',
     },
   }
-
+  const HtmlContent = ({ content }) => (
+    <div dangerouslySetInnerHTML={{ __html: content }} />
+  );
   return (
     <Box sx={{ padding: 2 }}>
       <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -141,7 +143,7 @@ export const ViewAnswer = () => {
                     aria-controls={`option${mcqIndex}-content`}
                     id={`option${mcqIndex}-header`}
                   >
-                                                      <div dangerouslySetInnerHTML={{ __html: mcqAnswer.question.question }} />
+                  <div dangerouslySetInnerHTML={{ __html: mcqAnswer.question.question }} />
 {/*  */}
                     {/* <Typography>{`${mcqIndex + 1}. ${mcqAnswer.question.question}`}</Typography> */}
                   </AccordionSummary>
@@ -158,10 +160,11 @@ export const ViewAnswer = () => {
                               }}
                             >
                               {mcqAnswer.givenanswer === key ? (
-                                <strong>{mcqAnswer.question[key]}</strong>
-                              ) : (
-                                mcqAnswer.question[key]
-                              )}
+  <strong dangerouslySetInnerHTML={{ __html: mcqAnswer.question[key] }} />
+) : (
+  <span dangerouslySetInnerHTML={{ __html: mcqAnswer.question[key] }} />
+)}
+
                               {mcqAnswer.givenanswer === key ? ' (Given Answer)' : null}
                               {mcqAnswer.question.correctOption === key ? ' (Correct Answer)' : null}
                             </li>

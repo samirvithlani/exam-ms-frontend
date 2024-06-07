@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const QuestionList = ({ question, type, options }) => {
+  const [expanded, setExpanded] = useState(false);
+  const maxLength = 50; // Define the maximum length of the question before truncation
+
+  const handleChange = () => {
+    setExpanded(!expanded);
+  };
+
   const renderOptions = () => {
     switch (type) {
       case 'MCQ':
@@ -33,24 +40,31 @@ const QuestionList = ({ question, type, options }) => {
           <List>
             {options.map((option, index) => (
               <ListItem key={index}>
-                <ListItemText primary={`• ${option}`} />
-              </ListItem>
+            <ListItemText
+            primary={<div dangerouslySetInnerHTML={{ __html: `• ${option}` }} />}
+            />
+            </ListItem>
             ))}
           </List>
         );
     }
   };
 
+  const getTruncatedQuestion = () => {
+    if (question.length > maxLength && !expanded) {
+      return `${question.substring(0, maxLength)}...`;
+    }
+    return question;
+  };
+
   return (
-    <Accordion>
+    <Accordion expanded={expanded} onChange={handleChange}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel-content"
         id="panel-header"
       >
-        <div dangerouslySetInnerHTML={{ __html: question }} />
-
-        {/* <Typography>{question}</Typography> */}
+        <Typography dangerouslySetInnerHTML={{ __html: getTruncatedQuestion() }} />
       </AccordionSummary>
       <AccordionDetails>
         {renderOptions()}
