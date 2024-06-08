@@ -24,6 +24,7 @@
     const [isSubmitting, setIsSubmitting] = useState(false); // State for button disable
 
     useEffect(() => {
+      alert("if you will refresh page or go back your exam will be reset automatically")
       fetchQuestions();
     }, [id]);
 

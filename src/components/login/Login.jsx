@@ -83,7 +83,7 @@ export default function Login() {
         Cookies.set("token", token);
         Cookies.set("role", role);
         if (role === "student") {
-          navigate("/userDashboard");
+          navigate("/userDasboard");
         } else if (role === "faculty") {
           navigate("/facultyDashboard");
         } else {
