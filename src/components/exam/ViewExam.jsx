@@ -80,21 +80,29 @@ export const ViewExam = () => {
       {questions.map((question) => (
         <Grid item key={question.id} xs={12} style={{ ...QuestioncardStyle }}>
           <Typography variant="h6" gutterBottom>
-            {question.question}
+          <div dangerouslySetInnerHTML={{ __html: question.question }} />
           </Typography>
           <ul style={{ padding: 0, margin: 0, listStyleType: "none" }}>
-            <li>
-              <Typography variant="body1">OPTION 1: {question.Option1}</Typography>
-            </li>
-            <li>
-              <Typography variant="body1">OPTION 2: {question.Option2}</Typography>
-            </li>
-            <li>
-              <Typography variant="body1">OPTION 3: {question.Option3}</Typography>
-            </li>
-            <li>
-              <Typography variant="body1">OPTION 4: {question.Option4}</Typography>
-            </li>
+          <li>
+      <Typography variant="body1">
+        OPTION 1: <div dangerouslySetInnerHTML={{ __html: question.Option1 }} />
+      </Typography>
+    </li>
+    <li>
+      <Typography variant="body1">
+        OPTION 2: <div dangerouslySetInnerHTML={{ __html: question.Option2 }} />
+      </Typography>
+    </li>
+    <li>
+      <Typography variant="body1">
+        OPTION 3: <div dangerouslySetInnerHTML={{ __html: question.Option3 }} />
+      </Typography>
+    </li>
+    <li>
+      <Typography variant="body1">
+         <div dangerouslySetInnerHTML={{ __html: question.Option4 }} />
+      </Typography>
+    </li>
           </ul>
         </Grid>
       ))}
