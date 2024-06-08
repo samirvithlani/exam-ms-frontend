@@ -44,18 +44,29 @@ const Historyofuser = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 280,
       renderCell: (params) => (
+        <>
         <Button
           variant="contained"
           color="primary"
           size="small"
           onClick={() => viewAnswer(params.row.id)}
+          style={{ marginRight: '8px' }}
         >
           View Answer
         </Button>
-      ),
-    },
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          onClick={() => reattemptExam(params.row.id)}
+        >
+          Reattempt Exam
+        </Button>
+      </>
+    ),
+  },
   ];
 
   const viewAnswer = (id) => {

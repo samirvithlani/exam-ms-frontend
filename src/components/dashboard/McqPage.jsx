@@ -119,7 +119,9 @@
         console.log(error, "erroro");
       }
     };
-
+    const HtmlLabel = ({ html }) => (
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    );
     return (
       <div>
         <Paper sx={paperStyle} className="responsive-container">
@@ -133,7 +135,9 @@
             {questions.map((question) => (
               <Grid item xs={12} key={question._id}>
                 <Typography variant="h6" gutterBottom>
-                  {question.question}
+                  {/* {question.question} */}
+                  <div dangerouslySetInnerHTML={{ __html: question.question }} />
+
                 </Typography>
                 <FormControl component="fieldset">
                   {question.isMultiselectedQuestion ? (
@@ -150,7 +154,9 @@
                                   onChange={(e) => handleAnswerChange(question._id, e.target.checked ? [...selectedAnswers[question._id], optionNumber] : selectedAnswers[question._id].filter(item => item !== optionNumber))}
                                 />
                               }
-                              label={question[key]}
+                              // label={question[key]}
+                              label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+
                             />
                           );
                         }
@@ -171,7 +177,9 @@
                               key={optionNumber}
                               value={optionNumber}
                               control={<Radio />}
-                              label={question[key]}
+                              // label={question[key]}
+                              label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+
                             />
                           );
                         }
