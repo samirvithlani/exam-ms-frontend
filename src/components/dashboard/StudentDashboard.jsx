@@ -70,6 +70,7 @@ export const StudentDashboard = () => {
           borderRadius: "8px",
           p: 2,
           ml:0.1,
+          mr: 0.1,
           
         }}
       >
@@ -83,11 +84,12 @@ export const StudentDashboard = () => {
             height: "400px",
             borderRadius: "20px",
             // mt: 2,
-            ml: 0.1,
+            ml:"0.1px",
             p: 2,
             background: "rgb(1,0,128)",
             pt: 10,
             gap: 1,
+            width: "100%",
           }}
         >
           <Grid
@@ -281,7 +283,8 @@ export const StudentDashboard = () => {
             style={{
               background: "rgb(255,255,255)",
               ...cardStyle,
-              height: 380,
+              height: 455,
+              minHeight: 455,
               mb: 2,
               marginTop: 10,
               border: "1px solid white",
@@ -315,7 +318,8 @@ export const StudentDashboard = () => {
             style={{
               background: "rgb(255,255,255)",
               ...cardStyle,
-              height: 380,
+              height: 455,
+              minHeight: 455,
               mb: 2,
               marginTop: 10,
               border: "1px solid white",
