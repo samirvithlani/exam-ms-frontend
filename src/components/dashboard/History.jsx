@@ -1,89 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import {
   Box,
   Grid,
-  Typography,
-  useTheme,
   Paper,
+  Typography,
+  Button,
   ThemeProvider,
   createTheme,
   useMediaQuery,
   CssBaseline,
+  CircularProgress,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
-import { useDemoData } from "@mui/x-data-grid-generator";
 
 const Historyofuser = () => {
   const navigate = useNavigate();
   const [histories, setHistories] = useState([]);
-  const theme = useTheme();
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     fetchData();
   }, []);
-  const { data } = useDemoData({
-    dataSet: "Commodity",
-    rowLength: 100,
-    maxColumns: 6,
-  });
-  const isMobile = useMediaQuery("(max-width:600px)");
 
-  const columns = [
-    { field: "displayid", headerName: "ID", width: 90 },
-    { field: "name", headerName: "Exam Name", width: 200 },
-    { field: "examType", headerName: "Exam Type", width: 150 },
-    { field: "noOfQuestions", headerName: "No. of Questions", width: 180 },
-    { field: "totalmarks", headerName: "Total Marks", width: 140 },
-    { field: "result", headerName: "Result", width: 130 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 280,
-      renderCell: (params) => (
-        <>
-        <Button
-          variant="contained"
-          color="primary"
-          size="small"
-          onClick={() => viewAnswer(params.row.id)}
-          style={{ marginRight: '8px' }}
-        >
-          View Answer
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="small"
-          onClick={() => reattemptExam(params.row.id)}
-        >
-          Reattempt Exam
-        </Button>
-      </>
-    ),
-  },
-  ];
-
-  const viewAnswer = (id) => {
-    navigate(`/userDasboard/viewAnswers/${id}`);
-  };
-  const paperStyle = {
-    p: 2,
-    display: "flex",
-    flexDirection: "column",
-    height: "600px",
-    backgroundColor: "white", // Set the background color to grey
-    m1: 2,
-  };
   const fetchData = async () => {
     const _id = Cookies.get("_id");
     try {
-      setisLoading(true);
+      setIsLoading(true);
       const response = await axios.get(`/userhistory/${_id}`);
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,
@@ -95,67 +41,90 @@ const Historyofuser = () => {
         result: exam.result,
       }));
       setHistories(filteredData);
-      setisLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsLoading(false);
     }
   };
 
+  const viewAnswer = (id) => {
+    navigate(`/userDasboard/viewAnswers/${id}`);
+  };
+
+  const reattemptExam = (id) => {
+    navigate(`/userDasboard/reattemptExam/${id}`);
+  };
+
+  const paperStyle = {
+    padding: 2,
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "white",
+    margin: 2,
+  };
+
   const defaultTheme = createTheme();
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Paper sx={paperStyle} className="responsive-container">
-      {
-            isLoading ? <CustomeLoader /> : null
-          }
+      <Box sx={{ p: 1 }}>
         <Typography
           variant="h4"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+          sx={{ fontWeight: "bold", marginBottom: 2,color: "#010080"}}
         >
-          Exam List
+          Attempted Exams
         </Typography>
-
-        <Grid
-          container
-          item
-          xs={12}
-          sx={{
-            width: isMobile ? "60vw" : "80vw",
-            height: isMobile ? "50vh" : "90vh",
-            overflowX: "auto",
-          }}
-        >
-          <Grid
-            container
-            item
-            xs={12}
-            sx={{
-              width: isMobile ? "45vw" : "80vw",
-              height: isMobile ? "50vh" : "50vh",
-              overflowX: "auto",
-            }}
+        {isLoading ? (
+          <Box
+            sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}
           >
-            
-            <DataGrid
-              autoHeight
-              sx={{
-                border: "none",
-                fontFamily: "Lato",
-                height: "100%",
-                // overflowY:"auto"
-              }}
-              rows={histories}
-              columns={columns}
-              initialState={{
-                ...data.initialState,
-                pagination: { paginationModel: { pageSize: 5 } },
-              }}
-              disableSelectionOnClick
-            />
+            <CustomeLoader/>
+          </Box>
+        ) : (
+          <Grid container spacing={2}>
+            {histories.map((history) => (
+              <Grid item xs={12} sm={6} md={4} key={history.id}>
+                <Paper sx={paperStyle}>
+                  <Typography variant="h6" gutterBottom>
+                    {history.name}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Exam Type:</strong> {history.examType}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>No. of Questions:</strong> {history.noOfQuestions}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Total Marks:</strong> {history.totalmarks}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Result:</strong> {history.result}
+                  </Typography>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => viewAnswer(history.id)}
+                    >
+                      View Answer
+                    </Button>
+                    <Button
+                      disabled
+                      variant="contained"
+                      sx={{ backgroundColor: "#FF0000" }}
+                      onClick={() => reattemptExam(history.id)}
+                    >
+                      Reattempt Exam
+                    </Button>
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
           </Grid>
-        </Grid>
-      </Paper>
+        )}
+      </Box>
     </ThemeProvider>
   );
 };
