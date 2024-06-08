@@ -40,25 +40,24 @@ export const FacultySideBar = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
   const [subjects, setsubjects] = useState([]);
   const [expandedSubject, setExpandedSubject] = useState(null);
-  const [Loading,setisloading] = useState(false)
+  const [Loading, setisloading] = useState(false);
   useEffect(() => {
     setOpenLogoutDialog(false);
     // fetchsubject()
   }, []);
- const fetchsubject = async () =>{
-  try {
-    setisloading(true)
-    const response = await axios.get("/subject");
-    if(response.status===200){
-      setsubjects(response.data)
-      setisloading(false)
+  const fetchsubject = async () => {
+    try {
+      setisloading(true);
+      const response = await axios.get("/subject");
+      if (response.status === 200) {
+        setsubjects(response.data);
+        setisloading(false);
+      }
+      // console.log(response.data,"data");
+    } catch (error) {
+      console.log(error, "error");
     }
-    // console.log(response.data,"data");
-  } catch (error) {
-    console.log(error,"error");
-  }
- 
-}
+  };
   const handleOpenLogoutDialog = () => {
     setOpenLogoutDialog(true);
   };
@@ -71,7 +70,7 @@ export const FacultySideBar = () => {
     // Remove cookies and navigate to login page
     Cookies.remove("token");
     Cookies.remove("name");
-    Cookies.remove("_id");  
+    Cookies.remove("_id");
     Cookies.remove("role");
     navigate("/login");
   };
@@ -86,7 +85,6 @@ export const FacultySideBar = () => {
       linkUrl: "",
       textColor: "#7D8FB3",
       activeMenuFor: ["adminDashboard"],
-     
     },
     {
       id: 3,
@@ -113,7 +111,7 @@ export const FacultySideBar = () => {
       activeMenuFor: ["createExam"],
       logoImage: AddIcon,
     },
-   
+
     {
       id: 9,
       name: "Student List",
@@ -130,8 +128,7 @@ export const FacultySideBar = () => {
       activeMenuFor: ["subject"],
       logoImage: AddIcon,
     },
-   
-  
+
     {
       id: 13,
       name: "Add Topic",
@@ -154,7 +151,7 @@ export const FacultySideBar = () => {
       textColor: "#7D8FB3",
       activeMenuFor: ["updateexam"],
     },
-   
+
     {
       id: 17,
       name: "userprofile",
@@ -168,8 +165,7 @@ export const FacultySideBar = () => {
       activeMenuFor: ["allquestion"],
       logoImage: ListIcon,
     },
-    
-   
+
     {
       id: 21,
       name: "Exam Details",
@@ -195,7 +191,6 @@ export const FacultySideBar = () => {
   };
 
   
-  //   <div>
   //     <AdminHeader
   //       isExpanded={isExpanded}
   //       toggleSidebar={toggleSidebar}
@@ -332,6 +327,7 @@ export const FacultySideBar = () => {
               borderRight: 0,
               width: isExpanded ? drawerWidth : partialWidth,
               height: "100%", // Set height to 100% of the viewport height
+              minHeight:"630px",
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",
@@ -350,9 +346,7 @@ export const FacultySideBar = () => {
               <div key={res.name}>
                 <ListItem
                   className={
-                    res.activeMenuFor.some((x) =>
-                      location.pathname.includes(x)
-                    )
+                    res.activeMenuFor.some((x) => location.pathname.includes(x))
                       ? "activebtn"
                       : res.linkUrl == "null"
                       ? "disabled-link"
@@ -440,11 +434,7 @@ export const FacultySideBar = () => {
         </Drawer>
         <Box
           component="main"
-          sx={{
-            width: "100%",
-            mt: "50px",
-            height: "100%",
-          }}
+          sx={{ width: "100%",  height: "100%",mt:3,ml:1,mr:1}}
         >
           <Outlet />
         </Box>
@@ -461,5 +451,4 @@ export const FacultySideBar = () => {
       </Dialog>
     </div>
   );
-  
 };

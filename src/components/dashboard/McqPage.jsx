@@ -34,7 +34,7 @@
       flexDirection: "column",
       height: "auto",
       backgroundColor: "white",
-      m1: 2,
+      
     };
 
     const fetchQuestions = async () => {

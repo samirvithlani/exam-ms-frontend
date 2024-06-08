@@ -141,39 +141,113 @@ const MainRouter = ({ children }) => {
       ],
     },
     {
-      path: "/facultyDashboard",
-      element: <FacultySideBar />,
-      errorElement: <div>404</div>,
+      element: <PrivateRoutes />,
       children: [
         {
-          path: "",
-          element: <FacultyDashboard />,
+          path: "/facultyDashboard",
+          element: <FacultySideBar />,
           errorElement: <div>404</div>,
-        },
-        {
-          path: "createexam",
-          element: <CreateExam />,
-          errorElement: <div>404</div>,
-        },
-        {
-          path: "examlist",
-          element: <ExamList />,
-          errorElement: <div>404</div>,
-        },
-        {
-          path: "mcqquestion/:id",
-          element: <McqQuestion />,
-          errorElement: <div>404</div>,
-        },
-        {
-          path: "mcqquestion",
-          element: <McqQuestion />,
-          errorElement: <div>404</div>,
-        },
-        {
-          path: "studentlist",
-          element: <StudentList />,
-          errorElement: <div>404</div>,
+          children: [
+            {
+              path: "",
+              element: <AdminDashboard />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "createexam",
+              element: <CreateExam />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "examlist",
+              element: <ExamList />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "subjectlist",
+              element: <SubjectList />,
+              errorElement: <div>404</div>,
+            },
+            // {
+            //   path: "facultylist",
+            //   element: <UserGrid />,
+            //   errorElement: <div>404</div>,
+            // },
+
+            // {
+            //   path: "companylist",
+            //   element: <CompanyList />,
+            //   errorElement: <div>404</div>,
+            // },
+            {
+              path: "mcqquestion/:id",
+              element: <McqQuestion />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "mcqquestion",
+              element: <McqQuestion />,
+              errorElement: <div>404</div>,
+            },
+            // {
+            //   path: "studentlist",
+            //   element: <StudentList />,
+            //   errorElement: <div>404</div>,
+            // },
+            // {
+            //   path: "subject",
+            //   element: <AddSubject />,
+            //   errorElement: <dov>404</dov>,
+            // },
+            // {
+            //   path: "standard",
+            //   element: <AddStandard />,
+            //   errorElement: <div>404</div>,
+            // },
+            // {
+            //   path: "stream",
+            //   element: <AddStream />,
+            //   errorElement: <div>404</div>,
+            // },
+            {
+              path: "topic",
+              element: <AddTopic />,
+              errorElement: <div>404 </div>,
+            },
+            {
+              path: "viewExam/:id",
+              element: <ViewExam />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "update-exam/:id",
+              element: <UpdateExam />,
+            },
+            // {
+            //   path: "add/:role",
+            //   element: <AddRole />,
+            // },
+            {
+              path: "userprofile",
+              element: <UserProfile />,
+            },
+            {
+              path: "allquestion",
+              element: <Allquestions />,
+            },
+            // {
+            //   path: "creditRequestList",
+            //   element: <CreditRequestList />,
+            // },
+            {
+              path: "subject/:id",
+              element: <GridList />,
+            },
+            {
+              path: "examdetails/:id",
+              element: <ExamDetails />,
+            },
+          ],
         },
       ],
     },

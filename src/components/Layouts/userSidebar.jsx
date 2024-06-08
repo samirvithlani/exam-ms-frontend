@@ -172,7 +172,7 @@ export const UserSideBar = () => {
         </Drawer>
         <Box
           component="main"
-          sx={{ width: "100%",  height: "100%",mt:3,ml:3 }}
+          sx={{ width: "100%",  height: "100%",mt:3,ml:1,mr:1}}
         >
           {/* <Toolbar /> */}
           <Outlet />

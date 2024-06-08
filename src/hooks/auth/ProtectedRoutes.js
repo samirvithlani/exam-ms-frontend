@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Login from "../../components/login/Login";
 
 
 const useAuth = () => {
   const [isAuthenticated, setisAuthenticated] = useState(false);
+  const location = useLocation();
   useEffect(() => {
     const id = localStorage.getItem("id");
     if (id) {
       setisAuthenticated(true);
     }
-  }, []);
+  }, [location]);
   return isAuthenticated;
 };
 const ProtectedRoutes = () => {

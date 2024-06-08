@@ -480,11 +480,7 @@ export const SideBar = () => {
         </Drawer>
         <Box
           component="main"
-          sx={{
-            width: "100%",
-            mt: "50px",
-            height: "100%",
-          }}
+          sx={{ width: "100%",  height: "100%",mt:3,ml:1,mr:1}}
         >
           <Outlet />
         </Box>
