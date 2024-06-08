@@ -62,12 +62,15 @@ export const StudentDashboard = () => {
   return (
     <div style={{ height: "100vh", overflowY: "auto" }}>
       <Grid
+      
         container
         spacing={2}
         width="100%"
         sx={{
           borderRadius: "8px",
           p: 2,
+          ml:0.1,
+          
         }}
       >
         {/* First Row */}
