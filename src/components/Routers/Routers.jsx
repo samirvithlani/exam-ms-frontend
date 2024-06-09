@@ -48,6 +48,7 @@ import { ExamSubjectList } from "../exam/ExamSubjectList";
 import { UserExamDetails } from "../exam/UserExamDetails";
 import GoogleCallback from "../login/GoogleCallback";
 import { QuillDemo } from "../QuillDemo";
+import FacultyView from "../Layouts/FacultyView";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -359,6 +360,10 @@ const MainRouter = ({ children }) => {
             {
               path: "examdetails/:id",
               element: <ExamDetails />,
+            },
+            {
+              path: "facultyDetails/:id",
+              element: <FacultyView />,
             },
           ],
         },
