@@ -77,12 +77,7 @@ const CompanyList = () => {
     <Paper sx={paperStyle} className="responsive-container">
       {isLoading ? <CustomeLoader /> : null}
       <Grid style={{ height: 400, width: "100%" }}>
-        <Typography
-          variant="h4"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
-        >
-          Company List
-        </Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Company List ::</Typography>
 
         <Button
           variant="contained"

@@ -122,9 +122,7 @@ export const AddStandard = () => {
                 backgroundColor: '#f0f0f0',
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                Add Standard
-              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Standard::</Typography>
               <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%' }}>
                 <TextField
                   margin="normal"
@@ -160,9 +158,7 @@ export const AddStandard = () => {
                 backgroundColor: '#f0f0f0',
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                All Standards
-              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Standard List ::</Typography>
               <Box sx={{ width: '100%', mb: 2 }}>
                 <TextField
                   fullWidth

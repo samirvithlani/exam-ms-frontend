@@ -155,9 +155,7 @@ export const AddStream = () => {
                 backgroundColor: "#f0f0f0",
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                Add Stream
-              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Stream ::</Typography>
               <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: "100%" }}>
                 <TextField
                   margin="normal"
@@ -209,9 +207,7 @@ export const AddStream = () => {
                 backgroundColor: "#f0f0f0",
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                All Streams
-              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Stream List ::</Typography>
               <Box sx={{ width: "100%", mb: 2 }}>
                 <TextField
                   fullWidth

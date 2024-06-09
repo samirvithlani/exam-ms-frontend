@@ -39,9 +39,7 @@ export const SubjectList = () => {
 
   return (
     <Box padding="20px">
-      <Typography variant="h4" gutterBottom>
-        Subject List
-      </Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Subject List ::</Typography>
 
       {Loading && <CustomeLoader />}
 

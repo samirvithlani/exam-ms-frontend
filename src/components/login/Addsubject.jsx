@@ -174,9 +174,7 @@ export const AddSubject = () => {
                 backgroundColor: "#f0f0f0",
               }}
             >
-              <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                Add Subject
-              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Subject ::</Typography>
               <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -249,13 +247,7 @@ export const AddSubject = () => {
                 backgroundColor: "#f0f0f0",
               }}
             >
-              <Typography
-                component="h1"
-                variant="h5"
-                sx={{ mb: 2 }}
-              >
-                All Subjects
-              </Typography>
+             <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>All Subjects ::</Typography>
               <Box sx={{ width: "100%", mb: 2 }}>
                 <TextField
                   fullWidth

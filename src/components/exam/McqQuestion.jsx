@@ -445,6 +445,7 @@ export const McqQuestion = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <MySnackBar />
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Question ::</Typography>
       <Grid
         container
         spacing={2}
@@ -476,12 +477,8 @@ export const McqQuestion = () => {
         </label>
       </Grid>
 
-      <Typography
-        variant="h4"
-        sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
-      >
-        ADD Question :
-      </Typography>
+      
+
       {/* </Typography> */}
       <Grid
         item
