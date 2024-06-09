@@ -1,34 +1,31 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import { useNavigate } from "react-router-dom";
-import { Box, Grid, Typography, useTheme, Paper, TextField } from '@mui/material';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { Card, CardContent, CardActions, Button, Grid, Typography, TextField, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 const StudentList = () => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [creditToAdd, setCreditToAdd] = useState('');
-  const[User,setUser] = useState('')
-  const theme = useTheme();
-
-  const { data } = useDemoData({
-    dataSet: 'Commodity',
-    rowLength: 100,
-    maxColumns: 6,
-  });
+  const [user, setUser] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+  const [filterCriteria, setFilterCriteria] = useState('');
 
   useEffect(() => {
     fetchdata();
   }, []);
 
+  useEffect(() => {
+    applyFilters();
+  }, [students, searchTerm, sortOrder, filterCriteria]);
+
   const fetchdata = async () => {
     setIsLoading(true);
-
     let response = await axios.get('/user');
     const facultyData = response.data.filter(user => user.role.role === 'student');
     let filterdata = facultyData.map((faculty, index) => ({
@@ -45,42 +42,113 @@ const StudentList = () => {
   }
 
   const handleAddCredit = async (userId) => {
-   
-    const user = await axios.get(`/user/${userId}`)
-    setUser(user.data.wallet._id)
-    if(user){
-      const data = {token:user.data.wallet.token +  parseFloat(creditToAdd)};
-    const addcredit = await axios.put(`/wallet/${User}`,data)
+    const user = await axios.get(`/user/${userId}`);
+    setUser(user.data.wallet._id);
+    if (user) {
+      const data = { token: user.data.wallet.token + parseFloat(creditToAdd) };
+      const addcredit = await axios.put(`/wallet/${user}`, data);
     }
     setCreditToAdd('');
     setSelectedUserId(null);
   }
 
-  const columns = [
-    { field: 'displayid', headerName: 'ID', width: 90 },
-    { field: 'firstname', headerName: 'Name', width: 200 },
-    { field: 'email', headerName: 'Email', width: 300 },
-    { field: 'role', headerName: 'Role', width: 300 },
-    { field: 'status', headerName: 'Status', width: 300 },
-    
-  ];
+  const applyFilters = () => {
+    let tempStudents = [...students];
+
+    if (searchTerm) {
+      tempStudents = tempStudents.filter(student =>
+        student.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.email.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (filterCriteria === 'a-z') {
+      tempStudents.sort((a, b) => a.firstname.localeCompare(b.firstname));
+    } else if (filterCriteria === 'recently_added') {
+      tempStudents.sort((a, b) => b.displayid - a.displayid);
+    }
+
+    setFilteredStudents(tempStudents);
+  };
 
   return (
     <Paper sx={{ p: 2, display: "flex", flexDirection: "column", height: "auto", backgroundColor: "white", m1: 2 }} className="responsive-container">
-      {isLoading ? <CustomeLoader /> : null}
+      {isLoading && <CustomeLoader />}
 
-      <Typography variant="h4" sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}>Student List</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Student List ::</Typography>
 
-      <Grid style={{ height: 400, width: '100%' }}>
-        <Grid container item xs={12} sx={{ width: "80vw", height: "50vh", overflowX: "auto", [theme.breakpoints.down("sm")]: { width: "90vw", height: "50vh" } }}>
-          <DataGrid
-            sx={{ border: "none", fontFamily: "Lato" }}
-            rows={students}
-            columns={columns}
-            initialState={{ ...data.initialState, pagination: { paginationModel: { pageSize: 5 } } }}
-            rowHeight={80}
+      <Grid container spacing={2} sx={{ mb: 2 }}>
+        <Grid item xs={12} sm={6} md={3}>
+          <TextField
+            fullWidth
+            label="Search"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Sort By</InputLabel>
+            <Select
+              value={filterCriteria}
+              onChange={(e) => setFilterCriteria(e.target.value)}
+              label="Sort By"
+            >
+              <MenuItem value="a-z">A to Z</MenuItem>
+              <MenuItem value="recently_added">Recently Added</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2}>
+        {filteredStudents.map((student) => (
+          <Grid item xs={12} sm={6} md={4} key={student.id}>
+            <Card sx={{ backgroundColor: '#f0f0f0', boxShadow: 3, borderRadius: 2 }}>
+              <CardContent>
+                <Typography variant="h5" component="div" sx={{ textTransform: 'uppercase', color: '#010080' }}>
+                  {student.firstname}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Email: {student.email}
+                </Typography>
+                {/* <Typography variant="body2" color="text.secondary">
+                  Role: {student.role}
+                </Typography> */}
+                <Typography variant="body2" color="text.secondary">
+                  Status: {student.status}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Credit: {student.credit}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Contact: {student.contact}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <TextField
+                  size="small"
+                  value={selectedUserId === student.id ? creditToAdd : ''}
+                  onChange={(e) => {
+                    setCreditToAdd(e.target.value);
+                    setSelectedUserId(student.id);
+                  }}
+                  placeholder="Add Credit"
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleAddCredit(student.id)}
+                  disabled={!creditToAdd || selectedUserId !== student.id}
+                  sx={{ ml: 1 }}
+                >
+                  Add
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Paper>
   );

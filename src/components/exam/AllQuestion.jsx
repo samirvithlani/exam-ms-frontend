@@ -45,6 +45,7 @@ function App() {
   const fetchData = async () => {
     try {
       const response = await axios.get("/mcq");
+      console.log
       const numberedQuestions = response.data.map((question, index) => ({
         ...question,
         question: `${index + 1}. ${question.question}`,
