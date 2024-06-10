@@ -1,45 +1,35 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import Button from "@mui/material/Button";
+import {
+  Button,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Paper,
+  Box,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Box, Grid, Typography, useTheme, Paper } from "@mui/material";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 
 const UserGrid = () => {
   const navigate = useNavigate();
   const [facultyUsers, setFacultyUsers] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [rolesData, setRolesData] = useState([]);
-  const theme = useTheme();
-  const { data } = useDemoData({
-    dataSet: "Commodity",
-    rowLength: 100,
-    maxColumns: 6,
-  });
-
-  const paperStyle = {
-    p: 2,
-    display: "flex",
-    flexDirection: "column",
-    height: "auto",
-    backgroundColor: "white",
-    m1: 2,
-  };
 
   useEffect(() => {
-    fetchdata();
+    fetchData();
     fetchRolesData();
   }, []);
 
   const fetchRolesData = async () => {
     try {
       const response = await axios.get("/role");
-      let data = response.data;
-      setRolesData(data);
+      setRolesData(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching roles data:", error);
     }
   };
 
@@ -53,115 +43,80 @@ const UserGrid = () => {
   };
 
   const handleViewFacultyClick = (id) => {
-    
-    console.log(id,"id");
     navigate(`/adminDashboard/facultyDetails/${id}`);
   };
 
-  const fetchdata = async () => {
-    setisLoading(true);
-    let response = await axios.get("/user");
-    const facultyData = response.data.filter(
-      (user) => user.role.role === "faculty"
-    );
-    let filterdata = facultyData.map((faculty, index) => ({
-      displayid: index + 1,
-      id: faculty._id,
-      firstname: faculty.firstname,
-      email: faculty.email,
-      role: faculty.role?.role,
-      status: faculty.status,
-    }));
-    setFacultyUsers(filterdata);
-    setisLoading(false);
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get("/user");
+      const facultyData = response.data.filter(
+        (user) => user.role.role === "faculty"
+      );
+      const formattedFacultyData = facultyData.map((faculty, index) => ({
+        id: faculty._id,
+        name: faculty.firstname,
+        email: faculty.email,
+        role: faculty.role?.role,
+        status: faculty.status,
+      }));
+      setFacultyUsers(formattedFacultyData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const columns = [
-    { field: "displayid", headerName: "ID", width: 90 },
-    { field: "firstname", headerName: "Name", width: 200 },
-    { field: "email", headerName: "Email", width: 300 },
-    { field: "role", headerName: "Role", width: 300 },
-    { field: "status", headerName: "Status", width: 300 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 150,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          onClick={() => handleViewFacultyClick(params.row.id)}
-        >
-          View Faculty
-        </Button>
-      ),
-    },
-  ];
-
   return (
-    <Paper sx={paperStyle} className="responsive-container">
-      {isLoading ? <CustomeLoader /> : null}
-      <Grid style={{ height: 400, width: "100%" }}>
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Faculty List ::</Typography>
-        <Button
-          variant="contained"
-          onClick={() => handleAddRoleClick("faculty")}
-          sx={{
-            fontSize: "12px",
-            padding: "5px 10px",
-            backgroundColor: "rgb(103,58,183)",
-            color: "white",
-            marginLeft: { xs: "auto", sm: 0 },
-            mt: { xs: "10px", sm: 0 },
-          }}
-        >
-          Add Faculty
-        </Button>
-        <Grid
-          container
-          item
-          xs={12}
-          md={12}
-          lg={12}
-          xl={12}
-          sx={{
-            width: "80vw",
-            height: "50vh",
-            overflowX: "auto",
-            [theme.breakpoints.down("sm")]: {
-              width: "100vw",
-              height: "50vh",
-            },
-          }}
-        >
-          <DataGrid
-            sx={{
-              border: "none",
-              fontFamily: "Lato",
-            }}
-            rows={facultyUsers}
-            columns={columns.map((column) => ({
-              ...column,
-              renderCell: column.renderCell
-                ? column.renderCell
-                : (params) => (
-                    <Grid container justifyContent="center" alignItems="center">
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                        fontFamily="Lato"
-                      >
-                        {params.value}
-                      </Typography>
-                    </Grid>
-                  ),
-            }))}
-            initialState={{
-              ...data.initialState,
-              pagination: { paginationModel: { pageSize: 5 } },
-            }}
-            rowHeight={80}
-          />
-        </Grid>
+    <Paper elevation={3} sx={{ p: 2, backgroundColor: "white", mt: 2 }}>
+      {isLoading && <CustomeLoader />}
+      <Typography variant="h4" fontWeight="bold" color="#010080" mb={1}>
+        Faculty List
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={() => handleAddRoleClick("faculty")}
+        sx={{
+          fontSize: 12,
+          padding: "5px 10px",
+          backgroundColor: "rgb(103,58,183)",
+          color: "white",
+          mt: { xs: 2, sm: 0 },
+          mb: 2,
+        }}
+      >
+        Add Faculty
+      </Button>
+      <Grid container spacing={2}>
+        {facultyUsers.map((user) => (
+          <Grid key={user.id} item xs={12} sm={6} md={4} lg={3}>
+            <Card sx={{ height: "100%",bgcolor:"gray" }}>
+              <CardContent>
+                <Typography variant="h5" component="div" mb={1}>
+                  {user.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  Email: {user.email}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  Role: {user.role}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  Status: {user.status}
+                </Typography>
+              </CardContent>
+              <Box sx={{ flexGrow: 1 }} />
+              <Button
+                onClick={() => handleViewFacultyClick(user.id)}
+                size="small"
+                variant="contained"
+              >
+                View Faculty
+              </Button>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Paper>
   );

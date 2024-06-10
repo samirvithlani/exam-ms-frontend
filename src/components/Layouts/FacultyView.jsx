@@ -1,6 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  Typography,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  FormGroup,
+  FormControl,
+  Paper,
+  Box,
+} from '@mui/material';
 
 const FacultyView = () => {
   const navigate = useNavigate();
@@ -21,19 +31,17 @@ const FacultyView = () => {
     try {
       const response = await axios.get('/subject');
       setSubjects(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.log(error, "error");
+      console.error("Error fetching subjects:", error);
     }
   };
 
   const fetchUser = async () => {
     try {
       const response = await axios.get(`/user/${id}`);
-      console.log(response?.data?.role?._id,"user");
       setUserData(response.data);
     } catch (error) {
-      console.log(error, "error");
+      console.error("Error fetching user data:", error);
     }
   };
 
@@ -42,9 +50,8 @@ const FacultyView = () => {
       const response = await axios.get(`/facultysubject/${id}`);
       const subjects = response.data.flatMap(data => data.subject.map(sub => sub._id));
       setSelectedSubjects(subjects);
-      console.log(subjects, "subjects");
     } catch (error) {
-      console.log(error, "error");
+      console.error("Error fetching faculty subjects:", error);
     }
   };
 
@@ -61,46 +68,49 @@ const FacultyView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(selectedSubjects, "selected subjects");
       const data = {
         userId: id,
         roleId: userData?.role?._id,
         subject: selectedSubjects
       };
-      console.log(data, "submit");
       await axios.post(`/facultysubject`, data);
       alert("Subjects assigned successfully");
       // navigate('/some-path'); 
     } catch (error) {
-      console.log(error, "error");
+      console.error("Error submitting data:", error);
     }
   };
 
   return (
-    <div>
-      <h1>Profile</h1>
+    <Paper sx={{ p: 3 }}>
+      <Typography variant="h4" mb={3}>Profile</Typography>
       {userData && (
-        <div>
-          <p>Name: {userData.firstname + ' ' + userData.lastname}</p>
-          <p>Email: {userData.email}</p>
-        </div>
+        <Box mb={3}>
+          <Typography>Name: {userData.firstname + ' ' + userData.lastname}</Typography>
+          <Typography>Email: {userData.email}</Typography>
+        </Box>
       )}
       <form onSubmit={handleSubmit}>
-        <h3>Assign Subjects</h3>
-        {subjects.map(subject => (
-          <div key={subject._id}>
-            <input
-              type="checkbox"
-              id={subject._id}
-              checked={selectedSubjects.includes(subject._id)}
-              onChange={() => handleCheckboxChange(subject._id)}
+        <Typography variant="h5" mb={2}>Assign Subjects</Typography>
+        <FormGroup>
+          {subjects.map(subject => (
+            <FormControlLabel
+              key={subject._id}
+              control={
+                <Checkbox
+                  checked={selectedSubjects.includes(subject._id)}
+                  onChange={() => handleCheckboxChange(subject._id)}
+                />
+              }
+              label={subject.name}
             />
-            <label htmlFor={subject._id}>{subject.name}</label>
-          </div>
-        ))}
-        <button type="submit">Submit</button>
+          ))}
+        </FormGroup>
+        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+          Submit
+        </Button>
       </form>
-    </div>
+    </Paper>
   );
 }
 

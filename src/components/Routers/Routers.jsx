@@ -151,8 +151,12 @@ const MainRouter = ({ children }) => {
           children: [
             {
               path: "",
-              element: <AdminDashboard />,
+              element: <FacultyDashboard />,
               errorElement: <div>404</div>,
+            },
+            {
+              path: "userprofile",
+              element: <UserProfile />,
             },
             {
               path: "createexam",
