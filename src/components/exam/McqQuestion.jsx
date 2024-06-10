@@ -31,6 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../assets/layouts/layout.module.css";
 import { MySnackBar } from "../MySnackBar";
 import { RemoveCircleOutline } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 export const McqQuestion = () => {
   const { id } = useParams();
@@ -80,6 +81,9 @@ export const McqQuestion = () => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isMultiselectedQuestion, setIsMultiselect] = useState("");
   const [question, setQuestion] = useState(""); // State to store the question content
+  const [userSubjects, setUserSubjects] = useState([]);
+  const userId = Cookies.get("_id");
+  const role = Cookies.get("role");
 
   // Function to handle multiselect change
 
@@ -93,7 +97,17 @@ export const McqQuestion = () => {
     fetchstd();
     fetchTypes();
     fetchdifficulty();
+    fetchUser();
   }, []);
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`/facultysubject/${userId}`);
+      const subjects = response?.data?.[0]?.subject || [];
+      setUserSubjects(subjects.map(subject => subject._id));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -152,14 +166,35 @@ export const McqQuestion = () => {
       console.error("Error fetching streams:", error);
     }
   };
-  const fetchSubjects = async (streamId, stdid) => {
+  // const fetchSubjects = async (streamId, stdid) => {
+  //   try {
+  //     if (stdid) {
+  //       let response = await axios.get(`/subjects/${stdid}`);
+  //       setSubjects(response.data);
+  //     } else {
+  //       const response = await axios.get(`/subject/${streamId}`);
+  //       setSubjects(response.data.result);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching subjects:", error);
+  //   }
+  // };
+  const fetchSubjects = async (streamId, stdId) => {
     try {
-      if (stdid) {
-        let response = await axios.get(`/subjects/${stdid}`);
-        setSubjects(response.data);
+      let response;
+      if (stdId) {
+        response = await axios.get(`/subjects/${stdId}`);
+        const subjects = role === "faculty"
+          ? response.data.filter((subject) => userSubjects.includes(subject._id))
+          : response.data;
+        setSubjects(subjects);
+        // setSubjects(response.data);
       } else {
-        const response = await axios.get(`/subject/${streamId}`);
-        setSubjects(response.data.result);
+        response = await axios.get(`/subject/${streamId}`);
+        const subjects = role === "faculty"
+          ? response.data.result.filter((subject) => userSubjects.includes(subject._id))
+          : response.data.result;
+        setSubjects(subjects);
       }
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -445,7 +480,7 @@ export const McqQuestion = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <MySnackBar />
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Question ::</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Question :</Typography>
       <Grid
         container
         spacing={2}
@@ -675,11 +710,17 @@ export const McqQuestion = () => {
                         {...register("Subject", validationSchema.subject)}
                         onChange={handleSubjectChange}
                       >
-                        {subjects.map((item) => (
-                          <MenuItem key={item._id} value={item._id}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
+                       {subjects.length > 0 ? (
+                    subjects.map((subject) => (
+                      <MenuItem key={subject._id} value={subject._id}>
+                        {subject.name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">
+                      Contact admin to assign the subject
+                    </MenuItem>
+                  )}
                       </Select>
                     </FormControl>
                   </Grid>

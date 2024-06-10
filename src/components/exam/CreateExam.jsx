@@ -26,6 +26,8 @@ import {
   FormControlLabel,
   FormLabel,
 } from "@mui/material";
+import Cookies from "js-cookie";
+
 export const CreateExam = () => {
   const [streams, setStreams] = useState([]);
   const [selectedStream, setSelectedStream] = useState("");
@@ -44,6 +46,10 @@ export const CreateExam = () => {
   const [question, setquestion] = useState("");
   const [Perquestionmark, setPerquestionmarks] = useState("");
   const [totalMarks, settotalmarks] = useState("");
+  const [userSubjects, setUserSubjects] = useState([]);
+  const userId = Cookies.get("_id");
+  const role = Cookies.get("role");
+
   const validationSchema = {
     Name: {
       required: {
@@ -101,11 +107,21 @@ export const CreateExam = () => {
     },
   };
   useEffect(() => {
+    fetchUser();
     fetchTypes();
     fetchstd();
     fetchdifficulty();
     totalmarks();
   }, [question, Perquestionmark]);
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`/facultysubject/${userId}`);
+      const subjects = response?.data?.[0]?.subject || [];
+      setUserSubjects(subjects.map(subject => subject._id));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   const totalmarks = () => {
     if (question !== "" && Perquestionmark !== "") {
       const totalMarks = parseInt(question) * parseInt(Perquestionmark);
@@ -132,14 +148,22 @@ export const CreateExam = () => {
   const handleIsTimeLimitChange = (event) => {
     setIsTimeLimit(event.target.value);
   };
-  const fetchSubjects = async (streamId, stdid) => {
+  const fetchSubjects = async (streamId, stdId) => {
     try {
-      if (stdid) {
-        let response = await axios.get(`/subjects/${stdid}`);
-        setSubjects(response.data);
+      let response;
+      if (stdId) {
+        response = await axios.get(`/subjects/${stdId}`);
+        const subjects = role === "faculty"
+          ? response.data.filter((subject) => userSubjects.includes(subject._id))
+          : response.data;
+        setSubjects(subjects);
+        // setSubjects(response.data);
       } else {
-        const response = await axios.get(`/subject/${streamId}`);
-        setSubjects(response.data.result);
+        response = await axios.get(`/subject/${streamId}`);
+        const subjects = role === "faculty"
+          ? response.data.result.filter((subject) => userSubjects.includes(subject._id))
+          : response.data.result;
+        setSubjects(subjects);
       }
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -448,11 +472,17 @@ export const CreateExam = () => {
                   {...register("subject", validationSchema.subject)}
                   onChange={handleSubjectChange}
                 >
-                  {subjects.map((item) => (
-                    <MenuItem key={item._id} value={item._id}>
-                      {item.name}
+                   {subjects.length > 0 ? (
+                    subjects.map((subject) => (
+                      <MenuItem key={subject._id} value={subject._id}>
+                        {subject.name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">
+                      Contact admin to assign the subject
                     </MenuItem>
-                  ))}
+                  )}
                 </Select>
               </FormControl>
             </Grid>
