@@ -18,6 +18,7 @@ const UserGrid = () => {
     rowLength: 100,
     maxColumns: 6,
   });
+
   const paperStyle = {
     p: 2,
     display: "flex",
@@ -26,10 +27,12 @@ const UserGrid = () => {
     backgroundColor: "white",
     m1: 2,
   };
+
   useEffect(() => {
     fetchdata();
     fetchRolesData();
   }, []);
+
   const fetchRolesData = async () => {
     try {
       const response = await axios.get("/role");
@@ -39,6 +42,7 @@ const UserGrid = () => {
       console.error("Error fetching data:", error);
     }
   };
+
   const handleAddRoleClick = (role) => {
     const roleData = rolesData.find((item) => item.role === role);
     if (roleData) {
@@ -47,6 +51,13 @@ const UserGrid = () => {
       console.log(`No data found for the ${role} role.`);
     }
   };
+
+  const handleViewFacultyClick = (id) => {
+    
+    console.log(id,"id");
+    navigate(`/adminDashboard/facultyDetails/${id}`);
+  };
+
   const fetchdata = async () => {
     setisLoading(true);
     let response = await axios.get("/user");
@@ -64,13 +75,28 @@ const UserGrid = () => {
     setFacultyUsers(filterdata);
     setisLoading(false);
   };
+
   const columns = [
     { field: "displayid", headerName: "ID", width: 90 },
     { field: "firstname", headerName: "Name", width: 200 },
     { field: "email", headerName: "Email", width: 300 },
     { field: "role", headerName: "Role", width: 300 },
     { field: "status", headerName: "Status", width: 300 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          onClick={() => handleViewFacultyClick(params.row.id)}
+        >
+          View Faculty
+        </Button>
+      ),
+    },
   ];
+
   return (
     <Paper sx={paperStyle} className="responsive-container">
       {isLoading ? <CustomeLoader /> : null}
@@ -84,8 +110,8 @@ const UserGrid = () => {
             padding: "5px 10px",
             backgroundColor: "rgb(103,58,183)",
             color: "white",
-            marginLeft: { xs: "auto", sm: 0 }, // Adjusted for responsiveness
-            mt: { xs: "10px", sm: 0 }, // Adjusted for responsiveness
+            marginLeft: { xs: "auto", sm: 0 },
+            mt: { xs: "10px", sm: 0 },
           }}
         >
           Add Faculty
@@ -115,24 +141,23 @@ const UserGrid = () => {
             rows={facultyUsers}
             columns={columns.map((column) => ({
               ...column,
-              renderCell: (params) => {
-                return (
-                  <Grid container justifyContent="center" alignItems="center">
-                    <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      fontFamily="Lato"
-                    >
-                      {params.value}
-                    </Typography>
-                  </Grid>
-                );
-              },
+              renderCell: column.renderCell
+                ? column.renderCell
+                : (params) => (
+                    <Grid container justifyContent="center" alignItems="center">
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        fontFamily="Lato"
+                      >
+                        {params.value}
+                      </Typography>
+                    </Grid>
+                  ),
             }))}
             initialState={{
               ...data.initialState,
               pagination: { paginationModel: { pageSize: 5 } },
-              
             }}
             rowHeight={80}
           />
