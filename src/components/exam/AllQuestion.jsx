@@ -50,20 +50,26 @@ function MCQQuestion({ question, options }) {
 function App() {
   const [questions, setQuestions] = useState([]);
   const [userSubjects, setUserSubjects] = useState([]);
+  const[subject,setsubject]=useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedStandard, setSelectedStandard] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
+  const [standards, setstandards] = useState([]);
+  const [difficultes, setdefficulties] = useState([]);
+  const[topics,settopics] = useState([]);
   const userId = Cookies.get("_id");
   const role = Cookies.get("role");
-
+  
   const fetchUser = async () => {
     try {
       const response = await axios.get(`/facultysubject/${userId}`);
       const subjects = response?.data?.[0]?.subject || [];
+
       setUserSubjects(subjects.map((subject) => subject._id));
+      setsubject(subjects);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -84,6 +90,9 @@ function App() {
   };
 
   useEffect(() => {
+    fetchstd();
+    fetchdifficulty();
+    fetchtopic();
     const fetchDataAsync = async () => {
       if (role === "faculty") {
         await fetchUser();
@@ -99,12 +108,12 @@ function App() {
         ? question.Subject._id === selectedSubject
         : true;
       const matchesStandard = selectedStandard
-        ? question.standard === selectedStandard
+        ? question.std === selectedStandard
         : true;
       const matchesDifficulty = selectedDifficulty
         ? question.difficulty === selectedDifficulty
         : true;
-      const matchesTopic = selectedTopic ? question.topic === selectedTopic : true;
+      const matchesTopic = selectedTopic ? question.Topic._id === selectedTopic : true;
       const matchesQuery = question.question
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -126,7 +135,31 @@ function App() {
     selectedTopic,
     questions,
   ]);
-
+  const fetchstd = async () => {
+    try {
+      const response = await axios.get("/getstd");
+      setstandards(response.data.data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+  const fetchdifficulty = async () => {
+    try {
+      const response = await axios.get("/difficulty");
+      let data = response.data;
+      setdefficulties(data);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+ const fetchtopic = async()=>{
+  try {
+    const response = await axios.get('/Topic');
+    settopics(response.data.result);
+  } catch (error) {
+    console.log(error,"err");
+  }
+ } 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -189,9 +222,9 @@ function App() {
                         <MenuItem value="">
                           <em>All Subjects</em>
                         </MenuItem>
-                        {userSubjects.map((subject) => (
-                          <MenuItem key={subject} value={subject}>
-                            {subject}
+                        {subject.map((subject) => (
+                          <MenuItem key={subject._id} value={subject._id}>
+                            {subject.name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -202,19 +235,20 @@ function App() {
                   <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
                     <InputLabel id="standard-filter-label">Filter by Standard</InputLabel>
                     <Select
-                      labelId="standard-filter-label"
-                      value={selectedStandard}
-                      onChange={handleStandardChange}
-                      label="Filter by Standard"
-                    >
-                      <MenuItem value="">
-                        <em>All Standards</em>
+                    labelId="standard-filter-label"
+                    value={selectedStandard}
+                    onChange={handleStandardChange}
+                    label="Filter by Standard"
+                  >
+                    <MenuItem value="">
+                      <em>All Standards</em>
+                    </MenuItem>
+                    {standards.map((standard) => (
+                      <MenuItem key={standard._id} value={standard._id}>
+                        {standard.std}
                       </MenuItem>
-                      {/* Add the standard options here */}
-                      <MenuItem value="standard1">Standard 1</MenuItem>
-                      <MenuItem value="standard2">Standard 2</MenuItem>
-                      {/* Add more standards as needed */}
-                    </Select>
+                    ))}
+                  </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -229,9 +263,11 @@ function App() {
                       <MenuItem value="">
                         <em>All Difficulty Levels</em>
                       </MenuItem>
-                      <MenuItem value="easy">Easy</MenuItem>
-                      <MenuItem value="medium">Medium</MenuItem>
-                      <MenuItem value="hard">Hard</MenuItem>
+                      {difficultes.map((item) => (
+                    <MenuItem key={item._id} value={item._id}>
+                      {item.difficulty}
+                    </MenuItem>
+                  ))}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -247,10 +283,12 @@ function App() {
                       <MenuItem value="">
                         <em>All Topics</em>
                       </MenuItem>
-                      {/* Add the topic options here */}
-                      <MenuItem value="topic1">Topic 1</MenuItem>
-                      <MenuItem value="topic2">Topic 2</MenuItem>
-                      {/* Add more topics as needed */}
+                      {topics.map((topic) => (
+                        <MenuItem key={topic._id} value={topic._id}>
+                          {topic.name}
+                        </MenuItem>
+                      ))}
+
                     </Select>
                   </FormControl>
                 </Grid>
