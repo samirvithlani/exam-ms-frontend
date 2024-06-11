@@ -1,49 +1,56 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation,useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
   Grid,
   Typography,
-  ListItemText
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Checkbox
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from "react-toastify";
 
 export const ExamDetails = () => {
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
 
- const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
+
   useEffect(() => {
     fetchexams();
     fetchallquestion();
   }, [id]);
+
   const fetchallquestion = async () => {
     try {
       const response = await axios.get("/mcq");
       setAllQuestions(response.data);
+      console.log("all questions", response.data);
     } catch (error) {
       console.log("error ", error);
     }
   };
+
   const fetchexams = async () => {
     const response = await axios.get(`/exam/${id}`);
     setQuestions(response.data);
-
   };
-  
-  const handleView = (
-    id,
-    subject,
-    stream,
-    difficulty,
-    standard,
-    topic,
-    type
-  ) => {
+
+  const handleView = (id, subject, stream, difficulty, standard, topic, type) => {
     navigate(`/adminDashboard/viewexam/${id}`, {
       state: { subject, stream, difficulty, standard, topic, type },
     });
@@ -64,46 +71,35 @@ export const ExamDetails = () => {
       console.log("Error while deleting exam:", error);
     }
   };
-  
-  const handleGenerateQuestions = async (
-    topicId,
-    noOfQuestions,
-    id,
-    difficultyId
-  ) => {
 
-    
+  const handleGenerateQuestions = async (topicId, noOfQuestions, id, difficultyId) => {
     try {
       const existingExamResponse = await axios.get(`/exam/${id}`);
       const existingExam = existingExamResponse.data;
-  
-      // Check how many more questions are needed
+
       const currentQuestionCount = existingExam.mcq.length;
       const additionalQuestionsNeeded = noOfQuestions - currentQuestionCount;
-  
+
       if (additionalQuestionsNeeded <= 0) {
         toast.info("Sufficient questions already available.");
         return;
       }
-  
+
       const filteredQuestions = allQuestions.filter(
-              (question) =>{
-                
-               return question.Topic._id === topicId && question.difficulty === difficultyId
-              }
-            
+        (question) =>
+          question.Topic._id === topicId && question.difficulty === difficultyId
       );
-  
+
       if (filteredQuestions.length < additionalQuestionsNeeded) {
         toast.error("Insufficient questions available for this topic.");
         return;
       }
-  
+
       const shuffledQuestions = filteredQuestions.sort(() => 0.5 - Math.random());
       const newQuestions = shuffledQuestions.slice(0, additionalQuestionsNeeded);
-  
-      const updatedQuestions = [ ...newQuestions];
-  
+
+      const updatedQuestions = [...newQuestions];
+
       const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
         mcq: updatedQuestions,
       });
@@ -115,7 +111,7 @@ export const ExamDetails = () => {
       toast.error("Failed to generate questions. Please try again.");
     }
   };
-  
+
   const handleAddQuestions = async (
     type,
     id,
@@ -159,6 +155,34 @@ export const ExamDetails = () => {
       navigate("/adminDashboard");
     }
   };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleToggleQuestion = (question) => {
+    const currentIndex = selectedQuestions.indexOf(question);
+    const newSelectedQuestions = [...selectedQuestions];
+
+    if (currentIndex === -1) {
+      newSelectedQuestions.push(question);
+    } else {
+      newSelectedQuestions.splice(currentIndex, 1);
+    }
+
+    setSelectedQuestions(newSelectedQuestions);
+  };
+
+  const handleSaveQuestions = () => {
+    // Logic to save selected questions to the exam
+    setOpenDialog(false);
+    toast.success("Questions selected successfully!");
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -361,7 +385,7 @@ export const ExamDetails = () => {
           <Button variant="contained" color="error" sx={{ mr: 1 }} onClick={() => handleDelete(id)}>
             Delete Exam
           </Button>
-          <Button variant="contained" color="primary" onClick={() => handleGenerateQuestions(
+          <Button variant="contained" sx={{ mr: 1 }} color="primary" onClick={() => handleGenerateQuestions(
             questions.examtopic?._id,
             questions.noofquestions,
             id,
@@ -369,33 +393,78 @@ export const ExamDetails = () => {
           )}>
             Generate Questions
           </Button>
-          <Button variant="contained" color="primary" 
-          onClick={() =>
-            handleAddQuestions(
-              "mcq",
-              id,
-              questions?.subject?.name,
-              questions?.stream?.name,
-              questions?.difficulty?.difficulty,
-              questions?.std?.std,
-              questions?.subject?._id,
-              questions?.stream?._id,
-              questions.examtopic?._id,
-              questions.difficulty?._id,
-              questions?.std?._id,
-              questions?.examtopic?.name,
-              questions?.examtype?.type,
-              questions?.examtype?._id,
-              questions.noOfQuestions
-            )
-          }
+          <Button variant="contained" color="primary"
+            onClick={() =>
+              handleAddQuestions(
+                "mcq",
+                id,
+                questions?.subject?.name,
+                questions?.stream?.name,
+                questions?.difficulty?.difficulty,
+                questions?.std?.std,
+                questions?.subject?._id,
+                questions?.stream?._id,
+                questions.examtopic?._id,
+                questions.difficulty?._id,
+                questions?.std?._id,
+                questions?.examtopic?.name,
+                questions?.examtype?.type,
+                questions?.examtype?._id,
+                questions.noOfQuestions
+              )
+            }
           >
-          Add Questions
+            Add Questions
+          </Button>
+          <Button variant="contained" sx={{ ml: 1 }} color="primary" onClick={handleOpenDialog}>
+            SELECT QUESTIONS
           </Button>
         </Box>
       </Grid>
+      <Dialog
+        fullScreen
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="select-questions-dialog-title"
+      >
+        <DialogTitle id="select-questions-dialog-title">
+          Select Questions
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleCloseDialog}
+            aria-label="close"
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            {allQuestions.map((question) => (
+              <ListItem key={question._id} button onClick={() => handleToggleQuestion(question)}>
+                <ListItemText primary={question.question} />
+                <ListItemSecondaryAction>
+                  <Checkbox
+                    edge="end"
+                    onChange={() => handleToggleQuestion(question)}
+                    checked={selectedQuestions.indexOf(question) !== -1}
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseDialog} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSaveQuestions} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
       <ToastContainer />
     </Grid>
   );
-  
 };
