@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardActions, Button, Grid, Typography, TextField, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 const StudentList = () => {
@@ -145,6 +145,7 @@ const StudentList = () => {
                 >
                   Add
                 </Button>
+                <Link to={`../studentDetail/${student.id}`} style={{ textDecoration: 'none' }}>DETAIL</Link>
               </CardActions>
             </Card>
           </Grid>

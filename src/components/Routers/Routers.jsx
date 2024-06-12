@@ -49,6 +49,7 @@ import { UserExamDetails } from "../exam/UserExamDetails";
 import GoogleCallback from "../login/GoogleCallback";
 import { QuillDemo } from "../QuillDemo";
 import FacultyView from "../Layouts/FacultyView";
+import StudentDetail from "../dashboard/StudentDetail";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -196,6 +197,11 @@ const MainRouter = ({ children }) => {
               errorElement: <div>404</div>,
             },
             {
+              path: "studentDetail/:id",
+              element: <StudentDetail />,
+              errorElement: <div>404</div>,
+            },
+            {
               path: "subject",
               element: <AddSubject />,
               errorElement: <dov>404</dov>,
@@ -310,6 +316,11 @@ const MainRouter = ({ children }) => {
             {
               path: "studentlist",
               element: <StudentList />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "studentDetail/:id",
+              element: <StudentDetail />,
               errorElement: <div>404</div>,
             },
             {
