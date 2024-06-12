@@ -155,10 +155,6 @@ const MainRouter = ({ children }) => {
               errorElement: <div>404</div>,
             },
             {
-              path: "userprofile",
-              element: <UserProfile />,
-            },
-            {
               path: "createexam",
               element: <CreateExam />,
               errorElement: <div>404</div>,
@@ -173,17 +169,17 @@ const MainRouter = ({ children }) => {
               element: <SubjectList />,
               errorElement: <div>404</div>,
             },
-            // {
-            //   path: "facultylist",
-            //   element: <UserGrid />,
-            //   errorElement: <div>404</div>,
-            // },
+            {
+              path: "facultylist",
+              element: <UserGrid />,
+              errorElement: <div>404</div>,
+            },
 
-            // {
-            //   path: "companylist",
-            //   element: <CompanyList />,
-            //   errorElement: <div>404</div>,
-            // },
+            {
+              path: "companylist",
+              element: <CompanyList />,
+              errorElement: <div>404</div>,
+            },
             {
               path: "mcqquestion/:id",
               element: <McqQuestion />,
@@ -194,26 +190,26 @@ const MainRouter = ({ children }) => {
               element: <McqQuestion />,
               errorElement: <div>404</div>,
             },
-            // {
-            //   path: "studentlist",
-            //   element: <StudentList />,
-            //   errorElement: <div>404</div>,
-            // },
-            // {
-            //   path: "subject",
-            //   element: <AddSubject />,
-            //   errorElement: <dov>404</dov>,
-            // },
-            // {
-            //   path: "standard",
-            //   element: <AddStandard />,
-            //   errorElement: <div>404</div>,
-            // },
-            // {
-            //   path: "stream",
-            //   element: <AddStream />,
-            //   errorElement: <div>404</div>,
-            // },
+            {
+              path: "studentlist",
+              element: <StudentList />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "subject",
+              element: <AddSubject />,
+              errorElement: <dov>404</dov>,
+            },
+            {
+              path: "standard",
+              element: <AddStandard />,
+              errorElement: <div>404</div>,
+            },
+            {
+              path: "stream",
+              element: <AddStream />,
+              errorElement: <div>404</div>,
+            },
             {
               path: "topic",
               element: <AddTopic />,
@@ -228,10 +224,10 @@ const MainRouter = ({ children }) => {
               path: "update-exam/:id",
               element: <UpdateExam />,
             },
-            // {
-            //   path: "add/:role",
-            //   element: <AddRole />,
-            // },
+            {
+              path: "add/:role",
+              element: <AddRole />,
+            },
             {
               path: "userprofile",
               element: <UserProfile />,
@@ -240,10 +236,10 @@ const MainRouter = ({ children }) => {
               path: "allquestion",
               element: <Allquestions />,
             },
-            // {
-            //   path: "creditRequestList",
-            //   element: <CreditRequestList />,
-            // },
+            {
+              path: "creditRequestList",
+              element: <CreditRequestList />,
+            },
             {
               path: "subject/:id",
               element: <GridList />,
@@ -251,6 +247,10 @@ const MainRouter = ({ children }) => {
             {
               path: "examdetails/:id",
               element: <ExamDetails />,
+            },
+            {
+              path: "facultyDetails/:id",
+              element: <FacultyView />,
             },
           ],
         },

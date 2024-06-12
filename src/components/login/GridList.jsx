@@ -3,8 +3,9 @@ import { Grid, Box, Avatar, Typography, ListItemText, Button } from '@mui/materi
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { CustomeLoader } from '../Layouts/CustomeLoader';
+import Cookies from 'js-cookie';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 export const GridList = () => {
   const { id } = useParams();
@@ -30,12 +31,39 @@ export const GridList = () => {
   }, [id]);
 
   const handleClick = (examId) => {
-    console.log("Clicked on exam ID:", examId);
-    navigate(`/adminDashboard/examdetails/${examId}`);
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/examdetails/${examId}`);
   };
 
   const handleBackClick = () => {
-    navigate('/adminDashboard/subjectlist');
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/subjectlist`);
   };
 
   const getAvatarLetter = (name) => {
@@ -44,7 +72,7 @@ export const GridList = () => {
 
   return (
     <Box padding="20px">
-       <Button 
+      <Button 
         variant="contained" 
         color="primary" 
         onClick={handleBackClick} 

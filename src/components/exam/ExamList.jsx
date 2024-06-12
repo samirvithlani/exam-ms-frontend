@@ -5,7 +5,6 @@ import {
   Add,
   DeleteOutline,
   Edit,
-  PlusOneOutlined,
   Visibility,
 } from "@mui/icons-material";
 import {
@@ -25,11 +24,11 @@ import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "styled-components";
 import "../../assets/layouts/layout.module.css";
-import { set } from "react-hook-form";
-import { CustomeLoader } from "../Layouts/CustomeLoader";
 import Cookies from "js-cookie";
 import { useTheme } from "@mui/material/styles";
 import { useDemoData } from "@mui/x-data-grid-generator";
+import { CustomeLoader } from "../Layouts/CustomeLoader";
+
 const userRole = Cookies.get("role");
 const isSuperAdmin = userRole === "superAdmin";
 
@@ -42,19 +41,13 @@ const columns = [
   { field: "Stream", headerName: "Stream", width: 80 },
   { field: "Standard", headerName: "Standard", width: 100 },
   { field: "Difficulty", headerName: "Difficulty", width: 100 },
-  { field: "credit", headerName: "credit", width: 50 },
-
-  // { field: "noOfQuestions", headerName: "No. of Questions", width: 70 },
-  // { field: "isTimeLimit", headerName: "Time-Limited", width: 70 },
-  // { field: "examTime", headerName: "Exam Time (in hours)", width: 70 },
-  // { field: "totalmarks", headerName: "Total Marks", width: 70 },
+  { field: "credit", headerName: "Credit", width: 50 },
   { field: "actions", headerName: "Actions", width: 200 },
 ];
 
 const ExamList = () => {
   const theme = useTheme();
-
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [examData, setExamData] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -63,53 +56,55 @@ const ExamList = () => {
     rowLength: 100,
     maxColumns: 6,
   });
-  const fetchallquestion = async () => {
+  const navigate = useNavigate();
+
+  const fetchAllQuestions = async () => {
     try {
       const response = await axios.get("/mcq");
       setAllQuestions(response.data);
     } catch (error) {
-      console.log("error ", error);
+      console.log("Error fetching questions:", error);
     }
   };
+
   useEffect(() => {
-    fetchallquestion();
+    fetchAllQuestions();
   }, []);
-  const navigate = useNavigate();
+
   const fetchData = async () => {
-    setisLoading(true);
-    axios
-      .get("/Exam")
-      .then((response) => {
-        const filteredData = response.data.map((exam, index) => ({
-          displayid: index + 1,
-          name: exam.name.toUpperCase(),
-          examType: exam.examtype?.type.toUpperCase() || "N/A",
-          examTopic: exam.examtopic?.name || "N/A",
-          Subject: exam.subject?.name || "N/A",
-          Stream: exam.stream ? exam.stream.name : "NA",
-          Standard: exam.std ? exam.std.std : "NA",
-          Difficulty: exam.difficulty ? exam.difficulty.difficulty : "NA",
-          noOfQuestions: exam.noofquestions || 0,
-          isNegative: exam.isNegative,
-          isTimeLimit: exam.isTimeLimit ? "Yes" : "No",
-          examTime: exam.examtime || 0,
-          perQuestionTime: exam.perQuestiontime || 0,
-          totalmarks: exam.totalmarks,
-          id: exam._id,
-          topicId: exam.examtopic?._id || "N/A",
-          difficultyId: exam.difficulty ? exam.difficulty._id : "NA",
-          subjectId: exam.subject?._id || "NA",
-          streamId: exam.stream?._id || "NA",
-          standardId: exam.std ? exam.std._id : "NA",
-          typeId: exam.examtype?._id || "N/A",
-          credit:exam?.credit || 'N/A',
-        }));
-        setExamData(filteredData);
-        setisLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    setIsLoading(true);
+    try {
+      const response = await axios.get("/Exam");
+      const filteredData = response.data.map((exam, index) => ({
+        displayid: index + 1,
+        name: exam.name.toUpperCase(),
+        examType: exam.examtype?.type.toUpperCase() || "N/A",
+        examTopic: exam.examtopic?.name || "N/A",
+        Subject: exam.subject?.name || "N/A",
+        Stream: exam.stream ? exam.stream.name : "NA",
+        Standard: exam.std ? exam.std.std : "NA",
+        Difficulty: exam.difficulty ? exam.difficulty.difficulty : "NA",
+        noOfQuestions: exam.noofquestions || 0,
+        isNegative: exam.isNegative,
+        isTimeLimit: exam.isTimeLimit ? "Yes" : "No",
+        examTime: exam.examtime || 0,
+        perQuestionTime: exam.perQuestiontime || 0,
+        totalmarks: exam.totalmarks,
+        id: exam._id,
+        topicId: exam.examtopic?._id || "N/A",
+        difficultyId: exam.difficulty ? exam.difficulty._id : "NA",
+        subjectId: exam.subject?._id || "NA",
+        streamId: exam.stream?._id || "NA",
+        standardId: exam.std ? exam.std._id : "NA",
+        typeId: exam.examtype?._id || "N/A",
+        credit: exam?.credit || "N/A",
+      }));
+      setExamData(filteredData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -117,8 +112,23 @@ const ExamList = () => {
   }, []);
 
   const handleEdit = (id) => {
-    navigate(`/adminDashboard/update-exam/${id}`);
+    const role = Cookies.get("role");
+    let dashboardPath = "";
+
+    switch (role) {
+      case "faculty":
+        dashboardPath = "facultyDashboard";
+        break;
+      case "superAdmin":
+        dashboardPath = "adminDashboard";
+        break;
+      default:
+        dashboardPath = "dashboard"; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/update-exam/${id}`);
   };
+
   const handleAddQuestions = async (
     type,
     id,
@@ -140,8 +150,23 @@ const ExamList = () => {
     if (data.data.mcq.length === noOfQuestions) {
       return alert("Question limit reached. Cannot add more questions.");
     }
+
+    const role = Cookies.get("role");
+    let dashboardPath = "";
+
+    switch (role) {
+      case "faculty":
+        dashboardPath = "facultyDashboard";
+        break;
+      case "superAdmin":
+        dashboardPath = "adminDashboard";
+        break;
+      default:
+        dashboardPath = "dashboard"; // Fallback path
+    }
+
     if (type === "mcq") {
-      navigate(`/adminDashboard/mcqquestion/${id}`, {
+      navigate(`/${dashboardPath}/mcqquestion/${id}`, {
         state: {
           subject,
           stream,
@@ -159,7 +184,7 @@ const ExamList = () => {
         },
       });
     } else {
-      navigate("/adminDashboard");
+      navigate(`/${dashboardPath}`);
     }
   };
 
@@ -168,7 +193,7 @@ const ExamList = () => {
       await toast.promise(axios.delete(`/exam/${id}`), {
         pending: "Deleting Exam...",
         success: "Exam Deleted Successfully!",
-        error: "Failed to create Exam. Please try again.",
+        error: "Failed to delete Exam. Please try again.",
       });
       setExamData((prevData) => prevData.filter((exam) => exam.id !== id));
       fetchData();
@@ -176,6 +201,7 @@ const ExamList = () => {
       console.log("Error while deleting exam:", error);
     }
   };
+
   const handleGenerateQuestions = async (
     topicId,
     noOfQuestions,
@@ -184,17 +210,8 @@ const ExamList = () => {
   ) => {
     try {
       const filteredQuestions = allQuestions.filter(
-        (question) =>{
-          // console.log("question",question)
-          console.log("topicId",topicId)
-          console.log("question topic id....",question.Topic._id)
-          console.log("difficultyId",difficultyId)
-          // console.log("difficultyId",difficultyId)
-          // console.log("question.Topic._id",question.Topic._id)
-          // console.log("question.difficulty",question.difficulty)
-          console.log("&&",question.Topic._id === topicId && question.difficulty === difficultyId)
-         return question.Topic._id === topicId && question.difficulty === difficultyId
-        }
+        (question) =>
+          question.Topic._id === topicId && question.difficulty === difficultyId
       );
       if (filteredQuestions.length < noOfQuestions) {
         toast.error("Insufficient questions available for this topic.");
@@ -204,9 +221,7 @@ const ExamList = () => {
         () => 0.5 - Math.random()
       );
       const mcq = shuffledQuestions.slice(0, noOfQuestions);
-      const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
-        mcq,
-      });
+      await axios.put(`/mcq/${id}`, { mcq });
       toast.success("Questions generated successfully!");
     } catch (error) {
       console.log(error);
@@ -214,6 +229,7 @@ const ExamList = () => {
       toast.error("Failed to generate questions. Please try again.");
     }
   };
+
   const handleView = (
     id,
     subject,
@@ -223,13 +239,29 @@ const ExamList = () => {
     topic,
     type
   ) => {
-    navigate(`/adminDashboard/viewexam/${id}`, {
+    const role = Cookies.get("role");
+    let dashboardPath = "";
+
+    switch (role) {
+      case "faculty":
+        dashboardPath = "facultyDashboard";
+        break;
+      case "superAdmin":
+        dashboardPath = "adminDashboard";
+        break;
+      default:
+        dashboardPath = "dashboard"; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/viewexam/${id}`, {
       state: { subject, stream, difficulty, standard, topic, type },
     });
   };
+
   const defaultTheme = createTheme({
     fontFamily: "Lato",
   });
+
   const paperStyle = {
     p: 2,
     display: "flex",
@@ -238,6 +270,7 @@ const ExamList = () => {
     backgroundColor: "white",
     m1: 2,
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       {isLoading ? (

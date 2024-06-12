@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 import {
   Box,
   Button,
@@ -51,13 +52,41 @@ export const ExamDetails = () => {
   };
 
   const handleView = (id, subject, stream, difficulty, standard, topic, type) => {
-    navigate(`/adminDashboard/viewexam/${id}`, {
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/viewexam/${id}`, {
       state: { subject, stream, difficulty, standard, topic, type },
     });
   };
 
   const handleEdit = (id) => {
-    navigate(`/adminDashboard/update-exam/${id}`);
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/update-exam/${id}`);
   };
 
   const handleDelete = async (id) => {
@@ -65,7 +94,7 @@ export const ExamDetails = () => {
       await toast.promise(axios.delete(`/exam/${id}`), {
         pending: "Deleting Exam...",
         success: "Exam Deleted Successfully!",
-        error: "Failed to create Exam. Please try again.",
+        error: "Failed to delete Exam. Please try again.",
       });
     } catch (error) {
       console.log("Error while deleting exam:", error);
@@ -133,8 +162,22 @@ export const ExamDetails = () => {
     if (data.data.mcq.length === noOfQuestions) {
       return alert("Question limit reached. Cannot add more questions.");
     }
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
     if (type === "mcq") {
-      navigate(`/adminDashboard/mcqquestion/${id}`, {
+      navigate(`/${dashboardPath}/mcqquestion/${id}`, {
         state: {
           subject,
           stream,
@@ -152,7 +195,7 @@ export const ExamDetails = () => {
         },
       });
     } else {
-      navigate("/adminDashboard");
+      navigate(`/${dashboardPath}`);
     }
   };
 

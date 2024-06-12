@@ -151,54 +151,63 @@
     const { register, handleSubmit ,reset} = useForm();
 
     const submitHandler = async (data) => {
-      console.log(examData,"exam data");
+      console.log(examData, "exam data");
       const updatedFields = {};
-      console.log(nameValue,"name value");
+      console.log(nameValue, "name value");
+    
       if (nameValue !== examData.name) {
         updatedFields.name = nameValue;
       }
       if (noOfQuestionsValue !== examData.noofquestions) {
         updatedFields.noofquestions = noOfQuestionsValue;
       }
-      // if (isTimeLimitValue !== examData.isTimeLimit) {
-      //   updatedFields.isTimeLimit = isTimeLimitValue;
-      // }
       if (totalMarksValue !== examData.totalmarks) {
         updatedFields.totalmarks = totalMarksValue;
       }
       if (perQuestionMarksValue !== examData.perQuestionmarks) {
         updatedFields.perQuestionmarks = perQuestionMarksValue;
       }
-    if(examData.stream){
-      if(selectedStream !== examData.stream.name){
-          updatedFields.stream = selectedStream
-      }
-    }
-    console.log(selectedSubject,
-      "subject ")
-      if(selectedSubject !== examData.subject.name){
-          updatedFields.subject = selectedSubject
-      }
-      
-      if(selectedTopic!== examData.examtopic.name){
-          updatedFields.examtopic = selectedTopic
-      }
-      if(selectedType!== examData.examtype.type){
-          updatedFields.examtype = selectedType
-      }
-      
-      try {
-          const result = await toast.promise(axios.put(`/exam/${id}`,updatedFields), {
-              pending: "Updating Exam...",
-              success: "Exam Update Successfully!",
-              error: "Failed to Update Exam. Please try again.",
-            });
-            navigate('/admindashboard/subjectlist'); 
-
-        } catch (error) {
-          console.error("Error updating exam:", error);
+      if (examData.stream) {
+        if (selectedStream !== examData.stream.name) {
+          updatedFields.stream = selectedStream;
         }
+      }
+      if (selectedSubject !== examData.subject.name) {
+        updatedFields.subject = selectedSubject;
+      }
+      if (selectedTopic !== examData.examtopic.name) {
+        updatedFields.examtopic = selectedTopic;
+      }
+      if (selectedType !== examData.examtype.type) {
+        updatedFields.examtype = selectedType;
+      }
+    
+      const role = Cookies.get("role");
+      let dashboardPath = "";
+    
+      switch (role) {
+        case "faculty":
+          dashboardPath = "facultyDashboard";
+          break;
+        case "superAdmin":
+          dashboardPath = "adminDashboard";
+          break;
+        default:
+          dashboardPath = "dashboard"; // Fallback path
+      }
+    
+      try {
+        const result = await toast.promise(axios.put(`/exam/${id}`, updatedFields), {
+          pending: "Updating Exam...",
+          success: "Exam Update Successfully!",
+          error: "Failed to Update Exam. Please try again.",
+        });
+        navigate(`/${dashboardPath}/subjectlist`);
+      } catch (error) {
+        console.error("Error updating exam:", error);
+      }
     };
+    
     return (
       <ThemeProvider theme={defaultTheme}>
         <CssBaseline />

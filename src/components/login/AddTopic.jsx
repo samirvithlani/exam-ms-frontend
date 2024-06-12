@@ -112,19 +112,33 @@ export const AddTopic = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
     const userData = {
       name: data.get('name'),
       subject: selectedSubject,
       std: selectedStandards,
     };
-
+  
+    const role = Cookies.get("role");
+    let dashboardPath = "";
+  
+    switch (role) {
+      case "faculty":
+        dashboardPath = "facultyDashboard";
+        break;
+      case "superAdmin":
+        dashboardPath = "adminDashboard";
+        break;
+      default:
+        dashboardPath = "dashboard"; // Fallback path
+    }
+  
     try {
       const response = await axios.post('/Topic', userData);
       const { message } = response.data;
       if (response.status === 200) {
         toast.success(message);
-        navigate('/adminDashboard');
+        navigate(`/${dashboardPath}`);
       } else {
         console.error('Failed');
       }
@@ -138,6 +152,7 @@ export const AddTopic = () => {
       }
     }
   };
+  
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;

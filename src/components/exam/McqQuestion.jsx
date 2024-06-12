@@ -276,22 +276,36 @@ export const McqQuestion = () => {
  
   
   const submitHandler = async (data) => {
-    // debugger
     console.log(questionsList);
-    debugger
+    debugger;
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
       formData.append("file", data.fileUpload[0]);
     }
+  
+    const role = Cookies.get("role");
+    let dashboardPath = "";
+  
+    switch (role) {
+      case "faculty":
+        dashboardPath = "facultyDashboard";
+        break;
+      case "superAdmin":
+        dashboardPath = "adminDashboard";
+        break;
+      default:
+        dashboardPath = "dashboard"; // Fallback path
+    }
+  
     if (!data.fileUpload || data.fileUpload === undefined) {
       try {
         response = await axios.post("/mcqmany", { questions: questionsList });
-        navigate("/admindashboard/subjectlist");
+        navigate(`/${dashboardPath}/subjectlist`);
         toast.success("Question Added Successfully ...");
       } catch (error) {
-        if (error.response.status === 409) {
-          toast.error(" Question already exists ...");
+        if (error.response && error.response.status === 409) {
+          toast.error("Question already exists ...");
         } else {
           toast.error("An error occurred while adding the question ...");
         }
@@ -303,10 +317,10 @@ export const McqQuestion = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        navigate("/admindashboard/subjectlist");
+        navigate(`/${dashboardPath}/subjectlist`);
         toast.success("Question Added Successfully ...");
       } catch (error) {
-        if (error.response.status === 409) {
+        if (error.response && error.response.status === 409) {
           console.log(error.response.data, "data");
           toast.error("Question already exists ...");
         } else {
@@ -314,13 +328,14 @@ export const McqQuestion = () => {
         }
       }
     }
-
+  
     let mcq;
     if (Array.isArray(response?.data?.data)) {
       mcq = response.data.data.map((item) => item._id);
     } else {
       mcq = response?.data?._id;
     }
+  
     if (id) {
       try {
         const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
@@ -331,7 +346,7 @@ export const McqQuestion = () => {
       }
     }
   };
-
+  
   const handleAddQuestion = () => {
     const data = getValues();
     // console.log(options,"options ")

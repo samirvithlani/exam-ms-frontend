@@ -261,13 +261,29 @@ export const CreateExam = () => {
       toast.error("All fields are required.");
       return;
     }
+    
     try {
       const result = await toast.promise(axios.post("/exam", data), {
         pending: "Creating Exam...",
         success: "Exam Created Successfully!",
         error: "Failed to create Exam. Please try again.",
       });
-      navigate("/admindashboard/subjectlist");
+
+      const role = Cookies.get('role');
+      let dashboardPath = '';
+
+      switch (role) {
+        case 'faculty':
+          dashboardPath = 'facultyDashboard';
+          break;
+        case 'superAdmin':
+          dashboardPath = 'adminDashboard';
+          break;
+        default:
+          dashboardPath = 'dashboard'; // Fallback path
+      }
+
+      navigate(`/${dashboardPath}/subjectlist`);
       reset();
       setSelectedStandards("");
       setselecteddefficultie("");
@@ -279,6 +295,7 @@ export const CreateExam = () => {
       console.error("Error creating Exam:", error);
     }
   };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />

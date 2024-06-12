@@ -3,6 +3,7 @@ import { Grid, Box, Avatar, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 export const SubjectList = () => {
@@ -30,7 +31,21 @@ export const SubjectList = () => {
   };
 
   const handleClick = (subjectID) => {
-    navigate(`/adminDashboard/subject/${subjectID}`);
+    const role = Cookies.get('role');
+    let dashboardPath = '';
+
+    switch (role) {
+      case 'faculty':
+        dashboardPath = 'facultyDashboard';
+        break;
+      case 'superAdmin':
+        dashboardPath = 'adminDashboard';
+        break;
+      default:
+        dashboardPath = 'dashboard'; // Fallback path
+    }
+
+    navigate(`/${dashboardPath}/subject/${subjectID}`);
   };
 
   const getAvatarLetter = (name) => {
@@ -39,7 +54,9 @@ export const SubjectList = () => {
 
   return (
     <Box padding="20px">
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Subject List ::</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 1, color: "#010080" }}>
+        Subject List ::
+      </Typography>
 
       {Loading && <CustomeLoader />}
 
