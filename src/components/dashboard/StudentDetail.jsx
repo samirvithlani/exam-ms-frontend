@@ -8,40 +8,27 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
-import { PieComponent } from "../charts/PieComponent"; // Assuming PieComponent is imported from the correct location
 import { useParams } from "react-router-dom";
 
 const StudentDetail = () => {
-  const [userData, setUserData] = useState({});
-  //const id = Cookies.get("_id");
-  const id= useParams().id
+  const [userData, setUserData] = useState({
+    firstname: "John",
+    lastname: "Doe",
+    email: "john.doe@example.com",
+    phone: "1234567890",
+    profilePic: "https://via.placeholder.com/150", // Placeholder image
+  });
+  const id = useParams().id;
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    fetchData();
+    // fetchData(); // Commented out for now, we'll fill in data later
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const result = await axios.get(`/user/${id}`);
-      console.log("User data:", result.data);
-      setUserData(result.data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
+  // Function to handle form submission
   const onSubmit = async (data) => {
-    try {
-      await axios.put(`/user/${id}`, data);
-      // Refresh user data after update
-      fetchData();
-    } catch (error) {
-      console.error("Error updating user data:", error);
-    }
+    // Update user data
   };
 
   return (
@@ -53,8 +40,8 @@ const StudentDetail = () => {
               User Profile
             </Typography>
             <Avatar
-              src={userData.profilePic}
               alt="Profile"
+              src={userData.profilePic}
               sx={{
                 width: 100,
                 height: 100,
@@ -127,11 +114,48 @@ const StudentDetail = () => {
         <Card>
           <CardContent>
             <Typography variant="h5" gutterBottom>
-              Exam History
+              Given Exams
             </Typography>
-            <div style={{ width: "100%", maxWidth: 400, margin: "auto" }}>
-              {/* <PieComponent chartType="pie" apiToCall="subject" /> */}
-            </div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">Mathematics</Typography>
+                    <Typography variant="body2">
+                      Score: 85 / 100
+                    </Typography>
+                    <Typography variant="body2">Date: 2024-06-12</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">Science</Typography>
+                    <Typography variant="body2">
+                      Score: 78 / 100
+                    </Typography>
+                    <Typography variant="body2">Date: 2024-06-11</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        <Card style={{ marginTop: 20 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              Chart 1
+            </Typography>
+            {/* Space for first chart */}
+          </CardContent>
+        </Card>
+        <Card style={{ marginTop: 20 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              Chart 2
+            </Typography>
+            {/* Space for second chart */}
           </CardContent>
         </Card>
       </Grid>
