@@ -20,6 +20,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
+import Cookies from "js-cookie";
 
 export const AddTopic = () => {
   const navigate = useNavigate();
@@ -29,22 +30,48 @@ export const AddTopic = () => {
   const [selectedStandards, setSelectedStandards] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [topics, setTopics] = useState([]);
+  const [userSubjects, setUserSubjects] = useState([]);
+  const userId = Cookies.get("_id");
+  const role = Cookies.get("role");
 
   useEffect(() => {
     fetchStd();
     fetchSubject();
-    fetchTopic();
+    fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (userSubjects.length > 0 || role !== 'faculty') {
+      fetchTopic();
+    }
+  }, [userSubjects, role]);
+
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`/facultysubject/${userId}`);
+      const subjects = response?.data?.[0]?.subject || [];
+      setUserSubjects(subjects.map((subject) => subject._id));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const fetchTopic = async () => {
     try {
       const response = await axios.get('/Topic');
-      const filterData = response.data.result.map((exam, index) => ({
+      const allTopics = response.data.result.map((exam, index) => ({
         displayid: index + 1,
         name: exam.name,
         id: exam._id,
+        subjectId: exam.subject._id,
       }));
-      setTopics(filterData);
+
+      if (role === 'faculty') {
+        const filteredTopics = allTopics.filter(topic => userSubjects.includes(topic.subjectId));
+        setTopics(filteredTopics);
+      } else {
+        setTopics(allTopics);
+      }
     } catch (error) {
       console.error(error, 'error');
     }
@@ -53,7 +80,12 @@ export const AddTopic = () => {
   const fetchSubject = async () => {
     try {
       const response = await axios.get('/subject');
+      if(role === 'faculty'){
+        const filteredSubjects = response.data.filter(subject => userSubjects.includes(subject._id));
+        setSubjects(filteredSubjects)
+      }else{
       setSubjects(response.data);
+      }
     } catch (error) {
       console.error(error, 'error');
     }
