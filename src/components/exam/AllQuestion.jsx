@@ -47,10 +47,11 @@ function MCQQuestion({ question, options }) {
   );
 }
 
+
 function App() {
   const [questions, setQuestions] = useState([]);
   const [userSubjects, setUserSubjects] = useState([]);
-  const[subject,setsubject]=useState([]);
+  const [subject, setsubject] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
@@ -59,10 +60,10 @@ function App() {
   const [selectedTopic, setSelectedTopic] = useState("");
   const [standards, setstandards] = useState([]);
   const [difficultes, setdefficulties] = useState([]);
-  const[topics,settopics] = useState([]);
+  const [topics, settopics] = useState([]);
   const userId = Cookies.get("_id");
   const role = Cookies.get("role");
-  
+
   const fetchUser = async () => {
     try {
       const response = await axios.get(`/facultysubject/${userId}`);
@@ -113,7 +114,9 @@ function App() {
       const matchesDifficulty = selectedDifficulty
         ? question.difficulty === selectedDifficulty
         : true;
-      const matchesTopic = selectedTopic ? question.Topic._id === selectedTopic : true;
+      const matchesTopic = selectedTopic
+        ? question.Topic._id === selectedTopic
+        : true;
       const matchesQuery = question.question
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -135,6 +138,7 @@ function App() {
     selectedTopic,
     questions,
   ]);
+
   const fetchstd = async () => {
     try {
       const response = await axios.get("/getstd");
@@ -152,14 +156,16 @@ function App() {
       console.log(error, "error");
     }
   };
- const fetchtopic = async()=>{
-  try {
-    const response = await axios.get('/Topic');
-    settopics(response.data.result);
-  } catch (error) {
-    console.log(error,"err");
-  }
- } 
+
+  const fetchtopic = async () => {
+    try {
+      const response = await axios.get("/Topic");
+      settopics(response.data.result);
+    } catch (error) {
+      console.log(error, "err");
+    }
+  };
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -235,20 +241,20 @@ function App() {
                   <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
                     <InputLabel id="standard-filter-label">Filter by Standard</InputLabel>
                     <Select
-                    labelId="standard-filter-label"
-                    value={selectedStandard}
-                    onChange={handleStandardChange}
-                    label="Filter by Standard"
-                  >
-                    <MenuItem value="">
-                      <em>All Standards</em>
-                    </MenuItem>
-                    {standards.map((standard) => (
-                      <MenuItem key={standard._id} value={standard._id}>
-                        {standard.std}
+                      labelId="standard-filter-label"
+                      value={selectedStandard}
+                      onChange={handleStandardChange}
+                      label="Filter by Standard"
+                    >
+                      <MenuItem value="">
+                        <em>All Standards</em>
                       </MenuItem>
-                    ))}
-                  </Select>
+                      {standards.map((standard) => (
+                        <MenuItem key={standard._id} value={standard._id}>
+                          {standard.std}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -264,10 +270,10 @@ function App() {
                         <em>All Difficulty Levels</em>
                       </MenuItem>
                       {difficultes.map((item) => (
-                    <MenuItem key={item._id} value={item._id}>
-                      {item.difficulty}
-                    </MenuItem>
-                  ))}
+                        <MenuItem key={item._id} value={item._id}>
+                          {item.difficulty}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -288,25 +294,26 @@ function App() {
                           {topic.name}
                         </MenuItem>
                       ))}
-
                     </Select>
                   </FormControl>
                 </Grid>
               </Grid>
             </Paper>
-            {filteredQuestions.map((question, index) => (
-              <QuestionList
-                key={index}
-                question={question.question}
-                type={question.type}
-                options={[
-                  question.Option1,
-                  question.Option2,
-                  question.Option3,
-                  question.Option4,
-                ]}
-              />
-            ))}
+        
+             {filteredQuestions.map((question, index) => {
+              const options = Object.entries(question)
+                .filter(([key, value]) => key.startsWith("Option") && value)
+                .map(([key, value]) => value);
+
+              return (
+                <QuestionList
+                  key={index}
+                  question={question.question}
+                  type={question.type}
+                  options={options}
+                />
+              );
+            })}
           </>
         )}
       </Box>
