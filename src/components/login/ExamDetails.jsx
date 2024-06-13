@@ -27,6 +27,10 @@ export const ExamDetails = () => {
   const [allQuestions, setAllQuestions] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [savedQuestions, setSavedQuestions] = useState([]);
+  const [initiallySelectedQuestions, setInitiallySelectedQuestions] = useState([]);
+
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -199,8 +203,22 @@ export const ExamDetails = () => {
     }
   };
 
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
+
+  const handleOpenDialog = async () => {
+    try {
+      const existingExamResponse = await axios.get(`/exam/${id}`);
+      const existingQuestions = existingExamResponse.data.mcq;
+      setSelectedQuestions(existingQuestions);
+      setInitiallySelectedQuestions(existingQuestions);
+
+      const filteredQuestions = allQuestions.filter(
+        (question) => question.Subject._id === questions.subject?._id
+      );
+      setFilteredQuestions(filteredQuestions);
+      setOpenDialog(true);
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
 
   const handleCloseDialog = () => {
@@ -208,23 +226,51 @@ export const ExamDetails = () => {
   };
 
   const handleToggleQuestion = (question) => {
-    const currentIndex = selectedQuestions.indexOf(question);
-    const newSelectedQuestions = [...selectedQuestions];
+    if (!initiallySelectedQuestions.some((q) => q._id === question._id)) {
+      const currentIndex = selectedQuestions.findIndex(
+        (q) => q._id === question._id
+      );
+      const newSelectedQuestions = [...selectedQuestions];
 
-    if (currentIndex === -1) {
-      newSelectedQuestions.push(question);
-    } else {
-      newSelectedQuestions.splice(currentIndex, 1);
+      if (currentIndex === -1) {
+        newSelectedQuestions.push(question);
+      } else {
+        newSelectedQuestions.splice(currentIndex, 1);
+      }
+
+      setSelectedQuestions(newSelectedQuestions);
     }
+  };
+  const handleSaveQuestions = async (noOfQuestions) => {
+    try {
+      const existingExamResponse = await axios.get(`/exam/${id}`);
+      const existingExam = existingExamResponse.data;
 
-    setSelectedQuestions(newSelectedQuestions);
+      const currentQuestionCount = existingExam.mcq.length;
+      const additionalQuestionsNeeded = noOfQuestions - currentQuestionCount;
+
+      if (additionalQuestionsNeeded <= 0) {
+        toast.info("Sufficient questions already available.");
+        return;
+      }
+      const updatedQuestions = selectedQuestions.filter(
+        (question) =>
+          !initiallySelectedQuestions.some((q) => q._id === question._id)
+      );
+
+      const updateQuestionResponse = await axios.put(`/mcq/${id}`, {
+        mcq: updatedQuestions,
+      });
+      console.log(updateQuestionResponse, "update question response");
+
+      setOpenDialog(false);
+      toast.success("Questions selected successfully!");
+    } catch (error) {
+      console.log(error, "error");
+      toast.error("Failed to save selected questions. Please try again.");
+    }
   };
 
-  const handleSaveQuestions = () => {
-    // Logic to save selected questions to the exam
-    setOpenDialog(false);
-    toast.success("Questions selected successfully!");
-  };
 
   return (
     <Grid container spacing={2}>
@@ -484,14 +530,19 @@ export const ExamDetails = () => {
         </DialogTitle>
         <DialogContent>
           <List>
-            {allQuestions.map((question) => (
+            {filteredQuestions.map((question) => (
               <ListItem key={question._id} button onClick={() => handleToggleQuestion(question)}>
-                <ListItemText primary={question.question} />
-                <ListItemSecondaryAction>
+              <ListItemText
+                  primary={
+                    <span dangerouslySetInnerHTML={{ __html: question.question }} />
+                  }
+                />                <ListItemSecondaryAction>
                   <Checkbox
                     edge="end"
                     onChange={() => handleToggleQuestion(question)}
-                    checked={selectedQuestions.indexOf(question) !== -1}
+                    disabled={initiallySelectedQuestions.some(selected => selected._id === question._id)}
+                    checked={selectedQuestions.some(selected => selected._id === question._id)}
+
                   />
                 </ListItemSecondaryAction>
               </ListItem>
@@ -502,7 +553,7 @@ export const ExamDetails = () => {
           <Button autoFocus onClick={handleCloseDialog} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleSaveQuestions} color="primary">
+          <Button onClick={()=>handleSaveQuestions(questions.noofquestions)} color="primary">
             Save
           </Button>
         </DialogActions>

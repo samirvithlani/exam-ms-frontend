@@ -276,8 +276,6 @@ export const McqQuestion = () => {
  
   
   const submitHandler = async (data) => {
-    console.log(questionsList);
-    debugger;
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
