@@ -16,6 +16,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { constant } from "../../constant";
 import {
   MenuItem,
   FormControl,
@@ -117,7 +118,7 @@ export const CreateExam = () => {
     try {
       const response = await axios.get(`/facultysubject/${userId}`);
       const subjects = response?.data?.[0]?.subject || [];
-      setUserSubjects(subjects.map(subject => subject._id));
+      setUserSubjects(subjects.map((subject) => subject._id));
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -153,16 +154,22 @@ export const CreateExam = () => {
       let response;
       if (stdId) {
         response = await axios.get(`/subjects/${stdId}`);
-        const subjects = role === "faculty"
-          ? response.data.filter((subject) => userSubjects.includes(subject._id))
-          : response.data;
+        const subjects =
+          role === "faculty"
+            ? response.data.filter((subject) =>
+                userSubjects.includes(subject._id)
+              )
+            : response.data;
         setSubjects(subjects);
         // setSubjects(response.data);
       } else {
         response = await axios.get(`/subject/${streamId}`);
-        const subjects = role === "faculty"
-          ? response.data.result.filter((subject) => userSubjects.includes(subject._id))
-          : response.data.result;
+        const subjects =
+          role === "faculty"
+            ? response.data.result.filter((subject) =>
+                userSubjects.includes(subject._id)
+              )
+            : response.data.result;
         setSubjects(subjects);
       }
     } catch (error) {
@@ -242,7 +249,7 @@ export const CreateExam = () => {
   const defaultTheme = createTheme({
     palette: {
       primary: {
-        main: '#673AB7', // Change this to your desired color
+        main: constant.backgroundColor, // Change this to your desired color
       },
     },
   });
@@ -261,7 +268,7 @@ export const CreateExam = () => {
       toast.error("All fields are required.");
       return;
     }
-    
+
     try {
       const result = await toast.promise(axios.post("/exam", data), {
         pending: "Creating Exam...",
@@ -269,18 +276,18 @@ export const CreateExam = () => {
         error: "Failed to create Exam. Please try again.",
       });
 
-      const role = Cookies.get('role');
-      let dashboardPath = '';
+      const role = Cookies.get("role");
+      let dashboardPath = "";
 
       switch (role) {
-        case 'faculty':
-          dashboardPath = 'facultyDashboard';
+        case "faculty":
+          dashboardPath = "facultyDashboard";
           break;
-        case 'superAdmin':
-          dashboardPath = 'adminDashboard';
+        case "superAdmin":
+          dashboardPath = "adminDashboard";
           break;
         default:
-          dashboardPath = 'dashboard'; // Fallback path
+          dashboardPath = "dashboard"; // Fallback path
       }
 
       navigate(`/${dashboardPath}/subjectlist`);
@@ -305,11 +312,15 @@ export const CreateExam = () => {
           <AddBoxIcon />
         </Avatar> */}
         <Typography
-          component="h1"
-          variant="h5"
-          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            fontFamily: "Lato",
+            mb: 1,
+            color: constant.backgroundColor,
+          }}
         >
-          CREATE EXAM
+          Create Exam ::
         </Typography>
         <Box
           component="form"
@@ -489,7 +500,7 @@ export const CreateExam = () => {
                   {...register("subject", validationSchema.subject)}
                   onChange={handleSubjectChange}
                 >
-                   {subjects.length > 0 ? (
+                  {subjects.length > 0 ? (
                     subjects.map((subject) => (
                       <MenuItem key={subject._id} value={subject._id}>
                         {subject.name}

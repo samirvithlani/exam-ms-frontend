@@ -19,7 +19,8 @@ export const GridList = () => {
         setLoading(true);
         const response = await axios.get(`/exams/${id}`);
         if (response.status === 200) {
-          setExam(response.data); // Assuming the exam data is stored in the 'data' field of the response
+          const ActiveExam = response.data.filter(data=>data.isActive)
+          setExam(ActiveExam); 
         }
         setLoading(false);
       } catch (error) {

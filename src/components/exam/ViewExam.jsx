@@ -2,28 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import {
-  Box,
-  Button,
-  createTheme,
   Grid,
-  InputLabel,
-  TextField,
-  ThemeProvider,
   Typography,
-  FormControl,
-  FormControlLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 
 export const ViewExam = () => {
   const location = useLocation();
-  const [exams, setexams] = useState([]);
   const [questions, setQuestions] = useState([]);
 
   const { id } = useParams();
   useEffect(() => {
-    fetchexams();
+    fetchExams();
   }, [id]);
 
   const subject = location.state?.subject;
@@ -33,7 +22,7 @@ export const ViewExam = () => {
   const topic = location.state?.topic;
   const type = location.state?.type;
 
-  const fetchexams = async () => {
+  const fetchExams = async () => {
     const response = await axios.get(`/exam/${id}`);
     setQuestions(response.data.mcq);
   };
@@ -49,7 +38,7 @@ export const ViewExam = () => {
     marginBottom: "20px",
   };
 
-  const QuestioncardStyle = {
+  const questionCardStyle = {
     backgroundColor: "rgb(102,102,102)",
     border: "1px solid #ddd",
     borderRadius: "20px",
@@ -63,7 +52,10 @@ export const ViewExam = () => {
   return (
     <Grid container spacing={2} sx={{ mt: 2, ml: 0.1, p: 2 }}>
       <Grid item xs={12}>
-        <Typography variant="h4" sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}>
+        <Typography
+          variant="h4"
+          sx={{ textAlign: "center", fontWeight: "bold", fontFamily: "Lato" }}
+        >
           EXAM DETAIL
         </Typography>
       </Grid>
@@ -77,35 +69,28 @@ export const ViewExam = () => {
         <Typography variant="h6">Difficulty: {difficulty}</Typography>
       </Grid>
 
-      {questions.map((question) => (
-        <Grid item key={question.id} xs={12} style={{ ...QuestioncardStyle }}>
-          <Typography variant="h6" gutterBottom>
-          <div dangerouslySetInnerHTML={{ __html: question.question }} />
-          </Typography>
-          <ul style={{ padding: 0, margin: 0, listStyleType: "none" }}>
-          <li>
-      <Typography variant="body1">
-        OPTION 1: <div dangerouslySetInnerHTML={{ __html: question.Option1 }} />
-      </Typography>
-    </li>
-    <li>
-      <Typography variant="body1">
-        OPTION 2: <div dangerouslySetInnerHTML={{ __html: question.Option2 }} />
-      </Typography>
-    </li>
-    <li>
-      <Typography variant="body1">
-        OPTION 3: <div dangerouslySetInnerHTML={{ __html: question.Option3 }} />
-      </Typography>
-    </li>
-    <li>
-      <Typography variant="body1">
-         <div dangerouslySetInnerHTML={{ __html: question.Option4 }} />
-      </Typography>
-    </li>
-          </ul>
-        </Grid>
-      ))}
+      {questions.map((question) => {
+        const options = Object.keys(question)
+          .filter(key => key.startsWith('Option') && question[key])
+          .map(key => ({ key, value: question[key] }));
+
+        return (
+          <Grid item key={question._id} xs={12} style={{ ...questionCardStyle }}>
+            <Typography variant="h6" gutterBottom>
+              <div dangerouslySetInnerHTML={{ __html: question.question }} />
+            </Typography>
+            <ul style={{ padding: 0, margin: 0, listStyleType: "none" }}>
+              {options.map((option, index) => (
+                <li key={index}>
+                  <Typography variant="body1">
+                    OPTION {index + 1}: <div dangerouslySetInnerHTML={{ __html: option.value }} />
+                  </Typography>
+                </li>
+              ))}
+            </ul>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

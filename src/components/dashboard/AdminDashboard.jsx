@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { Breadcrumbs, Grid, Link, Typography } from "@mui/material";
 import icon1 from "./../../assets/logos/icon1.svg";
+import { constant } from "../../constant";
 
 import axios from "axios";
 import { Pie } from "react-chartjs-2";
@@ -84,7 +85,7 @@ export const AdminDashboard = () => {
           mt: 2,
           ml: 0.1,
           p: 2,
-          background: "#010080",
+          background: constant.backgroundColor,
           pt: 10,
           gap: 1,
         }}

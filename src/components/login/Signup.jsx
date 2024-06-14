@@ -16,11 +16,12 @@ import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from '@mui/icons-material/Google';
 import ReCAPTCHA from "react-google-recaptcha";
+import {constant} from '../../constant'
 
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#673AB7", // Change this to your desired color
+      main: constant.backgroundColor, // Change this to your desired color
     },
   },
 });

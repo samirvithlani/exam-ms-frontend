@@ -21,6 +21,7 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { constant } from "../../constant";
 
 const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
@@ -58,7 +59,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "#010080",
+          backgroundColor: constant.backgroundColor,
           color: "#6B7A99",
           boxShadow: 0,
           borderBottom: "2px solid #F0F0F0",

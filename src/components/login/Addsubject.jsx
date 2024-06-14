@@ -25,11 +25,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
+import { constant } from "../../constant";
 
 export const AddSubject = () => {
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   const theme = useTheme();
   const navigate = useNavigate();
-  const defaultTheme = createTheme();
+  
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [standards, setStandards] = useState([]);
@@ -49,6 +57,7 @@ export const AddSubject = () => {
     applyFilters();
   }, [subjects, searchTerm, sortOrder]);
 
+  
   const fetchSubject = async () => {
     try {
       const response = await axios.get("/subject");

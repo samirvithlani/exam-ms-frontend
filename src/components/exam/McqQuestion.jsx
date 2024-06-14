@@ -32,6 +32,7 @@ import "../../assets/layouts/layout.module.css";
 import { MySnackBar } from "../MySnackBar";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import Cookies from "js-cookie";
+import { constant } from "../../constant";
 
 export const McqQuestion = () => {
   const { id } = useParams();
@@ -166,19 +167,7 @@ export const McqQuestion = () => {
       console.error("Error fetching streams:", error);
     }
   };
-  // const fetchSubjects = async (streamId, stdid) => {
-  //   try {
-  //     if (stdid) {
-  //       let response = await axios.get(`/subjects/${stdid}`);
-  //       setSubjects(response.data);
-  //     } else {
-  //       const response = await axios.get(`/subject/${streamId}`);
-  //       setSubjects(response.data.result);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching subjects:", error);
-  //   }
-  // };
+  
   const fetchSubjects = async (streamId, stdId) => {
     try {
       let response;
@@ -276,8 +265,6 @@ export const McqQuestion = () => {
  
   
   const submitHandler = async (data) => {
-    console.log(questionsList);
-    debugger;
     let response;
     const formData = new FormData();
     if (data.fileUpload && data.fileUpload[0]) {
@@ -495,7 +482,7 @@ export const McqQuestion = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <MySnackBar />
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Question :</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:constant.backgroundColor }}>Add Question :</Typography>
       <Grid
         container
         spacing={2}

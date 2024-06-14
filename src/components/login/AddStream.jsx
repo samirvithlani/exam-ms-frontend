@@ -24,11 +24,18 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
+import { constant } from "../../constant";
 
 export const AddStream = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const defaultTheme = createTheme();
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   const [standards, setStandards] = useState([]);
   const [streams, setStreams] = useState([]);
   const [filteredStreams, setFilteredStreams] = useState([]);

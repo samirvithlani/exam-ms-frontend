@@ -125,7 +125,25 @@ const MCQQuestionsPage = () => {
       console.log(error, "erroro");
     }
   };
+  const handleCheckboxChange = (questionId, optionNumber, isChecked) => {
+    setSelectedAnswers(prevState => {
+      let updatedValueArray = prevState[questionId].split(',').filter(val => val);
 
+      if (isChecked) {
+        updatedValueArray.push(optionNumber);
+      } else {
+        updatedValueArray = updatedValueArray.filter(val => val !== optionNumber);
+      }
+
+      const updatedValue = updatedValueArray.sort().join(',');
+
+      return { ...prevState, [questionId]: updatedValue };
+    });
+
+    if (!attemptedQuestions.includes(questionId)) {
+      setAttemptedQuestions([...attemptedQuestions, questionId]);
+    }
+  };
   const HtmlLabel = ({ html }) => (
     <div dangerouslySetInnerHTML={{ __html: html }} />
   );
@@ -159,8 +177,8 @@ const MCQQuestionsPage = () => {
                             control={
                               <Checkbox
                                 checked={selectedAnswers[question._id].includes(optionNumber)}
-                                onChange={(e) => handleAnswerChange(question._id, e.target.checked ? [...selectedAnswers[question._id], optionNumber] : selectedAnswers[question._id].filter(item => item !== optionNumber))}
-                              />
+                                onChange={(e) => handleCheckboxChange(question._id, optionNumber, e.target.checked)}
+                                />
                             }
                             label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
                           />
@@ -183,7 +201,7 @@ const MCQQuestionsPage = () => {
                             key={optionNumber}
                             value={optionNumber}
                             control={<Radio />}
-                            label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+                            label={<HtmlLabel html={question[key]} />} 
                           />
                         );
                       }

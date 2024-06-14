@@ -19,11 +19,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import loginImage from "../../assets/images/loginImage3.svg";
 import { Link } from "react-router-dom";
+import { constant } from "../../constant";
 
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: "#673AB7", // Change this to your desired color
+      main: constant.backgroundColor, // Change this to your desired color
     },
   },
 });

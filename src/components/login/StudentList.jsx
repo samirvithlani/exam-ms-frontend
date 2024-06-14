@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardActions, Button, Grid, Typography, TextField, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
+import { constant } from '../../constant';
 
 const StudentList = () => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const StudentList = () => {
     <Paper sx={{ p: 2, display: "flex", flexDirection: "column", height: "auto", backgroundColor: "white", m1: 2 }} className="responsive-container">
       {isLoading && <CustomeLoader />}
 
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Student List ::</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:constant.backgroundColor }}>Student List ::</Typography>
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} sm={6} md={3}>
@@ -107,7 +108,7 @@ const StudentList = () => {
           <Grid item xs={12} sm={6} md={4} key={student.id}>
             <Card sx={{ backgroundColor: '#f0f0f0', boxShadow: 3, borderRadius: 2 }}>
               <CardContent>
-                <Typography variant="h5" component="div" sx={{ textTransform: 'uppercase', color: '#010080' }}>
+                <Typography variant="h5" component="div" sx={{ textTransform: 'uppercase', color: constant.backgroundColor }}>
                   {student.firstname}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
