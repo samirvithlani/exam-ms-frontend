@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, createTheme, ThemeProvider } from '@mui/material';
 import { Delete as DeleteIcon, Close as CloseIcon } from '@mui/icons-material';
+import { constant } from '../../constant';
+import { CustomeLoader } from '../Layouts/CustomeLoader';
 
 export const DeletedExam = () => {
   const [exam, setExam] = useState([]);
@@ -51,12 +53,20 @@ export const DeletedExam = () => {
     }
     handleCloseDeleteDialog();
   };
-
-  if (loading) {
-    return <div><CircularProgress /></div>;
-  }
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
+ 
 
   return (
+    <ThemeProvider theme={defaultTheme}>
+      {
+        loading && <CustomeLoader/>
+      }
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -112,5 +122,6 @@ export const DeletedExam = () => {
         </DialogActions>
       </Dialog>
     </TableContainer>
+    </ThemeProvider>
   );
 };

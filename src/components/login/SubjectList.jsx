@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
+import { constant } from '../../constant';
 
 export const SubjectList = () => {
   const { id } = useParams();
@@ -71,7 +72,7 @@ export const SubjectList = () => {
 
   return (
     <Box padding="20px">
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 1, color: "#010080" }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 1, color: constant.backgroundColor }}>
         Subject List ::
       </Typography>
 

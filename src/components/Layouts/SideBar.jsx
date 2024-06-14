@@ -280,7 +280,7 @@ export const SideBar = () => {
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",
-              borderRadius: "30px",
+              borderRadius: "10px",
               backgroundColor: "white",
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
@@ -306,7 +306,7 @@ export const SideBar = () => {
                   disablePadding
                   sx={{
                     "&:hover": {
-                      backgroundColor: "#7776EE",
+                      backgroundColor: constant.backgroundColor,
                     },
                   }}
                 >
