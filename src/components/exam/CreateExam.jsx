@@ -16,6 +16,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { constant } from "../../constant";
 import {
   MenuItem,
   FormControl,
@@ -242,7 +243,7 @@ export const CreateExam = () => {
   const defaultTheme = createTheme({
     palette: {
       primary: {
-        main: '#673AB7', // Change this to your desired color
+        main: constant.backgroundColor // Change this to your desired color
       },
     },
   });

@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from "../../constant";
 
 const UserGrid = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const UserGrid = () => {
         sx={{
           fontSize: 12,
           padding: "5px 10px",
-          backgroundColor: "rgb(103,58,183)",
+          backgroundColor:constant.backgroundColor,
           color: "white",
           mt: { xs: 2, sm: 0 },
           mb: 2,

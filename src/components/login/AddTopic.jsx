@@ -21,10 +21,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import Cookies from "js-cookie";
+import { constant } from '../../constant';
 
 export const AddTopic = () => {
   const navigate = useNavigate();
-  const defaultTheme = createTheme();
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   const [subjects, setSubjects] = useState([]);
   const [standards, setStandards] = useState([]);
   const [selectedStandards, setSelectedStandards] = useState([]);

@@ -18,11 +18,14 @@ import {
   Toolbar,
   Paper,
   Grid,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import Cookies from "js-cookie";
 import QuestionList from "../CustomeCopmonent/QuestionList"; // Ensure this component is correctly imported
+import { constant } from "../../constant";
 
 function MCQQuestion({ question, options }) {
   return (
@@ -46,7 +49,6 @@ function MCQQuestion({ question, options }) {
     </Accordion>
   );
 }
-
 
 function App() {
   const [questions, setQuestions] = useState([]);
@@ -185,139 +187,171 @@ function App() {
   const handleTopicChange = (e) => {
     setSelectedTopic(e.target.value);
   };
-
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   return (
-    <Container>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">MCQ Portal</Typography>
-        </Toolbar>
-      </AppBar>
-      <Box my={4}>
-        <Typography variant="h4" gutterBottom>
-          All Question List
-        </Typography>
-        {role === "faculty" && userSubjects.length === 0 ? (
-          <Typography variant="h6" color="error">
-            Please contact admin to assign the subject.
+    <ThemeProvider theme={defaultTheme}>
+      <Container>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">MCQ Portal</Typography>
+          </Toolbar>
+        </AppBar>
+        <Box my={4}>
+          <Typography variant="h4" gutterBottom>
+            All Question List
           </Typography>
-        ) : (
-          <>
-            <Paper elevation={3} sx={{ padding: 2, marginBottom: 4 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField
-                    fullWidth
-                    label="Search Questions"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    sx={{ marginBottom: 2 }}
-                  />
-                </Grid>
-                {role === "faculty" && (
+          {role === "faculty" && userSubjects.length === 0 ? (
+            <Typography variant="h6" color="error">
+              Please contact admin to assign the subject.
+            </Typography>
+          ) : (
+            <>
+              <Paper elevation={3} sx={{ padding: 2, marginBottom: 4 }}>
+                <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
-                      <InputLabel id="subject-filter-label">Filter by Subject</InputLabel>
+                    <TextField
+                      fullWidth
+                      label="Search Questions"
+                      variant="outlined"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      sx={{ marginBottom: 2 }}
+                    />
+                  </Grid>
+                  {role === "faculty" && (
+                    <Grid item xs={12} sm={6} md={4}>
+                      <FormControl
+                        fullWidth
+                        variant="outlined"
+                        sx={{ marginBottom: 2 }}
+                      >
+                        <InputLabel id="subject-filter-label">
+                          Filter by Subject
+                        </InputLabel>
+                        <Select
+                          labelId="subject-filter-label"
+                          value={selectedSubject}
+                          onChange={handleSubjectChange}
+                          label="Filter by Subject"
+                        >
+                          <MenuItem value="">
+                            <em>All Subjects</em>
+                          </MenuItem>
+                          {subject.map((subject) => (
+                            <MenuItem key={subject._id} value={subject._id}>
+                              {subject.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                  <Grid item xs={12} sm={6} md={4}>
+                    <FormControl
+                      fullWidth
+                      variant="outlined"
+                      sx={{ marginBottom: 2 }}
+                    >
+                      <InputLabel id="standard-filter-label">
+                        Filter by Standard
+                      </InputLabel>
                       <Select
-                        labelId="subject-filter-label"
-                        value={selectedSubject}
-                        onChange={handleSubjectChange}
-                        label="Filter by Subject"
+                        labelId="standard-filter-label"
+                        value={selectedStandard}
+                        onChange={handleStandardChange}
+                        label="Filter by Standard"
                       >
                         <MenuItem value="">
-                          <em>All Subjects</em>
+                          <em>All Standards</em>
                         </MenuItem>
-                        {subject.map((subject) => (
-                          <MenuItem key={subject._id} value={subject._id}>
-                            {subject.name}
+                        {standards.map((standard) => (
+                          <MenuItem key={standard._id} value={standard._id}>
+                            {standard.std}
                           </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
                   </Grid>
-                )}
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
-                    <InputLabel id="standard-filter-label">Filter by Standard</InputLabel>
-                    <Select
-                      labelId="standard-filter-label"
-                      value={selectedStandard}
-                      onChange={handleStandardChange}
-                      label="Filter by Standard"
+                  <Grid item xs={12} sm={6} md={4}>
+                    <FormControl
+                      fullWidth
+                      variant="outlined"
+                      sx={{ marginBottom: 2 }}
                     >
-                      <MenuItem value="">
-                        <em>All Standards</em>
-                      </MenuItem>
-                      {standards.map((standard) => (
-                        <MenuItem key={standard._id} value={standard._id}>
-                          {standard.std}
+                      <InputLabel id="difficulty-filter-label">
+                        Filter by Difficulty
+                      </InputLabel>
+                      <Select
+                        labelId="difficulty-filter-label"
+                        value={selectedDifficulty}
+                        onChange={handleDifficultyChange}
+                        label="Filter by Difficulty"
+                      >
+                        <MenuItem value="">
+                          <em>All Difficulty Levels</em>
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
-                    <InputLabel id="difficulty-filter-label">Filter by Difficulty</InputLabel>
-                    <Select
-                      labelId="difficulty-filter-label"
-                      value={selectedDifficulty}
-                      onChange={handleDifficultyChange}
-                      label="Filter by Difficulty"
+                        {difficultes.map((item) => (
+                          <MenuItem key={item._id} value={item._id}>
+                            {item.difficulty}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <FormControl
+                      fullWidth
+                      variant="outlined"
+                      sx={{ marginBottom: 2 }}
                     >
-                      <MenuItem value="">
-                        <em>All Difficulty Levels</em>
-                      </MenuItem>
-                      {difficultes.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.difficulty}
+                      <InputLabel id="topic-filter-label">
+                        Filter by Topic
+                      </InputLabel>
+                      <Select
+                        labelId="topic-filter-label"
+                        value={selectedTopic}
+                        onChange={handleTopicChange}
+                        label="Filter by Topic"
+                      >
+                        <MenuItem value="">
+                          <em>All Topics</em>
                         </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                        {topics.map((topic) => (
+                          <MenuItem key={topic._id} value={topic._id}>
+                            {topic.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
-                    <InputLabel id="topic-filter-label">Filter by Topic</InputLabel>
-                    <Select
-                      labelId="topic-filter-label"
-                      value={selectedTopic}
-                      onChange={handleTopicChange}
-                      label="Filter by Topic"
-                    >
-                      <MenuItem value="">
-                        <em>All Topics</em>
-                      </MenuItem>
-                      {topics.map((topic) => (
-                        <MenuItem key={topic._id} value={topic._id}>
-                          {topic.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Paper>
-        
-             {filteredQuestions.map((question, index) => {
-              const options = Object.entries(question)
-                .filter(([key, value]) => key.startsWith("Option") && value)
-                .map(([key, value]) => value);
+              </Paper>
 
-              return (
-                <QuestionList
-                  key={index}
-                  question={question.question}
-                  type={question.type}
-                  options={options}
-                />
-              );
-            })}
-          </>
-        )}
-      </Box>
-    </Container>
+              {filteredQuestions.map((question, index) => {
+                const options = Object.entries(question)
+                  .filter(([key, value]) => key.startsWith("Option") && value)
+                  .map(([key, value]) => value);
+
+                return (
+                  <QuestionList
+                    key={index}
+                    question={question.question}
+                    type={question.type}
+                    options={options}
+                  />
+                );
+              })}
+            </>
+          )}
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Grid, Typography, useTheme, Paper } from "@mui/material";
 import { useDemoData } from "@mui/x-data-grid-generator";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from "../../constant";
 
 const CompanyList = () => {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const CompanyList = () => {
     <Paper sx={paperStyle} className="responsive-container">
       {isLoading ? <CustomeLoader /> : null}
       <Grid style={{ height: 400, width: "100%" }}>
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Company List ::</Typography>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:constant.backgroundColor}}>Company List ::</Typography>
 
         <Button
           variant="contained"
