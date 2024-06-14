@@ -220,6 +220,15 @@ export const SideBar = () => {
       textColor: "#7D8FB3",
       activeMenuFor: ["examdetails"],
     },
+    {
+      id: 22,
+      name: "Deleted Exam",
+      linkUrl: "deletedexam",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["deletedexam"],
+      logoImage: ListIcon
+    },
+    
   ];
   const filteredRouteArray = RouteArray.filter(
     (route) =>

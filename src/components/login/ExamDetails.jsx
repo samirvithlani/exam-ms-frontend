@@ -32,6 +32,7 @@ export const ExamDetails = () => {
   const [initiallySelectedQuestions, setInitiallySelectedQuestions] = useState(
     []
   );
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -45,7 +46,6 @@ export const ExamDetails = () => {
     try {
       const response = await axios.get("/mcq");
       setAllQuestions(response.data);
-      console.log("all questions", response.data);
     } catch (error) {
       console.log("error ", error);
     }
@@ -101,14 +101,28 @@ export const ExamDetails = () => {
 
     navigate(`/${dashboardPath}/update-exam/${id}`);
   };
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
 
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const confirmDelete = () => {
+    handleDelete(id);
+    handleCloseDeleteDialog();
+  };
   const handleDelete = async (id) => {
     try {
-      await toast.promise(axios.delete(`/exam/${id}`), {
+      const response = await toast.promise(axios.put(`/delete/${id}`), {
         pending: "Deleting Exam...",
         success: "Exam Deleted Successfully!",
         error: "Failed to delete Exam. Please try again.",
       });
+      if(response.status === 200){
+        navigate('/adminDashboard/subjectlist')
+      }
     } catch (error) {
       console.log("Error while deleting exam:", error);
     }
@@ -532,8 +546,8 @@ export const ExamDetails = () => {
           <Button
             variant="contained"
             color="error"
-            onClick={() => handleDelete(id)}
-          >
+            onClick={handleOpenDeleteDialog}
+            >
             Delete Exam
           </Button>
           <Button
@@ -638,6 +652,39 @@ export const ExamDetails = () => {
             color="primary"
           >
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+      >
+        <DialogTitle>
+          Confirm Deletion
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseDeleteDialog}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this exam?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmDelete} color="error">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

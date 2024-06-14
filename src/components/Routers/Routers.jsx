@@ -50,6 +50,7 @@ import GoogleCallback from "../login/GoogleCallback";
 import { QuillDemo } from "../QuillDemo";
 import FacultyView from "../Layouts/FacultyView";
 import StudentDetail from "../dashboard/StudentDetail";
+import { DeletedExam } from "../exam/DeletedExam";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -379,6 +380,10 @@ const MainRouter = ({ children }) => {
             {
               path: "facultyDetails/:id",
               element: <FacultyView />,
+            },
+            {
+              path: "deletedexam",
+              element: <DeletedExam />,
             },
           ],
         },
