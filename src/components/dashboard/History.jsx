@@ -31,6 +31,7 @@ const Historyofuser = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`/userhistory/${_id}`);
+      console.log("response", response);
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,
         displayid: index + 1,
@@ -40,6 +41,7 @@ const Historyofuser = () => {
         totalmarks: exam.total_marks,
         result: exam.result,
       }));
+      console.log("filteredData", filteredData);
       setHistories(filteredData);
       setIsLoading(false);
     } catch (error) {
