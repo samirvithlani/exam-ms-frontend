@@ -4,7 +4,9 @@ import { useParams, useLocation } from "react-router-dom";
 import {
   Grid,
   Typography,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const ViewExam = () => {
   const location = useLocation();
@@ -27,6 +29,17 @@ export const ViewExam = () => {
     setQuestions(response.data.mcq);
   };
 
+  const deleteQuestion = async (mcqId) => {
+    try {
+      await axios.delete(`/remove/${id}`, {
+        data: { mcqId }
+      });
+      setQuestions(prevQuestions => prevQuestions.filter(q => q._id !== mcqId));
+    } catch (error) {
+      console.error('Failed to delete the question', error);
+    }
+  };
+
   const cardStyle = {
     backgroundColor: "rgb(103,58,183)",
     border: "1px solid #ddd",
@@ -47,6 +60,7 @@ export const ViewExam = () => {
     fontFamily: "Lato",
     padding: "20px",
     marginBottom: "20px",
+    position: 'relative'
   };
 
   return (
@@ -76,6 +90,13 @@ export const ViewExam = () => {
 
         return (
           <Grid item key={question._id} xs={12} style={{ ...questionCardStyle }}>
+            <IconButton
+              aria-label="delete"
+              style={{ position: 'absolute', top: 10, right: 10, color: 'white' }}
+              onClick={() => deleteQuestion(question._id)}
+            >
+              <DeleteIcon />
+            </IconButton>
             <Typography variant="h6" gutterBottom>
               <div dangerouslySetInnerHTML={{ __html: question.question }} />
             </Typography>

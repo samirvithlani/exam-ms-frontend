@@ -229,6 +229,14 @@ export const SideBar = () => {
       activeMenuFor: ["deletedexam"],
       logoImage: ListIcon,
     },
+    {
+      id: 23,
+      name: "Deleted Questions",
+      linkUrl: "deletedquestion",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["deletedquestion"],
+      logoImage: ListIcon
+    },
   ];
 
   const filteredRouteArray = RouteArray.filter(
