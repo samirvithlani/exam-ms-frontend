@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ToastContainer, toast } from "react-toastify";
+import { constant } from "../../constant";
 
 export const ExamDetails = () => {
   const location = useLocation();
@@ -308,10 +309,9 @@ export const ExamDetails = () => {
       <Grid item xs={12}>
         <Typography
           variant="h4"
-          align="center"
-          sx={{ fontWeight: "bold", mb: 2 }}
+          sx={{ fontWeight: "bold", mb: 2 ,color:constant.backgroundColor}}
         >
-          EXAM DETAILS
+          EXAM DETAILS1
         </Typography>
       </Grid>
       <Grid item xs={12}>

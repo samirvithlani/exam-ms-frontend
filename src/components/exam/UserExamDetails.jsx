@@ -5,13 +5,14 @@ import { Box, Button, Grid, Typography, ListItemText } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from "../../constant";
 
 export const UserExamDetails = () => {
   const location = useLocation();
   const [questions, setQuestions] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
   const [userdata, setUserdata] = useState([]);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -24,9 +25,8 @@ export const UserExamDetails = () => {
     setisLoading(true);
     try {
       const response = await axios.get("/mcq");
-      if(response.status===200){
+      if (response.status === 200) {
         setisLoading(false);
-
       }
       setAllQuestions(response.data);
     } catch (error) {
@@ -66,209 +66,95 @@ export const UserExamDetails = () => {
     });
   };
 
+  const boxStyle = {
+    bgcolor: "white",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    padding: "10px",
+    textAlign: "center",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Updated boxShadow for better visibility
+    cursor: "pointer",
+    margin: "5px",
+    flex: 1,
+  };
+
+  const TypoGraphyProps = {
+    variant: "h6",
+    color: constant.backgroundColor,
+    fontWeight: "bold",
+  }
+  
+
   return (
     <Grid container spacing={2}>
-      {
-        isLoading  && <CustomeLoader />
-      }
+      {isLoading && <CustomeLoader />}
       <Grid item xs={12}>
         <Typography
           variant="h4"
-          align="center"
-          sx={{ fontWeight: "bold", mb: 2 }}
+          sx={{ fontWeight: "bold", mb: 2, color: constant.backgroundColor }}
         >
-          EXAM DETAILS
+          EXAM DETAILS ::
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {/* First line: Name, Standard, Stream, Subject, Topic */}
           <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">Name: {questions.name}</Typography>
+            <Box sx={boxStyle}>
+              <Typography sx = {TypoGraphyProps}>Name: {questions.name}</Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Standard: {questions.std?.std}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Stream: {questions.stream?.name}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Subject: {questions.subject?.name}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Topic: {questions.examtopic?.name}
               </Typography>
             </Box>
           </Box>
           {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Type: {questions?.examtype?.type}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 No Of Question: {questions?.noofquestions}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Difficulty: {questions?.difficulty?.difficulty}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Per Question marks: {questions?.perQuestionmarks}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
-              <Typography variant="h6">
+            <Box sx={boxStyle}>
+            <Typography sx = {TypoGraphyProps}>
                 Total marks: {questions?.totalmarks}
               </Typography>
             </Box>
             <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
+             sx={boxStyle}
             >
-              <Typography variant="h6">
+              <Typography sx = {TypoGraphyProps}>
                 Credits: {questions?.credit || "N/A"}
               </Typography>
             </Box>
@@ -281,7 +167,7 @@ export const UserExamDetails = () => {
           <Button
             variant="contained"
             color="secondary"
-            sx={{ mr: 1 }}
+            sx={{ mr: 1 ,backgroundColor: constant.backgroundColor, color: "white"}}
             onClick={() =>
               handleStartExam(
                 questions?._id,

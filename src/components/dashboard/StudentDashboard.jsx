@@ -5,6 +5,7 @@ import Chart from "chart.js/auto";
 import Cookies from "js-cookie";
 import { PieComponent } from "../charts/PieComponent";
 import "../../assets/css/chart.css";
+import { constant } from "../../constant";
 
 export const StudentDashboard = () => {
   const chartRef = useRef(null);
@@ -12,6 +13,11 @@ export const StudentDashboard = () => {
   const [wallet, setwallet] = useState([]);
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
+  const TypographyProps = {
+      variant: "h6",  
+      color: constant.backgroundColor
+  
+  }
   const cardStyle = {
     border: "2px solid #ddd",
     borderRadius: "20px",
@@ -86,7 +92,7 @@ export const StudentDashboard = () => {
             // mt: 2,
             ml:"0.1px",
             p: 2,
-            background: "rgb(1,0,128)",
+            background:constant.backgroundColor,
             pt: 10,
             gap: 1,
             width: "100%",
@@ -109,11 +115,11 @@ export const StudentDashboard = () => {
               style={{ position: "relative" }}
             >
               <div>
-                <Typography
-                  variant="h4"
-                  sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
-                >
-                  Exam History
+                  <Typography
+                    variant="h4"
+                    sx={{ color: constant.backgroundColor, }}
+                  >
+                  History
                 </Typography>
                 <Typography
                   variant="h6"
@@ -180,7 +186,7 @@ export const StudentDashboard = () => {
               <div>
                 <Typography
                   variant="h4"
-                  sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                  sx={TypographyProps}
                 >
                   Credit Detail
                 </Typography>
@@ -229,7 +235,7 @@ export const StudentDashboard = () => {
             >
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={TypographyProps}
               >
                 Exam Detail
               </Typography>
@@ -259,7 +265,7 @@ export const StudentDashboard = () => {
             >
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={TypographyProps}
               >
                 Exam Detail
               </Typography>
@@ -298,7 +304,7 @@ export const StudentDashboard = () => {
             >
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={TypographyProps}
               >
                 Number of Exams Taken by Subject
               </Typography>
@@ -333,7 +339,7 @@ export const StudentDashboard = () => {
             >
               <Typography
                 variant="h4"
-                sx={{ color: "rgb(103,116,142)", fontFamily: "Lato" }}
+                sx={TypographyProps}
               >
                 Subject Wise Exam Marks
               </Typography>
