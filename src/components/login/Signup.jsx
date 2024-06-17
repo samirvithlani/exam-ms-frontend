@@ -131,8 +131,8 @@ export default function SignUp() {
                   alignItems: "center",
                 }}
               >
-                <Typography component="h1" variant="h4" sx={{ fontFamily: "Lato" }}>
-                  Sign Up
+                <Typography component="h1" variant="h4" sx={{ fontWeight:"bold",color:constant.backgroundColor}}>
+                  Create n  ew Account
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <Grid container spacing={2}>

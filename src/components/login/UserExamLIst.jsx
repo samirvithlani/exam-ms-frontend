@@ -213,7 +213,7 @@ export const UserExamList = () => {
                     padding: "20px",
                     textAlign: "center",
                     cursor: "pointer",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    boxShadow: "0 8px 8px rgba(0, 0, 0, 0.2)",
                     height: "150px",
                     display: "flex",
                     flexDirection: "column",
@@ -223,14 +223,26 @@ export const UserExamList = () => {
                     "&:hover": {
                       bgcolor: "#010080",
                       color: "white",
+                      "& .MuiAvatar-root": {
+                        // Targeting the Avatar component on hover
+                        bgcolor: "white",
+                        color: constant.backgroundColor,
+                      },
                     },
-                    wordBreak: "break-word", // Ensures long words break and stay within the box
-                    overflowWrap: "break-word", // Ensures wrapping of words
-                    whiteSpace: "normal", // Ensures normal whitespace handling
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                    whiteSpace: "normal",
                   }}
                   onClick={() => handleClick(item._id)}
                 >
-                  <Avatar>{getAvatarLetter(item.name)}</Avatar>
+                  <Avatar
+                    sx={{
+                      backgroundColor: constant.backgroundColor,
+                      transition: "background-color 0.3s ease, color 0.3s ease",
+                    }}
+                  >
+                    {getAvatarLetter(item.name)}
+                  </Avatar>
                   <Typography
                     variant="h6"
                     sx={{ marginTop: "10px", textTransform: "uppercase" }}

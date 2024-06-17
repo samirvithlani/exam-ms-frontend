@@ -303,7 +303,7 @@ export const StudentDashboard = () => {
               spacing={0}
             >
               <Typography
-                variant="h4"
+                variant="h6"
                 sx={TypographyProps}
               >
                 Number of Exams Taken by Subject

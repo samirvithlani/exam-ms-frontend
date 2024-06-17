@@ -76,6 +76,8 @@ export const UserExamDetails = () => {
     cursor: "pointer",
     margin: "5px",
     flex: 1,
+    height: "100px",
+    
   };
 
   const TypoGraphyProps = {

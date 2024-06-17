@@ -30,6 +30,7 @@ import { Button } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from '@mui/icons-material/Home';
 import { useParams } from "react-router-dom";
+import { constant } from "../../constant";
 
 export const UserSideBar = () => {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ export const UserSideBar = () => {
               >
                 <ListItemButton>
                   <ListItemIcon>
-                    <Avatar sx={{ bgcolor: "rgb(1,0,128)" }}>
+                    <Avatar sx={{ bgcolor: constant.backgroundColor }}>
                       {res?.logoImage && <res.logoImage />}
                     </Avatar>
                   </ListItemIcon>
