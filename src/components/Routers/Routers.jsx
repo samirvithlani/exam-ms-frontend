@@ -51,6 +51,7 @@ import { QuillDemo } from "../QuillDemo";
 import FacultyView from "../Layouts/FacultyView";
 import StudentDetail from "../dashboard/StudentDetail";
 import { DeletedExam } from "../exam/DeletedExam";
+import DeletedMcq from "../exam/DeletedMcq";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -385,6 +386,10 @@ const MainRouter = ({ children }) => {
               path: "deletedexam",
               element: <DeletedExam />,
             },
+            {
+              path:"deletedquestion",
+              element:<DeletedMcq/>
+            }
           ],
         },
       ],
