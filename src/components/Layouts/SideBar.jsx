@@ -1,3 +1,4 @@
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Button,
@@ -17,7 +18,6 @@ import {
   createTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
 import AddIcon from "@mui/icons-material/Add";
@@ -43,25 +43,27 @@ export const SideBar = () => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(!isMobile);
   const [subjects, setsubjects] = useState([]);
   const [expandedSubject, setExpandedSubject] = useState(null);
-  const [Loading,setisloading] = useState(false)
+  const [Loading, setisloading] = useState(false);
+
   useEffect(() => {
     setOpenLogoutDialog(false);
     // fetchsubject()
   }, []);
- const fetchsubject = async () =>{
-  try {
-    setisloading(true)
-    const response = await axios.get("/subject");
-    if(response.status===200){
-      setsubjects(response.data)
-      setisloading(false)
+
+  const fetchsubject = async () => {
+    try {
+      setisloading(true);
+      const response = await axios.get("/subject");
+      if (response.status === 200) {
+        setsubjects(response.data);
+        setisloading(false);
+      }
+      // console.log(response.data,"data");
+    } catch (error) {
+      console.log(error, "error");
     }
-    // console.log(response.data,"data");
-  } catch (error) {
-    console.log(error,"error");
-  }
- 
-}
+  };
+
   const handleOpenLogoutDialog = () => {
     setOpenLogoutDialog(true);
   };
@@ -74,13 +76,15 @@ export const SideBar = () => {
     // Remove cookies and navigate to login page
     Cookies.remove("token");
     Cookies.remove("name");
-    Cookies.remove("_id");  
+    Cookies.remove("_id");
     Cookies.remove("role");
     navigate("/login");
   };
+
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
+
   const RouteArray = [
     {
       id: 12,
@@ -89,7 +93,6 @@ export const SideBar = () => {
       linkUrl: "",
       textColor: "#7D8FB3",
       activeMenuFor: ["adminDashboard"],
-     
     },
     {
       id: 3,
@@ -107,7 +110,6 @@ export const SideBar = () => {
       activeMenuFor: ["profile"],
       logoImage: ListIcon,
     },
-
     {
       id: 6,
       name: "ADD MCQ",
@@ -212,7 +214,6 @@ export const SideBar = () => {
       activeMenuFor: ["creditRequestList"],
       logoImage: ListIcon,
     },
-   
     {
       id: 21,
       name: "Exam Details",
@@ -226,10 +227,10 @@ export const SideBar = () => {
       linkUrl: "deletedexam",
       textColor: "#7D8FB3",
       activeMenuFor: ["deletedexam"],
-      logoImage: ListIcon
+      logoImage: ListIcon,
     },
-    
   ];
+
   const filteredRouteArray = RouteArray.filter(
     (route) =>
       route.name !== "View Exam" &&
@@ -238,6 +239,7 @@ export const SideBar = () => {
       route.name != "userprofile" &&
       route.name !== "Exam Details"
   );
+
   const handleToggleSubject = (subjectId) => {
     if (expandedSubject === subjectId) {
       setExpandedSubject(null);
@@ -249,10 +251,11 @@ export const SideBar = () => {
   const defaultTheme = createTheme({
     palette: {
       primary: {
-        main: constant.backgroundColor, // Change this to your desired color
+        main: constant.backgroundColor, 
       },
     },
   });
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <AdminHeader
@@ -304,20 +307,27 @@ export const SideBar = () => {
                       : ""
                   }
                   disablePadding
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: constant.backgroundColor,
-                    },
-                  }}
                 >
                   {res.name === "List" ? (
                     <ListItemButton
-                      sx={{ paddingLeft: "20px" }}
+                      sx={{
+                        paddingLeft: "20px",
+                        "&:hover .sidebartext": {
+                          color: "white",
+                        },
+                        "&:hover": {
+                          backgroundColor: constant.backgroundColor,
+                        },
+                      }}
                       onClick={() => handleToggleSubject(res.id)}
                     >
                       <ListItemIcon>
                         <Avatar
-                          sx={{ bgcolor:constant.backgroundColor, width: 24, height: 24 }}
+                          sx={{
+                            bgcolor: constant.backgroundColor,
+                            width: 24,
+                            height: 24,
+                          }}
                         >
                           {res?.logoImage && <res.logoImage />}
                         </Avatar>
@@ -337,11 +347,23 @@ export const SideBar = () => {
                     <ListItemButton
                       component={Link}
                       to={res.linkUrl != "null" ? res.linkUrl : "#"}
-                      style={{ marginTop: "5px" }}
+                      sx={{
+                        marginTop: "5px",
+                        "&:hover .sidebartext": {
+                          color: "white",
+                        },
+                        "&:hover": {
+                          backgroundColor: constant.backgroundColor,
+                        },
+                      }}
                     >
                       <ListItemIcon>
                         <Avatar
-                          sx={{ bgcolor: constant.backgroundColor, width: 24, height: 24 }}
+                          sx={{
+                            bgcolor: constant.backgroundColor,
+                            width: 24,
+                            height: 24,
+                          }}
                         >
                           {res?.logoImage && <res.logoImage />}
                         </Avatar>
@@ -363,7 +385,6 @@ export const SideBar = () => {
                       button
                       component={Link}
                       to={subject.linkUrl}
-                      // onClick={handleCloseDrawer}
                     >
                       <ListItemText primary={subject.name} />
                     </ListItem>
@@ -374,7 +395,11 @@ export const SideBar = () => {
           <Box sx={{ marginTop: "auto" }}>
             <Button
               variant="contained"
-              sx={{ color: "#whitesmoke", bgcolor: constant.backgroundColor, fontFamily: "Lato"}}
+              sx={{
+                color: "#whitesmoke",
+                bgcolor: constant.backgroundColor,
+                fontFamily: "Lato",
+              }}
               startIcon={<ExitToAppIcon />}
               onClick={handleOpenLogoutDialog}
               fullWidth
@@ -383,10 +408,7 @@ export const SideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box
-          component="main"
-          sx={{ width: "100%",  height: "100%",mt:3,mr:1}}
-        >
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 1 }}>
           <Outlet />
         </Box>
       </Box>
@@ -402,5 +424,4 @@ export const SideBar = () => {
       </Dialog>
     </ThemeProvider>
   );
-  
 };

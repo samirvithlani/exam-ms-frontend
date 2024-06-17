@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Avatar, Typography, ListItemText, Button } from '@mui/material';
+import { Grid, Box, Avatar, Typography, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -19,8 +19,8 @@ export const GridList = () => {
         setLoading(true);
         const response = await axios.get(`/exams/${id}`);
         if (response.status === 200) {
-          const ActiveExam = response.data.filter(data=>data.isActive)
-          setExam(ActiveExam); 
+          const ActiveExam = response.data.filter(data => data.isActive);
+          setExam(ActiveExam);
         }
         setLoading(false);
       } catch (error) {
@@ -73,17 +73,17 @@ export const GridList = () => {
 
   return (
     <Box padding="20px">
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleBackClick} 
-        style={{ marginBottom: '20px' }} 
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleBackClick}
+        style={{ marginBottom: '20px' }}
         startIcon={<ArrowBackIcon />}
       >
         Back to Subject List
       </Button>
 
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3 }}>
         Exam List
       </Typography>
 
@@ -95,22 +95,47 @@ export const GridList = () => {
         </Typography>
       )}
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {exam?.length > 0 &&
           exam.map((item) => (
-            <Grid key={item.id} item xs={12} sm={6} md={4} lg={3} xl={2}>
+            <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
               <Box
                 bgcolor="white"
                 border="1px solid #ccc"
-                borderRadius="5px"
-                padding="10px"
+                borderRadius="10px"
+                padding="20px"
                 textAlign="center"
                 onClick={() => handleClick(item._id)}
-                boxShadow="0 2px 4px rgba(0,0,0,0.1)" // Add shadow here
-                style={{ cursor: 'pointer' }}
+                sx={{
+                  cursor: 'pointer',
+                  boxShadow: 3,
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                  },
+                }}
               >
-                <Avatar>{getAvatarLetter(item.name)}</Avatar>
-                <ListItemText primary={item.name} />
+                <Avatar
+                  src={`/path/to/your/images/${item._id}.jpg`} // replace with your image path logic
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    margin: '0 auto 10px auto'
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 'bold',
+                    mt: 2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    maxWidth: '100%', // Ensure the text does not overflow the box
+                  }}
+                >
+                  {item.name}
+                </Typography>
               </Box>
             </Grid>
           ))}

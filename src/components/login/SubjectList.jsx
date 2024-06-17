@@ -72,7 +72,7 @@ export const SubjectList = () => {
 
   return (
     <Box padding="20px">
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 1, color: constant.backgroundColor }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 3, color: constant.backgroundColor }}>
         Subject List ::
       </Typography>
 
@@ -84,20 +84,36 @@ export const SubjectList = () => {
         </Typography>
       )}
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {filteredSubjects.map((item) => (
           <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
             <Box
               bgcolor="white"
               border="1px solid #ccc"
-              borderRadius="5px"
-              padding="10px"
+              borderRadius="10px"
+              padding="20px"
               textAlign="center"
               onClick={() => handleClick(item._id)}
-              style={{ cursor: 'pointer' }}
+              sx={{ 
+                cursor: 'pointer',
+                boxShadow: 3,
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                },
+              }}
             >
-              <Avatar>{getAvatarLetter(item.name)}</Avatar>
-              <Typography variant="body1">{item.name}</Typography>
+              <Avatar
+                src={`/path/to/your/images/${item._id}.jpg`} // replace with your image path logic
+                sx={{ 
+                  width: 80, 
+                  height: 80, 
+                  margin: '0 auto 10px auto' 
+                }}
+              />
+              <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2,color:constant.backgroundColor }}>
+                {item.name}
+              </Typography>
             </Box>
           </Grid>
         ))}
