@@ -35,11 +35,11 @@ const Historyofuser = () => {
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,
         displayid: index + 1,
-        name: exam.exam_id.name,
+        name: exam.exam_id?.name,
         examType: exam.exam_type?.type,
-        noOfQuestions: exam.exam_id.noofquestions || 0,
-        totalmarks: exam.total_marks,
-        result: exam.result,
+        noOfQuestions: exam.exam_id?.noofquestions || 0,
+        totalmarks: exam?.total_marks,
+        result: exam?.result,
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -51,6 +51,7 @@ const Historyofuser = () => {
   };
 
   const viewAnswer = (id) => {
+    
     navigate(`/userDasboard/viewAnswers/${id}`);
   };
 

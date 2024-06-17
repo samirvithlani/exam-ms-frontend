@@ -10,27 +10,53 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StudentDetail = () => {
-  const [userData, setUserData] = useState({
-    firstname: "John",
-    lastname: "Doe",
-    email: "john.doe@example.com",
-    phone: "1234567890",
-    profilePic: "https://via.placeholder.com/150", // Placeholder image
-  });
-  const id = useParams().id;
+  const [userData, setUserData] = useState({});
+  const [examData, setExamData] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    // fetchData(); // Commented out for now, we'll fill in data later
+    fetchdata();
+    fetchUserData();
   }, []);
 
-  // Function to handle form submission
+  const fetchdata = async () => {
+    try {
+      const response = await axios.get(`/userhistory/${id}`);
+      const exams = response.data.map(item => ({
+        id: item?._id ,
+        examName: item?.exam_id?.name,
+        score: item?.result,
+        date: item?.date,
+        totalmarks:item?.exam_id?.totalmarks
+      }));
+      setExamData(exams);
+    } catch (error) {
+      console.error("Error fetching exam data:", error);
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const result = await axios.get(`/user/${id}`);
+      setUserData(result.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   const onSubmit = async (data) => {
     // Update user data
   };
-
+const viewAnswer = async(examid)=>{
+  console.log(examid,"examid");
+  navigate(`/adminDashboard/viewAnswers/${examid}`);
+}
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
@@ -117,28 +143,27 @@ const StudentDetail = () => {
               Given Exams
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">Mathematics</Typography>
-                    <Typography variant="body2">
-                      Score: 85 / 100
-                    </Typography>
-                    <Typography variant="body2">Date: 2024-06-12</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">Science</Typography>
-                    <Typography variant="body2">
-                      Score: 78 / 100
-                    </Typography>
-                    <Typography variant="body2">Date: 2024-06-11</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
+              {examData.map((exam, index) => (
+                <Grid item xs={12} sm={6} key={index}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h6">{exam.examName}</Typography>
+                      <Typography variant="body2">
+                        Score: {exam.score}/{exam?.totalmarks}
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ marginTop: 2 }}
+                        onClick={() => viewAnswer(exam.id)}
+                      >
+                        View Result
+                      </Button>
+                      {/* <Typography variant="body2">Date: {new Date(exam.date).toLocaleDateString()}</Typography> */}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
           </CardContent>
         </Card>
