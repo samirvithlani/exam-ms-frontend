@@ -51,7 +51,6 @@ const Historyofuser = () => {
   };
 
   const viewAnswer = (id) => {
-    
     navigate(`/userDasboard/viewAnswers/${id}`);
   };
 
@@ -65,6 +64,11 @@ const Historyofuser = () => {
     flexDirection: "column",
     backgroundColor: "white",
     margin: 2,
+    boxShadow: 10,
+    transition: "transform 0.3s",
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
   };
 
   const defaultTheme = createTheme();
@@ -75,7 +79,7 @@ const Historyofuser = () => {
       <Box sx={{ p: 1 }}>
         <Typography
           variant="h4"
-          sx={{ fontWeight: "bold", marginBottom: 2,color: "#010080"}}
+          sx={{ fontWeight: "bold", marginBottom: 2, color: "#010080" }}
         >
           Attempted Exams
         </Typography>
@@ -83,7 +87,7 @@ const Historyofuser = () => {
           <Box
             sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}
           >
-            <CustomeLoader/>
+            <CustomeLoader />
           </Box>
         ) : (
           <Grid container spacing={2}>

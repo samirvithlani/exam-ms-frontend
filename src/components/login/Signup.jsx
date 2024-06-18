@@ -132,7 +132,7 @@ export default function SignUp() {
                 }}
               >
                 <Typography component="h1" variant="h4" sx={{ fontWeight:"bold",color:constant.backgroundColor}}>
-                  Create n  ew Account
+                  Create new Account
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <Grid container spacing={2}>

@@ -109,7 +109,7 @@ export const AdminDashboard = () => {
             <div>
               <Typography
                 variant="h4"
-                sx={{ color: "#282828", fontFamily: "Lato" }}
+                sx={{ color: constant.backgroundColor}}
               >
                 Student Detail
               </Typography>
@@ -120,43 +120,7 @@ export const AdminDashboard = () => {
                 Total student in portal: {students}
               </Typography>
             </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                marginTop: 8,
-                marginRight: 10,
-              }}
-            >
-              <g fill="none" stroke-linejoin="round" stroke-width="4">
-                <rect
-                  width="40"
-                  height="40"
-                  x="6"
-                  y="6"
-                  fill="rgb(117,101,228)"
-                  stroke="#000"
-                  rx="3"
-                />
-                <rect
-                  width="8"
-                  height="8"
-                  x="13"
-                  y="13"
-                  fill="#43CCF8"
-                  stroke="#fff"
-                />
-                <path stroke="#fff" stroke-linecap="round" d="M27 13L35 13" />
-                <path stroke="#fff" stroke-linecap="round" d="M27 20L35 20" />
-                <path stroke="#fff" stroke-linecap="round" d="M13 28L35 28" />
-                <path stroke="#fff" stroke-linecap="round" d="M13 35H35" />
-              </g>
-            </svg>
+           
           </Grid>
         </Grid>
         <Grid
@@ -178,7 +142,7 @@ export const AdminDashboard = () => {
             <div>
               <Typography
                 variant="h4"
-                sx={{ color: "#282828", fontFamily: "Lato" }}
+                sx={{ color: constant.backgroundColor}}
               >
                 Student Detail
               </Typography>
@@ -189,24 +153,7 @@ export const AdminDashboard = () => {
                 Total student in portal: {students}
               </Typography>
             </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="50"
-              height="50"
-              viewBox="0 0 24 24"
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                marginTop: 8,
-                marginRight: 10,
-              }}
-            >
-              <g fill="none" stroke="#F5484C" stroke-width="2">
-                <circle cx="12" cy="12" r="8" />
-                <path d="M18.572 6.421c-.724.782-1.685 1.424-2.805 1.872A10.17 10.17 0 0 1 12.133 9a10.273 10.273 0 0 1-3.664-.615C7.33 7.964 6.34 7.346 5.583 6.583m12.989 10.996c-.724-.782-1.685-1.424-2.805-1.872A10.17 10.17 0 0 0 12.133 15a10.272 10.272 0 0 0-3.664.615c-1.139.42-2.128 1.038-2.886 1.801M12 4v16m8-8H4" />
-              </g>
-            </svg>
+         
           </Grid>
         </Grid>
 
@@ -227,7 +174,7 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "#282828", fontFamily: "Lato" }}
+              sx={{ color:constant.backgroundColor}}
             >
               Exam Detail
             </Typography>
@@ -258,7 +205,7 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "#282828", fontFamily: "Lato" }}
+              sx={{ color: constant.backgroundColor }}
             >
               Question Detail
             </Typography>
@@ -296,27 +243,13 @@ export const AdminDashboard = () => {
           >
             <Typography
               variant="h4"
-              sx={{ color: "#282828", fontFamily: "Lato" }}
+              sx={{ color: constant.backgroundColor}}
             >
               Portal Detail
             </Typography>
             <Typography variant="body1"></Typography>
             <Grid xs={12} sm={6.1} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
-              {/* <Pie
-                data={data}
-                options={{
-                  plugins: {
-                    title: {
-                      display: true,
-                      text: "Users Gained between 2016-2020",
-                    },
-                    legend: {
-                      display: true, // Set to true to display labels
-                      position: "bottom", // Adjust the position as needed
-                    },
-                  },
-                }}
-              /> */}
+             chart here...
             </Grid>
           </Grid>
         </Grid>
@@ -342,7 +275,12 @@ export const AdminDashboard = () => {
             direction="column"
             spacing={0}
           >
-            <Typography variant="h4">Studets Detail</Typography>
+             <Typography
+              variant="h4"
+              sx={{ color: constant.backgroundColor}}
+            >
+              Students Detail
+            </Typography>
             <Typography variant="body1"></Typography>
           </Grid>
         </Grid>
