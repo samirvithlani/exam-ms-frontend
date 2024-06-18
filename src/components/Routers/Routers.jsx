@@ -389,6 +389,11 @@ const MainRouter = ({ children }) => {
             {
               path:"deletedquestion",
               element:<DeletedMcq/>
+            },
+            {
+              path: "viewAnswers/:id",
+              element: <ViewAnswer />,
+              errorElement: <div>400</div>,
             }
           ],
         },

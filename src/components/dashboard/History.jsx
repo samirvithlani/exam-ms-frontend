@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from "../../constant";
 
 const Historyofuser = () => {
   const navigate = useNavigate();
@@ -35,11 +36,11 @@ const Historyofuser = () => {
       const filteredData = response.data.map((exam, index) => ({
         id: exam._id || index,
         displayid: index + 1,
-        name: exam.exam_id.name,
+        name: exam.exam_id?.name,
         examType: exam.exam_type?.type,
-        noOfQuestions: exam.exam_id.noofquestions || 0,
-        totalmarks: exam.total_marks,
-        result: exam.result,
+        noOfQuestions: exam.exam_id?.noofquestions || 0,
+        totalmarks: exam?.total_marks,
+        result: exam?.result,
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -64,6 +65,11 @@ const Historyofuser = () => {
     flexDirection: "column",
     backgroundColor: "white",
     margin: 2,
+    boxShadow: 10,
+    transition: "transform 0.3s",
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
   };
 
   const defaultTheme = createTheme();
@@ -74,7 +80,7 @@ const Historyofuser = () => {
       <Box sx={{ p: 1 }}>
         <Typography
           variant="h4"
-          sx={{ fontWeight: "bold", marginBottom: 2,color: "#010080"}}
+          sx={{ fontWeight: "bold", marginBottom: 2, color: "#010080" }}
         >
           Attempted Exams
         </Typography>
@@ -82,7 +88,7 @@ const Historyofuser = () => {
           <Box
             sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}
           >
-            <CustomeLoader/>
+            <CustomeLoader />
           </Box>
         ) : (
           <Grid container spacing={2}>
@@ -107,7 +113,8 @@ const Historyofuser = () => {
                   <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
                     <Button
                       variant="contained"
-                      color="primary"
+                      //color={constant.backgroundColor}
+                      sx={{ backgroundColor: constant.backgroundColor}}
                       onClick={() => viewAnswer(history.id)}
                     >
                       View Answer

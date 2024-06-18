@@ -237,6 +237,14 @@ export const SideBar = () => {
       activeMenuFor: ["deletedquestion"],
       logoImage: ListIcon
     },
+    {
+      id: 23,
+      name: "viewAnswers",
+      linkUrl: "viewAnswers",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["viewAnswers"],
+      logoImage: ListIcon
+    },
   ];
 
   const filteredRouteArray = RouteArray.filter(
@@ -245,7 +253,8 @@ export const SideBar = () => {
       route.name !== "Update Exam" &&
       route.name !== "Add Faculty" &&
       route.name != "userprofile" &&
-      route.name !== "Exam Details"
+      route.name !== "Exam Details"&&
+      route.name !== "viewAnswers"
   );
 
   const handleToggleSubject = (subjectId) => {
