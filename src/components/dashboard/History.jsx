@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from "../../constant";
 
 const Historyofuser = () => {
   const navigate = useNavigate();
@@ -112,7 +113,8 @@ const Historyofuser = () => {
                   <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
                     <Button
                       variant="contained"
-                      color="primary"
+                      //color={constant.backgroundColor}
+                      sx={{ backgroundColor: constant.backgroundColor}}
                       onClick={() => viewAnswer(history.id)}
                     >
                       View Answer
