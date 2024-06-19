@@ -2,11 +2,12 @@
   import { Typography, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, IconButton } from '@mui/material';
   import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
   import DeleteIcon from '@mui/icons-material/Delete';
+  import Cookies from 'js-cookie';
 
   const QuestionList = ({ question, type, options ,onDelete} ) => {
     const [expanded, setExpanded] = useState(false);
     const maxLength = 50; // Define the maximum length of the question before truncation
-
+    const role = Cookies.get('role'); // Assuming the role is stored in a cookie
     const handleChange = () => {
       setExpanded(!expanded);
     };
@@ -65,15 +66,16 @@
           aria-controls="panel-content"
           id="panel-header"
         >
-          <Typography dangerouslySetInnerHTML={{ __html: getTruncatedQuestion() }} />
-          <IconButton edge="end" aria-label="delete" onClick={onDelete}>
-          <DeleteIcon />
-        </IconButton>
-
+          <Typography
+            dangerouslySetInnerHTML={{ __html: getTruncatedQuestion() }}
+          />
+          {role === "superAdmin" && (
+            <IconButton edge="end" aria-label="delete" onClick={onDelete}>
+              <DeleteIcon />
+            </IconButton>
+          )}
         </AccordionSummary>
-        <AccordionDetails>
-          {renderOptions()}
-        </AccordionDetails>
+        <AccordionDetails>{renderOptions()}</AccordionDetails>
       </Accordion>
     );
   };
