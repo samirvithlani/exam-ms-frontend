@@ -73,7 +73,7 @@ export const UserExamList = () => {
   const fetchHistory = async () => {
     try {
       const response = await axios.get(`/userhistory/${_id}`);
-      const data = response.data.map((item) => item.exam_id._id);
+      const data = response.data.map((item) => item?.exam_id?._id);
       setUserHistory(data);
     } catch (error) {
       console.log(error, "error");
