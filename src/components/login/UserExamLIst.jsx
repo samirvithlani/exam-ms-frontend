@@ -228,6 +228,9 @@ export const UserExamList = () => {
                         bgcolor: "white",
                         color: constant.backgroundColor,
                       },
+                      "& .MuiTypography-root": {
+                        color: "white",
+                      },
                     },
                     wordBreak: "break-word",
                     overflowWrap: "break-word",
@@ -245,7 +248,7 @@ export const UserExamList = () => {
                   </Avatar>
                   <Typography
                     variant="h6"
-                    sx={{ marginTop: "10px", textTransform: "uppercase" }}
+                    sx={{ marginTop: "10px", textTransform: "uppercase",color:constant.backgroundColor }}
                   >
                     {item.name}
                   </Typography>
