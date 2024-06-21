@@ -52,10 +52,13 @@ const StudentList = () => {
       role: faculty.role?.role,
       status: faculty.status,
       credit: faculty.credit,
+      createdAt: faculty.createdAt,  
     }));
+    filterdata.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     setStudents(filterdata);
     setIsLoading(false);
   };
+
 
   const handleAddCredit = async (userId) => {
     const user = await axios.get(`/user/${userId}`);
@@ -183,6 +186,9 @@ const StudentList = () => {
                 <Typography variant="body2" sx={typoPorps}>
                   Contact: {student.contact}
                 </Typography>
+                {/* <Typography variant="body2" sx={typoPorps}>
+                  Created At: {new Date(student.createdAt).toLocaleString()}
+                </Typography> */}
               </CardContent>
               <CardActions>
                 {/* <TextField

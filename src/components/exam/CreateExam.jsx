@@ -48,6 +48,7 @@ export const CreateExam = () => {
   const [Perquestionmark, setPerquestionmarks] = useState("");
   const [totalMarks, settotalmarks] = useState("");
   const [userSubjects, setUserSubjects] = useState([]);
+  const [examTime, setExamTime] = useState("");
   const userId = Cookies.get("_id");
   const role = Cookies.get("role");
 
@@ -148,6 +149,9 @@ export const CreateExam = () => {
   };
   const handleIsTimeLimitChange = (event) => {
     setIsTimeLimit(event.target.value);
+    if (event.target.value === "false") {
+      setExamTime("");
+    }
   };
   const fetchSubjects = async (streamId, stdId) => {
     try {
@@ -260,7 +264,7 @@ export const CreateExam = () => {
     formState: { errors },
     reset,
   } = useForm();
-
+  const Timechange = () => {};
   const submitHandler = async (data) => {
     const allFieldsFilled = Object.values(data).every((value) => value !== "");
 
@@ -382,11 +386,39 @@ export const CreateExam = () => {
                   <FormControlLabel
                     value="false"
                     control={<Radio {...register("isTimeLimit")} />}
-                    label="NO"
+                    label="No"
                   />
                 </RadioGroup>
               </FormControl>
             </Grid>
+            {isTimeLimit === "true" && (
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-title"
+                  name="timeLimit"
+                  required
+                  fullWidth
+                  id="timeLimit"
+                  label="Time Limit (in minutes)"
+                  type="Number"
+                  autoFocus
+                  value={examTime}
+                  {...register("examtime", {
+                    required: {
+                      value: isTimeLimit === "true",
+                      message:
+                        "Time Limit is required when Time Limit is set to Yes.",
+                    },
+                  })}
+                  onChange={(e) => setExamTime(e.target.value)}
+                />
+                {errors.timeLimit && (
+                  <span style={{ color: "red" }}>
+                    {errors.timeLimit.message}
+                  </span>
+                )}
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <TextField

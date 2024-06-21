@@ -52,6 +52,7 @@ import FacultyView from "../Layouts/FacultyView";
 import StudentDetail from "../dashboard/StudentDetail";
 import { DeletedExam } from "../exam/DeletedExam";
 import DeletedMcq from "../exam/DeletedMcq";
+import AllUserGivenExam from "../exam/AllUserGivenExam";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -156,6 +157,11 @@ const MainRouter = ({ children }) => {
               path: "",
               element: <FacultyDashboard />,
               errorElement: <div>404</div>,
+            },
+            {
+              path: "viewalluserexam",
+              element: <AllUserGivenExam />,
+              errorElement: <div>400</div>,
             },
             {
               path: "createexam",
@@ -393,6 +399,11 @@ const MainRouter = ({ children }) => {
             {
               path: "viewAnswers/:id",
               element: <ViewAnswer />,
+              errorElement: <div>400</div>,
+            },
+            {
+              path: "viewalluserexam",
+              element: <AllUserGivenExam />,
               errorElement: <div>400</div>,
             }
           ],
