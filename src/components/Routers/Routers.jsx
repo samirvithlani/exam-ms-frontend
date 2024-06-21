@@ -159,6 +159,11 @@ const MainRouter = ({ children }) => {
               errorElement: <div>404</div>,
             },
             {
+              path: "viewalluserexam",
+              element: <AllUserGivenExam />,
+              errorElement: <div>400</div>,
+            },
+            {
               path: "createexam",
               element: <CreateExam />,
               errorElement: <div>404</div>,

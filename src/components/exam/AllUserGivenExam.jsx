@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, CardContent, Typography, Grid, Container } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Container, ThemeProvider, createTheme } from '@mui/material';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
+import { constant } from '../../constant';
 
 const AllUserGivenExam = () => {
   const [exams, setExams] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  
 
   useEffect(() => {
     fetchData();
@@ -25,12 +27,23 @@ const AllUserGivenExam = () => {
       console.error('Error fetching data:', error);
     }
   };
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        All User Given Exams
+    <ThemeProvider theme={defaultTheme}>
+      <Typography variant="h4" gutterBottom sx={{color:constant.backgroundColor}}>
+        All User Given Exams ::
       </Typography>
+      <Typography variant="h6"sx={{color:constant.backgroundColor}}>
+        Total Given Exams : {exams?.length}
+      </Typography>
+      
       {isLoading ? <CustomeLoader /> : null}
     
       <Grid container spacing={3}>
@@ -52,7 +65,7 @@ const AllUserGivenExam = () => {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </ThemeProvider>
   );
 };
 

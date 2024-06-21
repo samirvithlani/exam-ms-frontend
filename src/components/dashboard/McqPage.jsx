@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { FormControl, FormControlLabel, FormGroup, Paper, Checkbox, Radio, RadioGroup, Typography, Grid, Button } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Paper, Checkbox, Radio, RadioGroup, Typography, Grid, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, createTheme, ThemeProvider } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from '../../constant';
+import Theme from 'quill/core/theme';
+import HangingWatch from '../CustomeCopmonent/HangingWatch';
 
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
@@ -21,12 +24,32 @@ const MCQQuestionsPage = () => {
   const examName = location.state?.name;
   const credit = location.state?.credit;
   const Userdata = location.state?.userdata;
-  const [isSubmitting, setIsSubmitting] = useState(false); // State for button disable
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
-    alert("if you will refresh page or go back your exam will be reset automatically")
+    alert("If you refresh the page or go back, your exam will be reset automatically.");
     fetchQuestions();
   }, [id]);
+
+  useEffect(() => {
+    if (timeLeft === null) return;
+
+    if (timeLeft <= 0) {
+      handleSubmit();
+    } else {
+      const timer = setInterval(() => {
+        setTimeLeft(prevTimeLeft => {
+          if (prevTimeLeft === 121) {
+            setOpenDialog(true);
+          }
+          return prevTimeLeft - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [timeLeft]);
 
   const paperStyle = {
     p: 2,
@@ -51,6 +74,11 @@ const MCQQuestionsPage = () => {
       const response = await axios.get(`/exam/${id}`);
       setQuestions(response.data.mcq);
       initializeAnswers(response.data.mcq);
+
+      const examTimeInMinutes = parseInt(response.data.examtime, 10);
+      if (!isNaN(examTimeInMinutes) && examTimeInMinutes > 0) {
+        setTimeLeft(examTimeInMinutes * 60);
+      }
     } catch (error) {
       console.error('Error fetching questions:', error);
     }
@@ -60,11 +88,7 @@ const MCQQuestionsPage = () => {
   const initializeAnswers = (questions) => {
     const initialAnswers = {};
     questions.forEach((question) => {
-      if (question.isMultiselectedQuestion) {
-        initialAnswers[question._id] = '';
-      } else {
-        initialAnswers[question._id] = '';
-      }
+      initialAnswers[question._id] = '';
     });
     setSelectedAnswers(initialAnswers);
   };
@@ -73,7 +97,6 @@ const MCQQuestionsPage = () => {
     setSelectedAnswers(prevState => {
       let updatedValue;
       if (Array.isArray(value)) {
-        // Filter out NaN, remove duplicates, and sort
         const filteredValues = value.filter(option => !isNaN(option)).filter((v, i, a) => a.indexOf(v) === i).sort();
         updatedValue = filteredValues.join(',');
       } else {
@@ -87,7 +110,7 @@ const MCQQuestionsPage = () => {
   };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true); // Disable button
+    setIsSubmitting(true);
 
     const _id = Cookies.get('_id');
     const mcqAnswers = [];
@@ -120,11 +143,11 @@ const MCQQuestionsPage = () => {
       }
       navigate('/userDasboard/history');
     } catch (error) {
-      setIsSubmitting(false); // Disable button
-
+      setIsSubmitting(false);
       console.log(error, "erroro");
     }
   };
+
   const handleCheckboxChange = (questionId, optionNumber, isChecked) => {
     setSelectedAnswers(prevState => {
       let updatedValueArray = prevState[questionId].split(',').filter(val => val);
@@ -144,23 +167,46 @@ const MCQQuestionsPage = () => {
       setAttemptedQuestions([...attemptedQuestions, questionId]);
     }
   };
+
   const HtmlLabel = ({ html }) => (
     <div dangerouslySetInnerHTML={{ __html: html }} />
   );
 
-  return (
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
+
+  const mainContent = (
     <div>
+        <Typography variant="h4">Main Content</Typography>
+        <Typography variant="body1">This is where your main content will go.</Typography>
+    </div>
+);
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      
       <Paper sx={paperStyle} className="responsive-container">
         {isLoading ? <CustomeLoader /> : null}
         <Typography variant="h5" gutterBottom sx={{color:"#010080"}}>
           ExamName :: {examName.toUpperCase()}
         </Typography>
+        {timeLeft !== null && (
+          <Typography variant="h6" gutterBottom>
+            Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}
+          </Typography>
+        )}
         <Grid container spacing={2}>
           {questions.map((question, qIndex) => (
             <Grid item xs={12} key={question._id}>
               <Paper sx={paperStyle2} className="responsive-container">
                 <Typography variant="h6" gutterBottom>
-                  {/* Display the question number */}
                   {`Q${qIndex + 1}. `}
                   <div dangerouslySetInnerHTML={{ __html: question.question }} />
                 </Typography>
@@ -178,9 +224,9 @@ const MCQQuestionsPage = () => {
                               <Checkbox
                                 checked={selectedAnswers[question._id].includes(optionNumber)}
                                 onChange={(e) => handleCheckboxChange(question._id, optionNumber, e.target.checked)}
-                                />
+                              />
                             }
-                            label={<HtmlLabel html={question[key]} />} // Use the custom HtmlLabel component
+                            label={<HtmlLabel html={question[key]} />}
                           />
                         );
                       }
@@ -201,7 +247,7 @@ const MCQQuestionsPage = () => {
                             key={optionNumber}
                             value={optionNumber}
                             control={<Radio />}
-                            label={<HtmlLabel html={question[key]} />} 
+                            label={<HtmlLabel html={question[key]} />}
                           />
                         );
                       }
@@ -218,7 +264,24 @@ const MCQQuestionsPage = () => {
         </Button>
         <ToastContainer />
       </Paper>
-    </div>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+      >
+        <DialogTitle>Time Warning</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Only 2 minutes left. Please review and submit your answers.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary" autoFocus>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ThemeProvider>
   );
 };
 

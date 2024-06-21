@@ -121,8 +121,8 @@ export const ExamDetails = () => {
         success: "Exam Deleted Successfully!",
         error: "Failed to delete Exam. Please try again.",
       });
-      if(response.status === 200){
-        navigate('/adminDashboard/subjectlist')
+      if (response.status === 200) {
+        navigate("/adminDashboard/subjectlist");
       }
     } catch (error) {
       console.log("Error while deleting exam:", error);
@@ -304,99 +304,51 @@ export const ExamDetails = () => {
     }
   };
 
+  const boxProp = {
+    bgcolor: "white",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    padding: "10px",
+    textAlign: "center",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    cursor: "pointer",
+    margin: "5px",
+    flex: 1,
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Typography
           variant="h4"
-          sx={{ fontWeight: "bold", mb: 2 ,color:constant.backgroundColor}}
+          sx={{ fontWeight: "bold", mb: 2, color: constant.backgroundColor }}
         >
-          EXAM DETAILS1
+          EXAM DETAILS ::
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           {/* First line: Name, Standard, Stream, Subject, Topic */}
           <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">Name: {questions.name}</Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Standard: {questions.std?.std}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Stream: {questions.stream?.name}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Subject: {questions.subject?.name}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Topic: {questions.examtopic?.name}
               </Typography>
@@ -404,104 +356,32 @@ export const ExamDetails = () => {
           </Box>
           {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Type: {questions?.examtype?.type}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 No Of Question: {questions?.noofquestions}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Difficulty: {questions?.difficulty?.difficulty}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Per Question marks: {questions?.perQuestionmarks}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Total marks: {questions?.totalmarks}
               </Typography>
             </Box>
-            <Box
-              sx={{
-                bgcolor: "white",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                textAlign: "center",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                cursor: "pointer",
-                margin: "5px",
-                flex: 1,
-              }}
-            >
+            <Box sx={boxProp}>
               <Typography variant="h6">
                 Credits: {questions?.credit || "N/A"}
               </Typography>
@@ -547,7 +427,7 @@ export const ExamDetails = () => {
             variant="contained"
             color="error"
             onClick={handleOpenDeleteDialog}
-            >
+          >
             Delete Exam
           </Button>
           <Button
@@ -589,7 +469,11 @@ export const ExamDetails = () => {
           >
             Add Questions
           </Button>
-          <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenDialog}
+          >
             Select Questions
           </Button>
         </Box>
@@ -655,17 +539,14 @@ export const ExamDetails = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={openDeleteDialog}
-        onClose={handleCloseDeleteDialog}
-      >
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>
           Confirm Deletion
           <IconButton
             aria-label="close"
             onClick={handleCloseDeleteDialog}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               right: 8,
               top: 8,
               color: (theme) => theme.palette.grey[500],
@@ -675,9 +556,7 @@ export const ExamDetails = () => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Typography>
-            Are you sure you want to delete this exam?
-          </Typography>
+          <Typography>Are you sure you want to delete this exam?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDeleteDialog} color="primary">
