@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { FormControl, FormControlLabel, FormGroup, Paper, Checkbox, Radio, RadioGroup, Typography, Grid, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Paper, Checkbox, Radio, RadioGroup, Typography, Grid, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, createTheme, ThemeProvider } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { constant } from '../../constant';
+import Theme from 'quill/core/theme';
+import HangingWatch from '../CustomeCopmonent/HangingWatch';
 
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
@@ -172,9 +175,23 @@ const MCQQuestionsPage = () => {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
 
-  return (
+  const mainContent = (
     <div>
+        <Typography variant="h4">Main Content</Typography>
+        <Typography variant="body1">This is where your main content will go.</Typography>
+    </div>
+);
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      
       <Paper sx={paperStyle} className="responsive-container">
         {isLoading ? <CustomeLoader /> : null}
         <Typography variant="h5" gutterBottom sx={{color:"#010080"}}>
@@ -264,7 +281,7 @@ const MCQQuestionsPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </ThemeProvider>
   );
 };
 
