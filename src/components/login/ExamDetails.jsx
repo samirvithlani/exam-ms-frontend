@@ -353,6 +353,11 @@ export const ExamDetails = () => {
                 Topic: {questions.examtopic?.name}
               </Typography>
             </Box>
+            <Box sx={boxProp}>
+              <Typography variant="h6">
+                Exam Time: {questions?.examtime||0}
+              </Typography>
+            </Box>
           </Box>
           {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>

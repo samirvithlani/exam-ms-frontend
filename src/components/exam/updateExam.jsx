@@ -23,6 +23,7 @@
     Select,
     } from "@mui/material";
     import { useParams } from 'react-router-dom';
+    import Cookies from 'js-cookie'
 
   export const UpdateExam = () => {
       const { id } = useParams(); // Get the exam ID from the route params
@@ -60,6 +61,7 @@
 
     };
     const handleisTimeLimit = (event)=>{
+      
       setIsTimeLimitValue(event.target.value);
     }
     const totalmarks = (event)=>{
@@ -77,7 +79,7 @@
         const { stream, subject, examtopic, examtype, ...otherData } = response.data;
         setNameValue(otherData.name || '');
         setNoOfQuestionsValue(otherData.noofquestions || '');
-        // setIsTimeLimitValue(otherData.isTimeLimit ||'');
+        setIsTimeLimitValue(otherData.examtime ||'');
         setTotalMarksValue(otherData.totalmarks);
         setPerQuestionMarksValue(otherData.perQuestionmarks)
         setExamData(response.data);
@@ -166,6 +168,9 @@
       }
       if (perQuestionMarksValue !== examData.perQuestionmarks) {
         updatedFields.perQuestionmarks = perQuestionMarksValue;
+      }
+      if(isTimeLimitValue !==examData.examtime){
+        updatedFields.examtime = isTimeLimitValue
       }
       if (examData.stream) {
         if (selectedStream !== examData.stream.name) {
@@ -274,6 +279,7 @@
                   autoFocus
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-title"
@@ -288,6 +294,22 @@
                   autoFocus
                 />
               </Grid>
+              <Grid item xs={12}>
+              <TextField
+                  autoComplete="given-title"
+                  name="examtime"
+                  required
+                  fullWidth
+                  id="examtime"
+                  label="Time Limit (in minutes)"
+                  type="Number"
+                  autoFocus
+                  value={isTimeLimitValue}
+                  
+                  onChange={handleisTimeLimit}
+                />
+              </Grid>
+              
               <Grid item xs={12}>
               <Typography variant="body1" gutterBottom>
               Selected Stream: { (examData?.stream?.name || 'None')}
