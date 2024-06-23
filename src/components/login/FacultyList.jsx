@@ -10,7 +10,6 @@ import {
   Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDemoData } from "@mui/x-data-grid-generator";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
 
@@ -69,41 +68,81 @@ const UserGrid = () => {
     }
   };
 
+  const typoProps = {
+    color: "#000000",
+    fontWeight: "bold"
+  };
+
   return (
-    <Paper elevation={3} sx={{ p: 2, backgroundColor: "white", mt: 2 }}>
+    <Paper
+      sx={{
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        height: "auto",
+        backgroundColor: "white",
+        m: 2,
+        boxShadow: 8,
+      }}
+      className="responsive-container"
+    >
       {isLoading && <CustomeLoader />}
-      <Typography variant="h4" fontWeight="bold" color="#010080" mb={1}>
-        Faculty List
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "bold",
+          mb: 2,
+          color: constant.backgroundColor,
+        }}
+      >
+        Faculty List ::
       </Typography>
       <Button
         variant="contained"
         onClick={() => handleAddRoleClick("faculty")}
         sx={{
-          fontSize: 12,
-          padding: "5px 10px",
-          backgroundColor:constant.backgroundColor,
+          // fontSize: 12,
+          // padding: "5px 10px",
+          width: "fit-content",
+          backgroundColor: constant.backgroundColor,
           color: "white",
-          mt: { xs: 2, sm: 0 },
           mb: 2,
         }}
       >
         Add Faculty
       </Button>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {facultyUsers.map((user) => (
-          <Grid key={user.id} item xs={12} sm={6} md={4} lg={3}>
-            <Card sx={{ height: "100%",bgcolor:"gray" }}>
+          <Grid item xs={12} sm={6} md={4} key={user.id}>
+            <Card
+              sx={{
+                backgroundColor: "#FFFFF",
+                boxShadow: 10,
+                borderRadius: 4,
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.10)",
+                },
+              }}
+            >
               <CardContent>
-                <Typography variant="h5" component="div" mb={1}>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: constant.backgroundColor,
+                  }}
+                >
                   {user.name}
                 </Typography>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography variant="body2" sx={typoProps}>
                   Email: {user.email}
                 </Typography>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography variant="body2" sx={typoProps}>
                   Role: {user.role}
                 </Typography>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography variant="body2" sx={typoProps}>
                   Status: {user.status}
                 </Typography>
               </CardContent>
@@ -112,6 +151,11 @@ const UserGrid = () => {
                 onClick={() => handleViewFacultyClick(user.id)}
                 size="small"
                 variant="contained"
+                sx={{
+                  backgroundColor: constant.backgroundColor,
+                  color: "white",
+                  m: 1,
+                }}
               >
                 View Faculty
               </Button>
