@@ -17,10 +17,14 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Checkbox,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ToastContainer, toast } from "react-toastify";
 import { constant } from "../../constant";
+import { DataGrid } from "@mui/x-data-grid";
+import { CustomeLoader } from "../Layouts/CustomeLoader";
 
 export const ExamDetails = () => {
   const location = useLocation();
@@ -34,6 +38,8 @@ export const ExamDetails = () => {
     []
   );
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const [openStudentList, setopenStudentList] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -55,6 +61,17 @@ export const ExamDetails = () => {
   const fetchexams = async () => {
     const response = await axios.get(`/exam/${id}`);
     setQuestions(response.data);
+  };
+
+  const [students, setstudents] = useState([]);
+  const [isLoading, setisLoading] = useState(false)
+  const fetchStudentDetailByExamId = async () => {
+    setisLoading(true)
+    const response = await axios.get(`/studentByExamId/${id}`);
+    console.log(response.data, "response");
+    setstudents(response.data);
+    setopenStudentList(true);
+    setisLoading(false)
   };
 
   const handleView = (
@@ -316,263 +333,324 @@ export const ExamDetails = () => {
     flex: 1,
   };
 
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
+  const columns = [
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "email", headerName: "Email", width: 200 },
+    { field: "marks", headerName: "Marks", width: 150 },
+    { field: "exam_date", headerName: "Exam Date", width: 200 },
+  ];
+  const rows = students.map((student) => ({
+    id: student._id,
+    name: `${student.user_id.firstname} ${student.user_id.lastname}`,
+    email: student.user_id.email,
+    marks: student.total_marks,
+    exam_date: new Date(student.createdAt).toLocaleDateString(),
+  }));
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Typography
-          variant="h4"
-          sx={{ fontWeight: "bold", mb: 2, color: constant.backgroundColor }}
-        >
-          EXAM DETAILS ::
-        </Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          {/* First line: Name, Standard, Stream, Subject, Topic */}
-          <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
-            <Box sx={boxProp}>
-              <Typography variant="h6">Name: {questions.name}</Typography>
+    <ThemeProvider theme={defaultTheme}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", mb: 2, color: constant.backgroundColor }}
+          >
+            EXAM DETAILS ::
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            {/* First line: Name, Standard, Stream, Subject, Topic */}
+            <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
+              <Box sx={boxProp}>
+                <Typography variant="h6">Name: {questions.name}</Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Standard: {questions.std?.std}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Stream: {questions.stream?.name}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Subject: {questions.subject?.name}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Topic: {questions.examtopic?.name}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Exam Time: {questions?.examtime || 0}
+                </Typography>
+              </Box>
             </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Standard: {questions.std?.std}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Stream: {questions.stream?.name}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Subject: {questions.subject?.name}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Topic: {questions.examtopic?.name}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Exam Time: {questions?.examtime||0}
-              </Typography>
+            {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
+            <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Type: {questions?.examtype?.type}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  No Of Question: {questions?.noofquestions}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Difficulty: {questions?.difficulty?.difficulty}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Per Question marks: {questions?.perQuestionmarks}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Total marks: {questions?.totalmarks}
+                </Typography>
+              </Box>
+              <Box sx={boxProp}>
+                <Typography variant="h6">
+                  Credits: {questions?.credit || "N/A"}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-          {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
-          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Type: {questions?.examtype?.type}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                No Of Question: {questions?.noofquestions}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Difficulty: {questions?.difficulty?.difficulty}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Per Question marks: {questions?.perQuestionmarks}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Total marks: {questions?.totalmarks}
-              </Typography>
-            </Box>
-            <Box sx={boxProp}>
-              <Typography variant="h6">
-                Credits: {questions?.credit || "N/A"}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        {/* Action buttons */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: 1,
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              handleView(
-                id,
-                questions.subject?.name,
-                questions.stream?.name,
-                questions.difficulty?.difficulty,
-                questions.std?.std,
-                questions.examtopic?.name,
-                questions.examtype?.type
-              )
-            }
-          >
-            View Exam
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleEdit(id)}
-          >
-            Edit Exam
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleOpenDeleteDialog}
-          >
-            Delete Exam
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              handleGenerateQuestions(
-                questions.examtopic?._id,
-                questions.noofquestions,
-                id,
-                questions.difficulty?._id
-              )
-            }
-          >
-            Generate Questions
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              handleAddQuestions(
-                "mcq",
-                id,
-                questions?.subject?.name,
-                questions?.stream?.name,
-                questions?.difficulty?.difficulty,
-                questions?.std?.std,
-                questions?.subject?._id,
-                questions?.stream?._id,
-                questions.examtopic?._id,
-                questions.difficulty?._id,
-                questions?.std?._id,
-                questions?.examtopic?.name,
-                questions?.examtype?.type,
-                questions?.examtype?._id,
-                questions.noOfQuestions
-              )
-            }
-          >
-            Add Questions
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenDialog}
-          >
-            Select Questions
-          </Button>
-        </Box>
-      </Grid>
-      <Dialog
-        fullScreen
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="select-questions-dialog-title"
-      >
-        <DialogTitle id="select-questions-dialog-title">
-          Select Questions
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleCloseDialog}
-            aria-label="close"
-            sx={{ position: "absolute", right: 8, top: 8 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <List>
-            {filteredQuestions.map((question) => (
-              <ListItem
-                key={question._id}
-                button
-                onClick={() => handleToggleQuestion(question)}
-              >
-                <ListItemText
-                  primary={
-                    <span
-                      dangerouslySetInnerHTML={{ __html: question.question }}
-                    />
-                  }
-                />{" "}
-                <ListItemSecondaryAction>
-                  <Checkbox
-                    edge="end"
-                    onChange={() => handleToggleQuestion(question)}
-                    disabled={initiallySelectedQuestions.some(
-                      (selected) => selected._id === question._id
-                    )}
-                    checked={selectedQuestions.some(
-                      (selected) => selected._id === question._id
-                    )}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleCloseDialog} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={() => handleSaveQuestions(questions.noofquestions)}
-            color="primary"
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>
-          Confirm Deletion
-          <IconButton
-            aria-label="close"
-            onClick={handleCloseDeleteDialog}
+        </Grid>
+        <Grid item xs={12}>
+          {/* Action buttons */}
+          <Box
             sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              gap: 1,
             }}
           >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <Typography>Are you sure you want to delete this exam?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <ToastContainer />
-    </Grid>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                handleView(
+                  id,
+                  questions.subject?.name,
+                  questions.stream?.name,
+                  questions.difficulty?.difficulty,
+                  questions.std?.std,
+                  questions.examtopic?.name,
+                  questions.examtype?.type
+                )
+              }
+            >
+              View Exam
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleEdit(id)}
+            >
+              Edit Exam
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleOpenDeleteDialog}
+            >
+              Delete Exam
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                handleGenerateQuestions(
+                  questions.examtopic?._id,
+                  questions.noofquestions,
+                  id,
+                  questions.difficulty?._id
+                )
+              }
+            >
+              Generate Questions
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                handleAddQuestions(
+                  "mcq",
+                  id,
+                  questions?.subject?.name,
+                  questions?.stream?.name,
+                  questions?.difficulty?.difficulty,
+                  questions?.std?.std,
+                  questions?.subject?._id,
+                  questions?.stream?._id,
+                  questions.examtopic?._id,
+                  questions.difficulty?._id,
+                  questions?.std?._id,
+                  questions?.examtopic?.name,
+                  questions?.examtype?.type,
+                  questions?.examtype?._id,
+                  questions.noOfQuestions
+                )
+              }
+            >
+              Add Questions
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOpenDialog}
+            >
+              Select Questions
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={fetchStudentDetailByExamId}
+            >
+              Student List
+            </Button>
+          </Box>
+        </Grid>
+        <Dialog
+          fullScreen
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="select-questions-dialog-title"
+        >
+          <DialogTitle id="select-questions-dialog-title">
+            Select Questions
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={handleCloseDialog}
+              aria-label="close"
+              sx={{ position: "absolute", right: 8, top: 8 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <List>
+              {filteredQuestions.map((question) => (
+                <ListItem
+                  key={question._id}
+                  button
+                  onClick={() => handleToggleQuestion(question)}
+                >
+                  <ListItemText
+                    primary={
+                      <span
+                        dangerouslySetInnerHTML={{ __html: question.question }}
+                      />
+                    }
+                  />{" "}
+                  <ListItemSecondaryAction>
+                    <Checkbox
+                      edge="end"
+                      onChange={() => handleToggleQuestion(question)}
+                      disabled={initiallySelectedQuestions.some(
+                        (selected) => selected._id === question._id
+                      )}
+                      checked={selectedQuestions.some(
+                        (selected) => selected._id === question._id
+                      )}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleCloseDialog} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleSaveQuestions(questions.noofquestions)}
+              color="primary"
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+          <DialogTitle>
+            Confirm Deletion
+            <IconButton
+              aria-label="close"
+              onClick={handleCloseDeleteDialog}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <Typography>Are you sure you want to delete this exam?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDeleteDialog} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="error">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <ToastContainer />
+      </Grid>
+
+      {openStudentList && (
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                mb: 2,
+                color: constant.backgroundColor,
+                mt: 2,
+                alignSelf: "center",
+              }}
+            >
+              Students Already given exam ::
+            </Typography>
+            <Box sx={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+              />
+            </Box>
+          </Box>
+        </Grid>
+      )}
+    </ThemeProvider>
   );
 };
