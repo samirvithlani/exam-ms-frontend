@@ -27,8 +27,11 @@ const MCQQuestionsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+
 
   useEffect(() => {
+    setStartTime(Date.now());
     alert("If you refresh the page or go back, your exam will be reset automatically.");
     fetchQuestions();
   }, [id]);
@@ -119,6 +122,10 @@ const MCQQuestionsPage = () => {
       const selectedAnswer = selectedAnswers[questionId];
       mcqAnswers.push({ question: questionId, givenanswer: selectedAnswer });
     });
+    const endTime = Date.now();
+    const timeTakenInMinutes = Math.floor((endTime - startTime) / (1000 * 60)); 
+    
+
     const data = {
       user_id: _id,
       exam_id: id,
@@ -126,7 +133,8 @@ const MCQQuestionsPage = () => {
       attempt_mcqquestions: attemptedQuestions,
       mcq_answers: mcqAnswers,
       total_marks: totalmarks,
-      status: 'completed'
+      status: 'completed',
+      timetaken:timeTakenInMinutes
     }
     try {
       const result = await toast.promise(axios.post("/add", data), {
