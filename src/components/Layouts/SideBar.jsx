@@ -433,7 +433,7 @@ export const SideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 1 }}>
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2 }}>
           <Outlet />
         </Box>
       </Box>

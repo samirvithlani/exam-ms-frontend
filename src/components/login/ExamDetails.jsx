@@ -19,12 +19,15 @@ import {
   Checkbox,
   createTheme,
   ThemeProvider,
+  GlobalStyles,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { ToastContainer, toast } from "react-toastify";
 import { constant } from "../../constant";
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
+import { set } from "lodash";
+import { PieComponent } from "../charts/PieComponent";
 
 export const ExamDetails = () => {
   const location = useLocation();
@@ -64,14 +67,18 @@ export const ExamDetails = () => {
   };
 
   const [students, setstudents] = useState([]);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const fetchStudentDetailByExamId = async () => {
-    setisLoading(true)
+    setisLoading(true);
     const response = await axios.get(`/studentByExamId/${id}`);
     console.log(response.data, "response");
     setstudents(response.data);
     setopenStudentList(true);
-    setisLoading(false)
+    setisLoading(false);
+  };
+  const [displayChart, setdisplayChart] = useState(false);
+  const displayChartOfstudents = () => {
+    setdisplayChart(true);
   };
 
   const handleView = (
@@ -101,6 +108,27 @@ export const ExamDetails = () => {
       state: { subject, stream, difficulty, standard, topic, type },
     });
   };
+
+  const GlobalScrollbarStyles = ({ backgroundColor }) => (
+    <GlobalStyles
+      styles={{
+        "*::-webkit-scrollbar": {
+          width: "10px",
+          height: "4px",
+        },
+        "*::-webkit-scrollbar-track": {
+          background: "white",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          background: backgroundColor,
+          borderRadius: "4px",
+        },
+        "*::-webkit-scrollbar-thumb:hover": {
+          background: backgroundColor,
+        },
+      }}
+    />
+  );
 
   const handleEdit = (id) => {
     const role = Cookies.get("role");
@@ -343,14 +371,14 @@ export const ExamDetails = () => {
   const columns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "marks", headerName: "Marks", width: 150 },
+    { field: "marks", headerName: "Obtain Marks", width: 150 },
     { field: "exam_date", headerName: "Exam Date", width: 200 },
   ];
   const rows = students.map((student) => ({
     id: student._id,
     name: `${student.user_id.firstname} ${student.user_id.lastname}`,
     email: student.user_id.email,
-    marks: student.total_marks,
+    marks: student.result,
     exam_date: new Date(student.createdAt).toLocaleDateString(),
   }));
   return (
@@ -526,6 +554,14 @@ export const ExamDetails = () => {
             >
               Student List
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={displayChartOfstudents}
+              disabled
+            >
+              Statastics [Coming Soon]
+            </Button>
           </Box>
         </Grid>
         <Dialog
@@ -619,34 +655,81 @@ export const ExamDetails = () => {
         </Dialog>
         <ToastContainer />
       </Grid>
+      <>
+        <GlobalScrollbarStyles backgroundColor={constant.backgroundColor} />
+        {openStudentList && (
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setopenStudentList(false)}
+              sx={{ mb: 2, mt: 2, alignSelf: "center" }}
+            >
+              Close Table
+            </Button>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center", // Center the content horizontally
+              }}
+            >
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                  mb: 2,
+                  color: constant.backgroundColor,
+                  mt: 2,
+                  textAlign: "center", // Center the text
+                }}
+              >
+                Students Already given exam ::
+              </Typography>
+              <Box
+                sx={{
+                  height: { xs: 300, sm: 400 }, // Adjust height for mobile screens
+                  width: "100%",
+                  maxWidth: { xs: "100%", sm: "80%" }, // Limit max width on larger screens
+                  overflowX: "auto", // Enable horizontal scrolling if needed
+                }}
+              >
+                <DataGrid
+                  sx={{
+                    color: constant.backgroundColor,
+                    "& .MuiDataGrid-root": {
+                      fontSize: { xs: "0.75rem", sm: "1rem" }, // Adjust font size for smaller screens
+                    },
+                  }}
+                  rows={rows}
+                  columns={columns}
+                  pageSize={5}
+                  rowsPerPageOptions={[5, 10, 20]}
+                />
+              </Box>
+            </Box>
+          </Grid>
+        )}
+      </>
 
-      {openStudentList && (
+      {displayChart && (
         <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setdisplayChart(false)}
+            sx={{ mb: 2, mt: 2, alignSelf: "center" }}
+          >
+            Close Chart
+          </Button>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: "bold",
-                mb: 2,
-                color: constant.backgroundColor,
-                mt: 2,
-                alignSelf: "center",
-              }}
-            >
-              Students Already given exam ::
-            </Typography>
-            <Box sx={{ height: 400, width: "100%" }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5, 10, 20]}
-              />
+            <Box sx={{ height: 200, width: "100%" }}>
+              <PieComponent chartType="pie" data={students} />
             </Box>
           </Box>
         </Grid>

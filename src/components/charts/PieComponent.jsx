@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import Cookies from "js-cookie";
 
-export const PieComponent = ({ chartType, apiToCall }) => {
+export const PieComponent = ({ chartType, apiToCall, data }) => {
   const [chartData, setChartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Call the appropriate function based on the prop value
+    if (data) {
+      getChartFromData();
+      return;
+    }
     if (apiToCall === "examMarks") {
       getLoogedinUserDataExamMarksVise();
     } else if (apiToCall === "subject") {
@@ -25,8 +29,8 @@ export const PieComponent = ({ chartType, apiToCall }) => {
       const dataFromApi = response.data;
 
       if (dataFromApi && dataFromApi.length > 0) {
-        const labels = dataFromApi.map(item => item.examName);
-        const data = dataFromApi.map(item => item.marks);
+        const labels = dataFromApi.map((item) => item.examName);
+        const data = dataFromApi.map((item) => item.marks);
 
         const newData = {
           labels: labels,
@@ -57,8 +61,8 @@ export const PieComponent = ({ chartType, apiToCall }) => {
       const dataFromApi = response.data;
 
       if (dataFromApi && dataFromApi.length > 0) {
-        const labels = dataFromApi.map(item => item.subject);
-        const data = dataFromApi.map(item => item.totalExams);
+        const labels = dataFromApi.map((item) => item.subject);
+        const data = dataFromApi.map((item) => item.totalExams);
 
         const newData = {
           labels: labels,
@@ -81,6 +85,28 @@ export const PieComponent = ({ chartType, apiToCall }) => {
     }
   };
 
+  const getChartFromData = () => {
+    if (data && data.length > 0) {
+      const labels = data.map((item) => item.label);
+      const data = data.map((item) => item.value);
+
+      const newData = {
+        labels: labels,
+        datasets: [
+          {
+            label: "Data",
+            data: data,
+            backgroundColor: ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"],
+          },
+        ],
+      };
+      setChartData(newData);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  };
+
   const options = {
     responsive: true,
   };
@@ -89,8 +115,13 @@ export const PieComponent = ({ chartType, apiToCall }) => {
     return <Typography variant="body1">Loading...</Typography>;
   }
 
-  if (!chartData || (chartData.labels.length === 0 && chartData.datasets[0].data.length === 0)) {
-    return <Typography variant="body1">Not enough data to show chart.</Typography>;
+  if (
+    !chartData ||
+    (chartData.labels.length === 0 && chartData.datasets[0].data.length === 0)
+  ) {
+    return (
+      <Typography variant="body1">Not enough data to show chart.</Typography>
+    );
   }
 
   switch (chartType) {
@@ -104,7 +135,7 @@ export const PieComponent = ({ chartType, apiToCall }) => {
       return <Line data={chartData} options={options} />;
     case "bar":
       return (
-        <Box sx={{ width: "100%", minWidth: "220px", height: "auto"}}>
+        <Box sx={{ width: "100%", minWidth: "220px", height: "auto" }}>
           <Bar data={chartData} options={options} />
         </Box>
       );
