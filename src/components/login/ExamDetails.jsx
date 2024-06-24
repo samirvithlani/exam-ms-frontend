@@ -2,6 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import PreviewIcon from '@mui/icons-material/Preview';
+import EditIcon from '@mui/icons-material/Edit';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
+import AddIcon from '@mui/icons-material/Add';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ListIcon from '@mui/icons-material/List';
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import {
   Box,
   Button,
@@ -381,6 +388,7 @@ export const ExamDetails = () => {
     marks: student.result,
     exam_date: new Date(student.createdAt).toLocaleDateString(),
   }));
+  const typoProps = {color:constant.backgroundColor,fontWeight:"bold"};
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container spacing={2}>
@@ -397,30 +405,30 @@ export const ExamDetails = () => {
             {/* First line: Name, Standard, Stream, Subject, Topic */}
             <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
               <Box sx={boxProp}>
-                <Typography variant="h6">Name: {questions.name}</Typography>
+                <Typography variant="h6" sx ={typoProps}>Name: {questions.name}</Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6" sx={typoProps}>
                   Standard: {questions.std?.std}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6" sx={typoProps}>
                   Stream: {questions.stream?.name}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                 <Typography variant="h6" sx= {typoProps}>
                   Subject: {questions.subject?.name}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Topic: {questions.examtopic?.name}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Exam Time: {questions?.examtime || 0}
                 </Typography>
               </Box>
@@ -428,32 +436,32 @@ export const ExamDetails = () => {
             {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Type: {questions?.examtype?.type}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   No Of Question: {questions?.noofquestions}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Difficulty: {questions?.difficulty?.difficulty}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Per Question marks: {questions?.perQuestionmarks}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Total marks: {questions?.totalmarks}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6">
+                <Typography variant="h6"  sx= {typoProps}>
                   Credits: {questions?.credit || "N/A"}
                 </Typography>
               </Box>
@@ -471,6 +479,7 @@ export const ExamDetails = () => {
             }}
           >
             <Button
+            startIcon={<PreviewIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -488,20 +497,16 @@ export const ExamDetails = () => {
               View Exam
             </Button>
             <Button
+            startIcon={<EditIcon />}
               variant="contained"
               color="primary"
               onClick={() => handleEdit(id)}
             >
               Edit Exam
             </Button>
+           
             <Button
-              variant="contained"
-              color="error"
-              onClick={handleOpenDeleteDialog}
-            >
-              Delete Exam
-            </Button>
-            <Button
+            startIcon={<DonutLargeIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -516,6 +521,7 @@ export const ExamDetails = () => {
               Generate Questions
             </Button>
             <Button
+            startIcon={<AddIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -541,6 +547,7 @@ export const ExamDetails = () => {
               Add Questions
             </Button>
             <Button
+            startIcon={<PlaylistAddCheckIcon />}
               variant="contained"
               color="primary"
               onClick={handleOpenDialog}
@@ -548,11 +555,20 @@ export const ExamDetails = () => {
               Select Questions
             </Button>
             <Button
+            startIcon={<ListIcon />}
               variant="contained"
               color="primary"
               onClick={fetchStudentDetailByExamId}
             >
               Student List
+            </Button>
+            <Button
+            startIcon={<AutoDeleteIcon />}
+              variant="contained"
+              color="error"
+              onClick={handleOpenDeleteDialog}
+            >
+              Delete Exam
             </Button>
             <Button
               variant="contained"

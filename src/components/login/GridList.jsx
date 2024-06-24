@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Avatar, Typography, Button } from '@mui/material';
+import { Grid, Box, Avatar, Typography, Button, createTheme, ThemeProvider } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
+import { constant } from '../../constant';
 
 export const GridList = () => {
   const { id } = useParams();
@@ -70,8 +71,15 @@ export const GridList = () => {
   const getAvatarLetter = (name) => {
     return name.charAt(0).toUpperCase();
   };
-
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   return (
+    <ThemeProvider theme={defaultTheme}>
     <Box padding="20px">
       <Button
         variant="contained"
@@ -83,7 +91,7 @@ export const GridList = () => {
         Back to Subject List
       </Button>
 
-      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3 }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3,color:constant.backgroundColor }}>
         Exam List
       </Typography>
 
@@ -132,6 +140,7 @@ export const GridList = () => {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     maxWidth: '100%', // Ensure the text does not overflow the box
+                    color:constant.backgroundColor
                   }}
                 >
                   {item.name}
@@ -141,5 +150,6 @@ export const GridList = () => {
           ))}
       </Grid>
     </Box>
+    </ThemeProvider>
   );
 };
