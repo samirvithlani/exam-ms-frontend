@@ -10,7 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import "../../assets/css/loadercust.css";
 
 export const CustomeLoader = () => {
-  console.log("called....11")
+  
   return (
     <div class="banter-loader">
       <div class="banter-loader__box"></div>
