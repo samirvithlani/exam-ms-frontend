@@ -305,6 +305,7 @@ export const SideBar = () => {
               borderRight: 0,
               width: isExpanded ? drawerWidth : partialWidth,
               height: "100%", // Set height to 100% of the viewport height
+              
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",

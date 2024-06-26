@@ -120,7 +120,7 @@ export const StudentDashboard = () => {
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{ color: "black", fontFamily: "Lato" }}
+                  sx={{ color:constant.backgroundColor}}
                 >
                   Total Exam Given : {history}
                 </Typography>
@@ -149,9 +149,9 @@ export const StudentDashboard = () => {
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{ color: "black", fontFamily: "Lato" }}
+                  sx={{ color: constant.backgroundColor }}
                 >
-                  Total Credit: {wallet}
+                  Total Credit: {wallet || 0}
                 </Typography>
               </div>
             </Grid>
@@ -177,7 +177,7 @@ export const StudentDashboard = () => {
               </Typography>
               <Typography
                 variant="h6"
-                sx={{ color: "black", fontFamily: "Lato" }}
+                sx={{ color:constant.backgroundColor }}
               >
                 Total no of exam in portal:{examData}
               </Typography>
@@ -204,7 +204,7 @@ export const StudentDashboard = () => {
               </Typography>
               <Typography
                 variant="h6"
-                sx={{ color: "black", fontFamily: "Lato" }}
+                sx={{ color:constant.backgroundColor }}
               >
                 Total no of exam in portal:{examData}
               </Typography>

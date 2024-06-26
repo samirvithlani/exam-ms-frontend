@@ -13,6 +13,8 @@ import {
   DialogContent,
   DialogTitle,
   useMediaQuery,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useContext, useEffect, useState } from "react";
@@ -30,6 +32,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Cookies from "js-cookie";
 import HomeIcon from "@mui/icons-material/Home";
 import axios from "axios";
+import { constant } from "../../constant";
 
 export const FacultySideBar = () => {
   const navigate = useNavigate();
@@ -175,16 +178,22 @@ export const FacultySideBar = () => {
       setExpandedSubject(subjectId);
     }
   };
-
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor, // Change this to your desired color
+      },
+    },
+  });
   
   
   return (
-    <div>
+    <ThemeProvider theme={defaultTheme}>
       <AdminHeader
         isExpanded={isExpanded}
         toggleSidebar={toggleSidebar}
-        name={"ADMIN PANEL"}
-      ></AdminHeader>
+        name={"STUDENT PANEL"}
+      />
       <CssBaseline />
       <Box
         sx={{
@@ -195,110 +204,72 @@ export const FacultySideBar = () => {
         }}
       >
         <Drawer
+          variant={isMobile ? "temporary" : "permanent"}
+          open={isExpanded}
+          onClose={() => setIsExpanded(false)}
           PaperProps={{
             sx: {
-              marginRight: "5px",
               position: "inherit",
               borderRight: 0,
-              width: isExpanded ? drawerWidth : partialWidth,
-              height: "100%", // Set height to 100% of the viewport height
-              minHeight:"630px",
+              width: isExpanded ? drawerWidth : 0,
+              height: "100%",
+              minHeight: "635px",
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",
-              borderRadius: "30px",
+              borderRadius: "10px",
               backgroundColor: "white",
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
               },
             },
           }}
-          variant="permanent"
+          ModalProps={{ keepMounted: true }}
           anchor="left"
         >
           <List>
             {filteredRouteArray.map((res, index) => (
-              <div key={res.name}>
-                <ListItem
-                  className={
-                    res.activeMenuFor.some((x) => location.pathname.includes(x))
-                      ? "activebtn"
-                      : res.linkUrl == "null"
-                      ? "disabled-link"
-                      : ""
-                  }
-                  disablePadding
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "#7776EE",
-                    },
-                  }}
-                >
-                  {res.name === "List" ? (
-                    <ListItemButton
-                      sx={{ paddingLeft: "20px" }}
-                      onClick={() => handleToggleSubject(res.id)}
-                    >
-                      <ListItemIcon>
-                        <Avatar
-                          sx={{ bgcolor: "#010080", width: 24, height: 24 }}
-                        >
-                          {res?.logoImage && <res.logoImage />}
-                        </Avatar>
-                      </ListItemIcon>
-                      <ListItemText
-                        className="sidebartext"
-                        sx={{ color: "black" }}
-                        primary={res.name}
-                      />
-                      {expandedSubject === res.id ? (
-                        <ChevronLeftIcon />
-                      ) : (
-                        <ChevronRightIcon />
-                      )}
-                    </ListItemButton>
-                  ) : (
-                    <ListItemButton
-                      component={Link}
-                      to={res.linkUrl != "null" ? res.linkUrl : "#"}
-                      style={{ marginTop: "5px" }}
-                    >
-                      <ListItemIcon>
-                        <Avatar
-                          sx={{ bgcolor: "#010080", width: 24, height: 24 }}
-                        >
-                          {res?.logoImage && <res.logoImage />}
-                        </Avatar>
-                      </ListItemIcon>
-                      <ListItemText
-                        className="sidebartext"
-                        sx={{ color: "black" }}
-                        primary={res.name}
-                      />
-                    </ListItemButton>
-                  )}
-                </ListItem>
-                {expandedSubject === res.id &&
-                  res.children &&
-                  res.children.map((subject) => (
-                    <ListItem
-                      className="nested-subject"
-                      key={subject.id}
-                      button
-                      component={Link}
-                      to={subject.linkUrl}
-                      // onClick={handleCloseDrawer}
-                    >
-                      <ListItemText primary={subject.name} />
-                    </ListItem>
-                  ))}
-              </div>
+              <ListItem
+                key={res.name}
+                disablePadding
+                component={Link}
+                to={res.linkUrl !== "null" ? res.linkUrl : "#"}
+                onClick={() => isMobile && setIsExpanded(false)}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: constant.backgroundColor,
+                  },
+                  "&:hover .MuiListItemText-root": {
+                    color: "white",
+                  },
+                }}
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Avatar sx={{ bgcolor: constant.backgroundColor }}>
+                      {res?.logoImage && <res.logoImage />}
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    sx={{ color: constant.backgroundColor,fontWeight:"bold"}}
+                    primary={res.name}
+                  />
+                </ListItemButton>
+              </ListItem>
             ))}
           </List>
           <Box sx={{ marginTop: "auto" }}>
             <Button
               variant="contained"
-              sx={{ color: "#whitesmoke", bgcolor: "#010080" }}
+              sx={{
+                color: "#whitesmoke",
+                bgcolor: constant.backgroundColor,
+                fontFamily: "Lato",
+                "&:hover": {
+                  backgroundColor: constant.backgroundColor,
+                  color: "white",
+                },
+              }}
               startIcon={<ExitToAppIcon />}
               onClick={handleOpenLogoutDialog}
               fullWidth
@@ -307,10 +278,7 @@ export const FacultySideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box
-          component="main"
-          sx={{ width: "100%",  height: "100%",mt:3,ml:1,mr:1}}
-        >
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2 }}>
           <Outlet />
         </Box>
       </Box>
@@ -324,6 +292,6 @@ export const FacultySideBar = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </ThemeProvider>
   );
 };
