@@ -255,10 +255,34 @@ export const SideBar = () => {
     },
     {
       id: 25,
+      name: "Create Contest",
+      linkUrl: "createcontest",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["createcontest"],
+      logoImage: AddIcon
+    },
+    {
+      id: 26,
       name:"Announcement",
       linkUrl:"annoucement",
       textColor:"#7D8FB3",
       activeMenuFor:["announcement"],
+      logoImage:ListIcon
+    },
+    {
+      id: 27,
+      name:"Contest List",
+      linkUrl:"contestlist",
+      textColor:"#7D8FB3",
+      activeMenuFor:["contestlist"],
+      logoImage:ListIcon
+    },
+    {
+      id: 27,
+      name:"Contest Detial",
+      linkUrl:"contestdetail",
+      textColor:"#7D8FB3",
+      activeMenuFor:["contestdetail"],
       logoImage:ListIcon
     }
   ];
@@ -270,7 +294,9 @@ export const SideBar = () => {
       route.name !== "Add Faculty" &&
       route.name != "userprofile" &&
       route.name !== "Exam Details"&&
-      route.name !== "viewAnswers"
+      route.name !== "viewAnswers"&&
+      route.name !== "Contest Detial"
+
   );
 
   const handleToggleSubject = (subjectId) => {
