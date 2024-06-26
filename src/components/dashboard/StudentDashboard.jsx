@@ -14,10 +14,9 @@ export const StudentDashboard = () => {
   const [students, setStudents] = useState([]);
   const [examData, setExamData] = useState([]);
   const TypographyProps = {
-      variant: "h6",  
-      color: constant.backgroundColor
-  
-  }
+    variant: "h6",
+    color: constant.backgroundColor,
+  };
   const cardStyle = {
     border: "2px solid #ddd",
     borderRadius: "20px",
@@ -68,16 +67,14 @@ export const StudentDashboard = () => {
   return (
     <div style={{ height: "100vh", overflowY: "auto" }}>
       <Grid
-      
         container
         spacing={2}
         width="100%"
         sx={{
           borderRadius: "8px",
           p: 2,
-          ml:0.1,
+          ml: 0.1,
           mr: 0.1,
-          
         }}
       >
         {/* First Row */}
@@ -90,9 +87,9 @@ export const StudentDashboard = () => {
             height: "400px",
             borderRadius: "20px",
             // mt: 2,
-            ml:"0.1px",
+            ml: "0.1px",
             p: 2,
-            background:constant.backgroundColor,
+            background: constant.backgroundColor,
             pt: 10,
             gap: 1,
             width: "100%",
@@ -115,10 +112,10 @@ export const StudentDashboard = () => {
               style={{ position: "relative" }}
             >
               <div>
-                  <Typography
-                    variant="h4"
-                    sx={{ color: constant.backgroundColor, }}
-                  >
+                <Typography
+                  variant="h4"
+                  sx={{ color: constant.backgroundColor }}
+                >
                   History
                 </Typography>
                 <Typography
@@ -128,7 +125,6 @@ export const StudentDashboard = () => {
                   Total Exam Given : {history}
                 </Typography>
               </div>
-            
             </Grid>
           </Grid>
           <Grid
@@ -148,10 +144,7 @@ export const StudentDashboard = () => {
               style={{ position: "relative" }}
             >
               <div>
-                <Typography
-                  variant="h4"
-                  sx={TypographyProps}
-                >
+                <Typography variant="h4" sx={TypographyProps}>
                   Credit Detail
                 </Typography>
                 <Typography
@@ -161,7 +154,6 @@ export const StudentDashboard = () => {
                   Total Credit: {wallet}
                 </Typography>
               </div>
-           
             </Grid>
           </Grid>
 
@@ -180,10 +172,7 @@ export const StudentDashboard = () => {
               direction="column"
               spacing={0}
             >
-              <Typography
-                variant="h4"
-                sx={TypographyProps}
-              >
+              <Typography variant="h4" sx={TypographyProps}>
                 Exam Detail
               </Typography>
               <Typography
@@ -210,10 +199,7 @@ export const StudentDashboard = () => {
               direction="column"
               spacing={0}
             >
-              <Typography
-                variant="h4"
-                sx={TypographyProps}
-              >
+              <Typography variant="h4" sx={TypographyProps}>
                 Exam Detail
               </Typography>
               <Typography
@@ -249,10 +235,7 @@ export const StudentDashboard = () => {
               direction="column"
               spacing={0}
             >
-              <Typography
-                variant="h6"
-                sx={TypographyProps}
-              >
+              <Typography variant="h6" sx={TypographyProps}>
                 Number of Exams Taken by Subject
               </Typography>
               <Typography variant="body1"></Typography>
@@ -284,13 +267,10 @@ export const StudentDashboard = () => {
               direction="column"
               spacing={0}
             >
-              <Typography
-                variant="h6"
-                sx={TypographyProps}
-              >
+              <Typography variant="h6" sx={TypographyProps}>
                 Subject Wise Exam Marks
               </Typography>
-              <Grid xs={12} sm={6.1} md={6.1} lg={6.1} xl={6.1} sx={{ mt: 2 }}>
+              <Grid xs={12} sm={8} md={8} lg={8} xl={8} sx={{ mt: 10 }}>
                 <PieComponent chartType="bar" apiToCall="examMarks" />
               </Grid>
             </Grid>

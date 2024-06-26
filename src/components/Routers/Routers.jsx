@@ -277,7 +277,7 @@ const MainRouter = ({ children }) => {
           path: "/adminDashboard",
           element: <SideBar />,
           errorElement: <div>404</div>,
-          loader: checkAuthToken,
+          //loader: checkAuthToken,
 
           children: [
             {

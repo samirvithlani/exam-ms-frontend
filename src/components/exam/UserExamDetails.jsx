@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
 import HangingWatch from "../CustomeCopmonent/HangingWatch";
+import AlarmOnIcon from "@mui/icons-material/AlarmOn";
 
 export const UserExamDetails = () => {
   const location = useLocation();
@@ -208,6 +209,7 @@ export const UserExamDetails = () => {
         {/* Action buttons */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button
+            startIcon={<AlarmOnIcon />}
             variant="contained"
             color="secondary"
             sx={{
@@ -225,12 +227,11 @@ export const UserExamDetails = () => {
               )
             }
           >
-            Start Exam
+            Attempt now
           </Button>
         </Box>
       </Grid>
       <ToastContainer />
-      
     </Grid>
   );
 };
