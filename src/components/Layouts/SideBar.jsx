@@ -253,6 +253,14 @@ export const SideBar = () => {
       activeMenuFor: ["viewalluserexam"],
       logoImage: ListIcon
     },
+    {
+      id: 25,
+      name:"Announcement",
+      linkUrl:"annoucement",
+      textColor:"#7D8FB3",
+      activeMenuFor:["announcement"],
+      logoImage:ListIcon
+    }
   ];
 
   const filteredRouteArray = RouteArray.filter(
