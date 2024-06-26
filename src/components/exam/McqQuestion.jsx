@@ -33,6 +33,7 @@ import { MySnackBar } from "../MySnackBar";
 import { RemoveCircleOutline } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { constant } from "../../constant";
+import PreWrapper from "../CustomeCopmonent/PreWrapper";
 
 export const McqQuestion = () => {
   const { id } = useParams();
@@ -589,15 +590,7 @@ export const McqQuestion = () => {
                   <InputLabel htmlFor={`Option${index + 1}`}>
                     {`Option${index + 1}`}
                   </InputLabel>
-                  {/* <TextField
-                    autoComplete="given-title"
-                    name={`Option${index + 1}`}
-                    fullWidth
-                    id={`Option${index + 1}`}
-                    label={`Option${index + 1}`}
-                    // autoFocus
-                    {...register(`Option${index + 1}`)}
-                  /> */}
+                
                   <ReactQuill
                       value={option}
                       onChange={(value) => handleOptionTextChange(index, value)}
@@ -822,11 +815,11 @@ export const McqQuestion = () => {
                   </Typography>
                   {/* <pre>{String.raw`${question.question}`}</pre>  */}
                   {/* <pre>question:<div dangerouslySetInnerHTML={{ __html:questions.question }} /></pre> */}
-                  <pre>options:<div dangerouslySetInnerHTML={{ __html:questions.option }} /></pre>
+                  <pre>options:<pre dangerouslySetInnerHTML={{ __html:questions.option }} /></pre>
 
 
                   <pre>
-                  question:<div dangerouslySetInnerHTML={{ __html:questions.question }} />
+                  question:<pre dangerouslySetInnerHTML={{ __html:questions.question }} />
                     {JSON.stringify(questions, null, 2)}</pre>
                 </div>
               ))}

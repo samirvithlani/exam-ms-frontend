@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
-import { Typography, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText, RadioGroup, FormControlLabel, Radio, Checkbox, FormGroup, IconButton } from '@mui/material';
+import {
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Checkbox,
+  FormGroup,
+  IconButton
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Cookies from 'js-cookie';
+import PreWrapper from './PreWrapper'; // Adjust the import path as needed
 
 const QuestionList = ({ question, type, options, onDelete, questionNumber }) => {
   const [expanded, setExpanded] = useState(false);
@@ -19,7 +34,7 @@ const QuestionList = ({ question, type, options, onDelete, questionNumber }) => 
         return (
           <RadioGroup>
             {options.map((option, index) => (
-              <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+              <FormControlLabel key={index} value={option} control={<Radio />} label={<PreWrapper htmlContent={option} />} />
             ))}
           </RadioGroup>
         );
@@ -27,7 +42,7 @@ const QuestionList = ({ question, type, options, onDelete, questionNumber }) => 
         return (
           <FormGroup>
             {options.map((option, index) => (
-              <FormControlLabel key={index} control={<Checkbox />} label={option} />
+              <FormControlLabel key={index} control={<Checkbox />} label={<PreWrapper htmlContent={option} />} />
             ))}
           </FormGroup>
         );
@@ -44,7 +59,7 @@ const QuestionList = ({ question, type, options, onDelete, questionNumber }) => 
             {options.map((option, index) => (
               <ListItem key={index}>
                 <ListItemText
-                  primary={<div dangerouslySetInnerHTML={{ __html: `• ${option}` }} />}
+                  primary={<PreWrapper htmlContent={`• ${option}`} />}
                 />
               </ListItem>
             ))}
@@ -55,7 +70,7 @@ const QuestionList = ({ question, type, options, onDelete, questionNumber }) => 
 
   const getTruncatedQuestion = () => {
     if (question.length > maxLength && !expanded) {
-      return `${question.substring(0, maxLength)}...`;
+      return `${question.substring(0, maxLength)}...`
     }
     return question;
   };
@@ -73,10 +88,7 @@ const QuestionList = ({ question, type, options, onDelete, questionNumber }) => 
           </IconButton>
         )}
         <Typography variant="body1" style={{ marginRight: 10 }}>{questionNumber}.</Typography>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: getTruncatedQuestion() }}
-          style={{ marginLeft: 10 }}
-        />
+        <PreWrapper htmlContent={getTruncatedQuestion()} />
       </AccordionSummary>
       <AccordionDetails>{renderOptions()}</AccordionDetails>
     </Accordion>
