@@ -2,13 +2,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import PreviewIcon from '@mui/icons-material/Preview';
-import EditIcon from '@mui/icons-material/Edit';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
-import AddIcon from '@mui/icons-material/Add';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import ListIcon from '@mui/icons-material/List';
-import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import PreviewIcon from "@mui/icons-material/Preview";
+import EditIcon from "@mui/icons-material/Edit";
+import DonutLargeIcon from "@mui/icons-material/DonutLarge";
+import AddIcon from "@mui/icons-material/Add";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import ListIcon from "@mui/icons-material/List";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
+import ShareIcon from '@mui/icons-material/Share';
+
 import {
   Box,
   Button,
@@ -35,6 +37,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { set } from "lodash";
 import { PieComponent } from "../charts/PieComponent";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 export const ExamDetails = () => {
   const location = useLocation();
@@ -388,7 +391,7 @@ export const ExamDetails = () => {
     marks: student.result,
     exam_date: new Date(student.createdAt).toLocaleDateString(),
   }));
-  const typoProps = {color:constant.backgroundColor,fontWeight:"bold"};
+  const typoProps = { color: constant.backgroundColor, fontWeight: "bold" };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container spacing={2}>
@@ -405,7 +408,9 @@ export const ExamDetails = () => {
             {/* First line: Name, Standard, Stream, Subject, Topic */}
             <Box sx={{ display: "flex", flexWrap: "wrap", mb: 2 }}>
               <Box sx={boxProp}>
-                <Typography variant="h6" sx ={typoProps}>Name: {questions.name}</Typography>
+                <Typography variant="h6" sx={typoProps}>
+                  Name: {questions.name}
+                </Typography>
               </Box>
               <Box sx={boxProp}>
                 <Typography variant="h6" sx={typoProps}>
@@ -418,17 +423,17 @@ export const ExamDetails = () => {
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                 <Typography variant="h6" sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Subject: {questions.subject?.name}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Topic: {questions.examtopic?.name}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Exam Time: {questions?.examtime || 0}
                 </Typography>
               </Box>
@@ -436,32 +441,32 @@ export const ExamDetails = () => {
             {/* Second line: Type, No Of Question, Difficulty, Per Question marks, Total marks, Credits */}
             <Box sx={{ display: "flex", flexWrap: "wrap" }}>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Type: {questions?.examtype?.type}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   No Of Question: {questions?.noofquestions}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Difficulty: {questions?.difficulty?.difficulty}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Per Question marks: {questions?.perQuestionmarks}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Total marks: {questions?.totalmarks}
                 </Typography>
               </Box>
               <Box sx={boxProp}>
-                <Typography variant="h6"  sx= {typoProps}>
+                <Typography variant="h6" sx={typoProps}>
                   Credits: {questions?.credit || "N/A"}
                 </Typography>
               </Box>
@@ -479,7 +484,7 @@ export const ExamDetails = () => {
             }}
           >
             <Button
-            startIcon={<PreviewIcon />}
+              startIcon={<PreviewIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -497,16 +502,16 @@ export const ExamDetails = () => {
               View Exam
             </Button>
             <Button
-            startIcon={<EditIcon />}
+              startIcon={<EditIcon />}
               variant="contained"
               color="primary"
               onClick={() => handleEdit(id)}
             >
               Edit Exam
             </Button>
-           
+
             <Button
-            startIcon={<DonutLargeIcon />}
+              startIcon={<DonutLargeIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -521,7 +526,7 @@ export const ExamDetails = () => {
               Generate Questions
             </Button>
             <Button
-            startIcon={<AddIcon />}
+              startIcon={<AddIcon />}
               variant="contained"
               color="primary"
               onClick={() =>
@@ -547,7 +552,7 @@ export const ExamDetails = () => {
               Add Questions
             </Button>
             <Button
-            startIcon={<PlaylistAddCheckIcon />}
+              startIcon={<PlaylistAddCheckIcon />}
               variant="contained"
               color="primary"
               onClick={handleOpenDialog}
@@ -555,15 +560,27 @@ export const ExamDetails = () => {
               Select Questions
             </Button>
             <Button
-            startIcon={<ListIcon />}
+              startIcon={<ListIcon />}
               variant="contained"
               color="primary"
               onClick={fetchStudentDetailByExamId}
             >
               Student List
             </Button>
+            <CopyToClipboard
+              text={`https://skid-royal.web.app/userDasboard/examdetails/${id}`}
+              onCopy={() => toast.success("Link copied to clipboard!")}
+            >
+              <Button
+                variant="outlined"
+                startIcon={<ShareIcon />}
+                style={{ marginRight: "10px" }}
+              >
+                Share Exam
+              </Button>
+            </CopyToClipboard>
             <Button
-            startIcon={<AutoDeleteIcon />}
+              startIcon={<AutoDeleteIcon />}
               variant="contained"
               color="error"
               onClick={handleOpenDeleteDialog}

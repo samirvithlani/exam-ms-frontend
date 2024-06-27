@@ -13,7 +13,7 @@ export const FacultyDashboard = () => {
   const[question,setQuestion] = useState([]);
   const cardStyle = {
     border: "2  px solid #ddd",
-    borderRadius: "20px",
+    borderRadius: "5px",
     height: 140,
   };
   const [data, setdata] = useState({
@@ -66,7 +66,7 @@ export const FacultyDashboard = () => {
       spacing={2}
       width="100%"
       sx={{
-        borderRadius: "8px",
+        // borderRadius: "8px",
         mt: 2,
         ml: 0.1,
         p: 2,
@@ -80,7 +80,7 @@ export const FacultyDashboard = () => {
         sx={{
           maxheight: "100%",
           height: "400px",
-          borderRadius: "20px",
+          borderRadius: "10px",
           mt: 2,
           ml: 0.1,
           p: 2,
