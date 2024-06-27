@@ -53,6 +53,10 @@ import StudentDetail from "../dashboard/StudentDetail";
 import { DeletedExam } from "../exam/DeletedExam";
 import DeletedMcq from "../exam/DeletedMcq";
 import AllUserGivenExam from "../exam/AllUserGivenExam";
+import { CreateContest } from "../exam/CreateContest";
+import { Annouement } from "../dashboard/Annouement";
+import AllContest from "../exam/AllContest";
+import ContestDetail from "../exam/ContestDetail";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -277,7 +281,7 @@ const MainRouter = ({ children }) => {
           path: "/adminDashboard",
           element: <SideBar />,
           errorElement: <div>404</div>,
-          loader: checkAuthToken,
+          //loader: checkAuthToken,
 
           children: [
             {
@@ -405,7 +409,29 @@ const MainRouter = ({ children }) => {
               path: "viewalluserexam",
               element: <AllUserGivenExam />,
               errorElement: <div>400</div>,
+            },
+            {
+              path: "createcontest",
+              element: <CreateContest />,
+              errorElement: <div>400</div>,
+            },
+            {
+              path:"annoucement",
+              element:<Annouement/>,
+              errorElement:<div>404</div>
+
+            },
+            {
+              path:"contestlist",
+              element:<AllContest/>,
+              errorElement:<div>404</div>
+
+            },
+            {
+              path:"contestdetail/:id",
+              element:<ContestDetail/>
             }
+
           ],
         },
       ],

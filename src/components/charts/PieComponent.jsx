@@ -4,12 +4,17 @@ import React, { useEffect, useState } from "react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import Cookies from "js-cookie";
 
-export const PieComponent = ({ chartType, apiToCall }) => {
+export const PieComponent = ({ chartType, apiToCall, data,isUserSide,userId }) => {
+  console.log(isUserSide,userId)
   const [chartData, setChartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Call the appropriate function based on the prop value
+    if (data) {
+      getChartFromData();
+      return;
+    }
     if (apiToCall === "examMarks") {
       getLoogedinUserDataExamMarksVise();
     } else if (apiToCall === "subject") {
@@ -18,15 +23,24 @@ export const PieComponent = ({ chartType, apiToCall }) => {
   }, [apiToCall]);
 
   const getLoogedinUserDataExamMarksVise = async () => {
-    const _id = Cookies.get("_id");
+    var _id
+    if(isUserSide==undefined){
+      console.log("inside.......................................")
+     _id= Cookies.get("_id");
+    }
+    else{
+      _id = userId
+    }
 
     try {
+      if(_id!=undefined){
+
       const response = await axios.get("/chart2/" + _id);
       const dataFromApi = response.data;
 
       if (dataFromApi && dataFromApi.length > 0) {
-        const labels = dataFromApi.map(item => item.examName);
-        const data = dataFromApi.map(item => item.marks);
+        const labels = dataFromApi.map((item) => item.examName);
+        const data = dataFromApi.map((item) => item.marks);
 
         const newData = {
           labels: labels,
@@ -43,22 +57,30 @@ export const PieComponent = ({ chartType, apiToCall }) => {
       } else {
         setIsLoading(false);
       }
-    } catch (err) {
+    }} catch (err) {
       console.log(err);
       setIsLoading(false);
     }
   };
-
+  
   const getLoggedInUserDataSubjectVise = async () => {
-    const _id = Cookies.get("_id");
+    var _id
+    if(isUserSide==undefined){
+     _id= Cookies.get("_id");
+    }
+    else{
+      _id = userId
+    }
+
 
     try {
+      
       const response = await axios.get("/chart1/" + _id);
       const dataFromApi = response.data;
 
       if (dataFromApi && dataFromApi.length > 0) {
-        const labels = dataFromApi.map(item => item.subject);
-        const data = dataFromApi.map(item => item.totalExams);
+        const labels = dataFromApi.map((item) => item.subject);
+        const data = dataFromApi.map((item) => item.totalExams);
 
         const newData = {
           labels: labels,
@@ -81,6 +103,28 @@ export const PieComponent = ({ chartType, apiToCall }) => {
     }
   };
 
+  const getChartFromData = () => {
+    if (data && data.length > 0) {
+      const labels = data.map((item) => item.label);
+      const data = data.map((item) => item.value);
+
+      const newData = {
+        labels: labels,
+        datasets: [
+          {
+            label: "Data",
+            data: data,
+            backgroundColor: ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"],
+          },
+        ],
+      };
+      setChartData(newData);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  };
+
   const options = {
     responsive: true,
   };
@@ -89,14 +133,19 @@ export const PieComponent = ({ chartType, apiToCall }) => {
     return <Typography variant="body1">Loading...</Typography>;
   }
 
-  if (!chartData || (chartData.labels.length === 0 && chartData.datasets[0].data.length === 0)) {
-    return <Typography variant="body1">Not enough data to show chart.</Typography>;
+  if (
+    !chartData ||
+    (chartData.labels.length === 0 && chartData.datasets[0].data.length === 0)
+  ) {
+    return (
+      <Typography variant="body1">Not enough data to show chart.</Typography>
+    );
   }
 
   switch (chartType) {
     case "pie":
       return (
-        <Box sx={{ width: "100%", minWidth: "220px", height: "auto" }}>
+        <Box sx={{ width: "100%", minWidth: "300px", height: "auto", maxHeight: "350px" }}>
           <Pie data={chartData} options={options} />
         </Box>
       );
@@ -104,7 +153,7 @@ export const PieComponent = ({ chartType, apiToCall }) => {
       return <Line data={chartData} options={options} />;
     case "bar":
       return (
-        <Box sx={{ width: "100%", minWidth: "220px", height: "auto"}}>
+        <Box sx={{ width: "100%", minWidth: "300px", height: "auto", maxHeight: "400px" }}>
           <Bar data={chartData} options={options} />
         </Box>
       );

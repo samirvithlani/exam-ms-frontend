@@ -1,35 +1,12 @@
-import {
-  Avatar,
-  CssBaseline,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  useMediaQuery,
-  Toolbar,
-} from "@mui/material";
-import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Avatar, Button, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, ThemeProvider, createTheme } from "@mui/material";
+import { Box } from "@mui/system";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
-import AddIcon from "@mui/icons-material/Add";
-import { deepOrange, deepPurple } from "@mui/material/colors";
-import ListIcon from '@mui/icons-material/List';
-import "../../assets/layouts/layout.module.css";
-import MenuIcon from '@mui/icons-material/Menu';
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Cookies from "js-cookie";
-import { Button } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import ListIcon from "@mui/icons-material/List";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import HomeIcon from '@mui/icons-material/Home';
-import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 import { constant } from "../../constant";
 
 export const UserSideBar = () => {
@@ -39,7 +16,7 @@ export const UserSideBar = () => {
   const [isExpanded, setIsExpanded] = useState(!isMobile);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const { token } = useParams();
-  
+
   useEffect(() => {
     setIsExpanded(!isMobile);
   }, [isMobile]);
@@ -55,7 +32,7 @@ export const UserSideBar = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("name");
-    Cookies.remove("_id");  
+    Cookies.remove("_id");
     Cookies.remove("role");
     navigate("/login");
   };
@@ -83,7 +60,7 @@ export const UserSideBar = () => {
     },
     {
       id: 3,
-      name: "result",
+      name: "Result",
       linkUrl: "history",
       textColor: "#7D8FB3",
       activeMenuFor: ["history"],
@@ -94,7 +71,7 @@ export const UserSideBar = () => {
 
   const filteredRouteArray = RouteArray.filter(
     (route) =>
-      route.name !== "Answer" && 
+      route.name !== "Answer" &&
       route.name !== "Question" &&
       route.name !== "userprofile" &&
       route.name !== "wallet" &&
@@ -102,15 +79,30 @@ export const UserSideBar = () => {
       route.name !== "Exam Details"
   );
 
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor,
+      },
+    },
+  });
+
   return (
-    <div>
+    <ThemeProvider theme={defaultTheme}>
       <AdminHeader
         isExpanded={isExpanded}
         toggleSidebar={toggleSidebar}
-        name={'STUDENT PANEL'}
+        name={"STUDENT PANEL"}
       />
       <CssBaseline />
-      <Box sx={{ display: "flex", backgroundColor: "rgb(238,242,246)", width: "100%", fontFamily: "Lato" }}>
+      <Box
+        sx={{
+          display: "flex",
+          backgroundColor: "rgb(238,242,246)",
+          width: "100%",
+          fontFamily: "Lato",
+        }}
+      >
         <Drawer
           variant={isMobile ? "temporary" : "permanent"}
           open={isExpanded}
@@ -120,19 +112,19 @@ export const UserSideBar = () => {
               position: "inherit",
               borderRight: 0,
               width: isExpanded ? drawerWidth : 0,
-              minHeight:"650px",
               height: "100%",
+              minHeight: "635px",
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",
-              borderRadius: "30px",
+              borderRadius: "10px",
               backgroundColor: "white",
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
               },
             },
           }}
-          ModalProps={{ keepMounted: true }} // Better open performance on mobile.
+          ModalProps={{ keepMounted: true }}
           anchor="left"
         >
           <List>
@@ -142,8 +134,15 @@ export const UserSideBar = () => {
                 disablePadding
                 component={Link}
                 to={res.linkUrl !== "null" ? res.linkUrl : "#"}
-                onClick={() => isMobile && setIsExpanded(false)} // Close drawer on link click if mobile
-                sx={{ "&:hover": { backgroundColor: "#7776EE" } }}
+                onClick={() => isMobile && setIsExpanded(false)}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: constant.backgroundColor,
+                  },
+                  "&:hover .MuiListItemText-root": {
+                    color: "white",
+                  },
+                }}
               >
                 <ListItemButton>
                   <ListItemIcon>
@@ -152,7 +151,7 @@ export const UserSideBar = () => {
                     </Avatar>
                   </ListItemIcon>
                   <ListItemText
-                    sx={{ color: "black" }}
+                    sx={{ color: constant.backgroundColor,fontWeight:"bold"}}
                     primary={res.name}
                   />
                 </ListItemButton>
@@ -162,7 +161,15 @@ export const UserSideBar = () => {
           <Box sx={{ marginTop: "auto" }}>
             <Button
               variant="contained"
-              sx={{ color: "#whitesmoke", bgcolor: "rgb(1,0,128)" }}
+              sx={{
+                color: "#whitesmoke",
+                bgcolor: constant.backgroundColor,
+                fontFamily: "Lato",
+                "&:hover": {
+                  backgroundColor: constant.backgroundColor,
+                  color: "white",
+                },
+              }}
               startIcon={<ExitToAppIcon />}
               onClick={handleOpenLogoutDialog}
               fullWidth
@@ -171,11 +178,7 @@ export const UserSideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box
-          component="main"
-          sx={{ width: "100%",  height: "100%",mt:3,ml:1,mr:1}}
-        >
-          {/* <Toolbar /> */}
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2 }}>
           <Outlet />
         </Box>
       </Box>
@@ -189,6 +192,6 @@ export const UserSideBar = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </ThemeProvider>
   );
 };

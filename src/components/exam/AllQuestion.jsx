@@ -27,8 +27,6 @@ import Cookies from "js-cookie";
 import QuestionList from "../CustomeCopmonent/QuestionList"; // Ensure this component is correctly imported
 import { constant } from "../../constant";
 
-
-
 function App() {
   const [questions, setQuestions] = useState([]);
   const [userSubjects, setUserSubjects] = useState([]);
@@ -64,8 +62,8 @@ function App() {
         ...question,
         question: `${index + 1}. ${question.question}`,
       }));
-      setQuestions(numberedQuestions.filter(x=>x.isActive));
-      setFilteredQuestions(numberedQuestions.filter(x=>x.isActive));
+      setQuestions(numberedQuestions.filter((x) => x.isActive));
+      setFilteredQuestions(numberedQuestions.filter((x) => x.isActive));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -169,13 +167,17 @@ function App() {
   const deleteQuestion = async (questionId) => {
     try {
       await axios.put(`/mcqdelete/${questionId}`);
-      setQuestions((prevQuestions) => prevQuestions.filter((q) => q._id !== questionId));
-      setFilteredQuestions((prevQuestions) => prevQuestions.filter((q) => q._id !== questionId));
+      setQuestions((prevQuestions) =>
+        prevQuestions.filter((q) => q._id !== questionId)
+      );
+      setFilteredQuestions((prevQuestions) =>
+        prevQuestions.filter((q) => q._id !== questionId)
+      );
     } catch (error) {
       console.error("Error deleting question:", error);
     }
   };
-  
+
   const defaultTheme = createTheme({
     palette: {
       primary: {
@@ -334,7 +336,6 @@ function App() {
                     type={question.type}
                     options={options}
                     onDelete={() => deleteQuestion(question._id)}
-
                   />
                 );
               })}

@@ -253,6 +253,38 @@ export const SideBar = () => {
       activeMenuFor: ["viewalluserexam"],
       logoImage: ListIcon
     },
+    {
+      id: 25,
+      name: "Create Contest",
+      linkUrl: "createcontest",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["createcontest"],
+      logoImage: AddIcon
+    },
+    {
+      id: 26,
+      name:"Announcement",
+      linkUrl:"annoucement",
+      textColor:"#7D8FB3",
+      activeMenuFor:["announcement"],
+      logoImage:ListIcon
+    },
+    {
+      id: 27,
+      name:"Contest List",
+      linkUrl:"contestlist",
+      textColor:"#7D8FB3",
+      activeMenuFor:["contestlist"],
+      logoImage:ListIcon
+    },
+    {
+      id: 27,
+      name:"Contest Detial",
+      linkUrl:"contestdetail",
+      textColor:"#7D8FB3",
+      activeMenuFor:["contestdetail"],
+      logoImage:ListIcon
+    }
   ];
 
   const filteredRouteArray = RouteArray.filter(
@@ -262,7 +294,9 @@ export const SideBar = () => {
       route.name !== "Add Faculty" &&
       route.name != "userprofile" &&
       route.name !== "Exam Details"&&
-      route.name !== "viewAnswers"
+      route.name !== "viewAnswers"&&
+      route.name !== "Contest Detial"
+
   );
 
   const handleToggleSubject = (subjectId) => {
@@ -305,6 +339,7 @@ export const SideBar = () => {
               borderRight: 0,
               width: isExpanded ? drawerWidth : partialWidth,
               height: "100%", // Set height to 100% of the viewport height
+              
               flexShrink: 0,
               overflowX: "hidden",
               border: "5px solid #F0F0F0",
@@ -433,7 +468,7 @@ export const SideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 1 }}>
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2 }}>
           <Outlet />
         </Box>
       </Box>
