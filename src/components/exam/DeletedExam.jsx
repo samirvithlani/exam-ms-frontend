@@ -11,21 +11,22 @@ export const DeletedExam = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [examToDelete, setExamToDelete] = useState(null);
 
-  useEffect(() => {
-    const fetchExams = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/exam');
-        if (response.status === 200) {
-          const ActiveExam = response.data.filter(data => data.isActive === false);
-          setExam(ActiveExam);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+  const fetchExams = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/exam');
+      if (response.status === 200) {
+        const ActiveExam = response.data.filter(data => data.isActive === false);
+        setExam(ActiveExam);
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+   
     fetchExams();
   }, []);
 
