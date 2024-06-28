@@ -192,9 +192,9 @@ export const ExamDetails = () => {
   ) => {
     try {
       const existingExamResponse = await axios.get(`/exam/${id}`);
-      const existingExam = existingExamResponse.data;
+      const existingExam = existingExamResponse?.data;
 
-      const currentQuestionCount = existingExam.mcq.length;
+      const currentQuestionCount = existingExam?.mcq?.length;
       const additionalQuestionsNeeded = noOfQuestions - currentQuestionCount;
 
       if (additionalQuestionsNeeded <= 0) {
@@ -202,12 +202,12 @@ export const ExamDetails = () => {
         return;
       }
 
-      const filteredQuestions = allQuestions.filter(
+      const filteredQuestions = allQuestions?.filter(
         (question) =>
-          question.Topic._id === topicId && question.difficulty === difficultyId
+          question?.Topic._id === topicId && question?.difficulty === difficultyId
       );
 
-      if (filteredQuestions.length < additionalQuestionsNeeded) {
+      if (filteredQuestions?.length < additionalQuestionsNeeded) {
         toast.error("Insufficient questions available for this topic.");
         return;
       }
