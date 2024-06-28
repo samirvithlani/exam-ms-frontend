@@ -49,6 +49,7 @@ export const CreateExam = () => {
   const [totalMarks, settotalmarks] = useState("");
   const [userSubjects, setUserSubjects] = useState([]);
   const [examTime, setExamTime] = useState("");
+  const [isContestExam, setIsContestExam] = useState(false); 
   const userId = Cookies.get("_id");
   const role = Cookies.get("role");
 
@@ -146,6 +147,9 @@ export const CreateExam = () => {
     } catch (error) {
       console.error("Error fetching streams:", error);
     }
+  };
+  const handleIsContestExamChange = (event) => {
+    setIsContestExam(event.target.value);
   };
   const handleIsTimeLimitChange = (event) => {
     setIsTimeLimit(event.target.value);
@@ -419,7 +423,30 @@ export const CreateExam = () => {
                 )}
               </Grid>
             )}
-
+            <Grid item xs={3}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend" id="isContestExam">
+                  Is Contest Exam ?
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="isContestExam"
+                  name="isContestExam"
+                  onChange={handleIsContestExamChange}
+                >
+                  <FormControlLabel
+                    value="true"
+                    control={<Radio {...register("isContestExam")} />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value="false"
+                    control={<Radio {...register("isContestExam")} />}
+                    label="No"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 autoComplete="given-title"

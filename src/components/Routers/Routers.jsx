@@ -57,6 +57,7 @@ import { CreateContest } from "../exam/CreateContest";
 import { Annouement } from "../dashboard/Annouement";
 import AllContest from "../exam/AllContest";
 import ContestDetail from "../exam/ContestDetail";
+import UserContestexam from "../exam/UserContestexam";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -144,6 +145,14 @@ const MainRouter = ({ children }) => {
             {
               path: "examdetails/:id",
               element: <UserExamDetails />,
+            },
+            {
+              path: "allcontest",
+              element: <AllContest/>,
+            },
+            {
+              path: "contestdetails/:id",
+              element: <UserContestexam/>,
             },
           ],
         },

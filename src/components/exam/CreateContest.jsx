@@ -32,7 +32,7 @@ export const CreateContest = () => {
 
   useEffect(() => {
     if (selectedSubjects.length > 0) {
-      fetchExams(selectedSubjects.map(subject => subject._id)); // Pass array of subject _ids
+      fetchExams(selectedSubjects.map(subject => subject._id)); 
     } else {
       setExams([]);
     }
@@ -41,7 +41,8 @@ export const CreateContest = () => {
   const fetchExams = async (subjectIds) => {
     try {
       const response = await axios.post('/getexams', { subjects: subjectIds });
-      setExams(response.data);
+      const contestExam = response.data.filter(exam=>exam.isContestExam===true)
+      setExams(contestExam);
     } catch (error) {
       console.error('Error fetching exams:', error);
     }
@@ -74,9 +75,7 @@ export const CreateContest = () => {
     };
 
     try {
-      const response = await axios.post('/contest', contestData);
-      console.log('Contest created successfully:', response.data);
-
+      const response = await axios.post('/contest', contestData); 
       setName('');
       setSelectedSubjects([]);
       setSelectedExams([]);

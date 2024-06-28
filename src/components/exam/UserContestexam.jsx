@@ -1,0 +1,93 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
+import Cookies from 'js-cookie';
+
+const UserContestexam = () => {
+  const { id } = useParams();
+  const [exams, setExams] = useState([]);
+  const [userExams, setUserExams] = useState([]);
+  const navigate = useNavigate();
+  const Id = Cookies.get("_id");
+
+  useEffect(() => {
+    fetchDetails();
+    fetchUserExam();
+  }, []);
+
+  const fetchUserExam = async () => {
+    try {
+      const response = await axios.get(`/contest_participant/${Id}`);
+      const userExamData = response.data;
+      setUserExams(userExamData);
+      fetchDetails(userExamData);
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  const fetchDetails = async (userExamData = []) => {
+    try {
+      const response = await axios.get(`/contest/${id}`);
+      const fetchedExams = response.data.exam;
+
+      const updatedExams = fetchedExams.map((exam, index) => {
+        let isActive = index === 0; 
+
+        if (index > 0) {
+          const prevExam = fetchedExams[index - 1];
+          const prevExamCompleted = userExamData.some(
+            userExam => userExam.exam.some(userExamDetail => userExamDetail._id === prevExam._id)
+          );
+          if (prevExamCompleted) {
+            isActive = true;
+          }
+        }
+
+        return {
+          ...exam,
+          isActive,
+        };
+      });
+
+      setExams(updatedExams);
+    } catch (error) {
+      console.error('Error fetching contest details:', error);
+    }
+  };
+
+  const handleCardClick = (examId) => {
+   navigate(`/userDasboard/examdetails/${examId}`);
+};
+
+  return (
+    <div>
+      <h1>Exam Details</h1>
+      <Grid container spacing={2}>
+        {exams.map((exam) => (
+          <Grid item key={exam._id} xs={12} sm={6} md={4}>
+            <Card
+              onClick={() => handleCardClick(exam._id)}
+              style={{ backgroundColor: exam.isActive ? 'white' : 'grey' }} // Change card color based on isActive
+            >
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {exam.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Exam Time: {exam.examtime} minutes
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Number of Questions: {exam.noofquestions}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
+
+export default UserContestexam;

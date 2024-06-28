@@ -66,6 +66,23 @@ export const UserSideBar = () => {
       activeMenuFor: ["history"],
       logoImage: ListIcon,
     },
+    {
+      id: 4,
+      name: "All Contest",
+      linkUrl: "allcontest",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["allcontest"],
+      logoImage: ListIcon,
+    },
+    {
+      id: 5,
+      name: "Contest Details",
+      linkUrl: "contestdetails",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["allcontest"],
+      logoImage: ListIcon,
+    },
+    
     // ... other routes
   ];
 
@@ -76,7 +93,9 @@ export const UserSideBar = () => {
       route.name !== "userprofile" &&
       route.name !== "wallet" &&
       route.name !== "subjects" &&
-      route.name !== "Exam Details"
+      route.name !== "Exam Details"&&
+      route.name !== "Contest Details"
+
   );
 
   const defaultTheme = createTheme({
