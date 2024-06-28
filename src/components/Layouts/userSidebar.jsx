@@ -136,6 +136,7 @@ export const UserSideBar = () => {
                 to={res.linkUrl !== "null" ? res.linkUrl : "#"}
                 onClick={() => isMobile && setIsExpanded(false)}
                 sx={{
+                  fontWeight: "bold",
                   "&:hover": {
                     backgroundColor: constant.backgroundColor,
                   },
