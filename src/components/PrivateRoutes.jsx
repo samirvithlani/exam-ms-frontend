@@ -56,7 +56,7 @@ export const PrivateRoutes = () => {
             role == "superAdmin" &&
             window.location.pathname.includes("adminDashboard")
           ) {
-            toast.error("You don't have permission to access this page!");
+            //toast.error("You don't have permission to access this page!");
             const currentPath1 = window.location.pathname;
             navigate(currentPath1); // Redirect to super admin dashboard or any other route for super admins
           } else {
