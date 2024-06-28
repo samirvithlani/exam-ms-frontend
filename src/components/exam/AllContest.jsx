@@ -21,7 +21,7 @@ const AllContest = () => {
   const fetchContests = async () => {
     try {
       const response = await axios.get(`/contest`);
-      setContests(response.data);
+      setContests(response?.data);
     } catch (error) {
       console.error('Error fetching contests:', error);
     }
@@ -30,7 +30,7 @@ const AllContest = () => {
   const fetchParticipantContests = async () => {
     try {
       const response = await axios.get(`/contest_participant/${Id}`);
-      setParticipantContests(response.data);
+      setParticipantContests(response?.data);
     } catch (error) {
       console.error('Error fetching participant contests:', error);
     }
@@ -56,7 +56,7 @@ const AllContest = () => {
   const isParticipant = (contestId) => {
     Cookies.set("contestid",contestId)
 
-    return participantContests.some(participant => participant.contest._id === contestId);
+    return participantContests.some(participant => participant?.contest?._id === contestId);
   };
 
   return (

@@ -19,7 +19,7 @@ const UserContestexam = () => {
   const fetchUserExam = async () => {
     try {
       const response = await axios.get(`/contest_participant/${Id}`);
-      const userExamData = response.data;
+      const userExamData = response?.data;
       setUserExams(userExamData);
       fetchDetails(userExamData);
     } catch (error) {
@@ -30,7 +30,7 @@ const UserContestexam = () => {
   const fetchDetails = async (userExamData = []) => {
     try {
       const response = await axios.get(`/contest/${id}`);
-      const fetchedExams = response.data.exam;
+      const fetchedExams = response.data?.exam;
 
       const updatedExams = fetchedExams.map((exam, index) => {
         let isActive = index === 0; 
@@ -38,7 +38,7 @@ const UserContestexam = () => {
         if (index > 0) {
           const prevExam = fetchedExams[index - 1];
           const prevExamCompleted = userExamData.some(
-            userExam => userExam.exam.some(userExamDetail => userExamDetail._id === prevExam._id)
+            userExam => userExam?.exam.some(userExamDetail => userExamDetail?._id === prevExam?._id)
           );
           if (prevExamCompleted) {
             isActive = true;

@@ -94,7 +94,7 @@ const MCQQuestionsPage = () => {
     setisLoading(true);
     try {
       const response = await axios.get(`/exam/${id}`);
-      setQuestions(response.data.mcq);
+      setQuestions(response?.data?.mcq);
       initializeAnswers(response.data.mcq);
 
       const examTimeInMinutes = parseInt(response.data.examtime, 10);
@@ -166,8 +166,8 @@ const MCQQuestionsPage = () => {
       console.log(result,"result data");
       if(result.status === 200){
         const contest = Cookies.get("contestid")
-        const score =  result.data.savedExam.result
-        const exam = result.data.savedExam.exam_id
+        const score =  result?.data?.savedExam?.result
+        const exam = result?.data?.savedExam?.exam_id
         const userId = Cookies.get("_id")
         const data = {contest,score,exam,userId}
         console.log(data,"data in contest ");
@@ -190,7 +190,7 @@ const MCQQuestionsPage = () => {
       navigate("/userDasboard/history");
     } catch (error) {
       setIsSubmitting(false);
-      console.log(error, "erroro");
+      console.log(error, "error");
     }
   };
 
