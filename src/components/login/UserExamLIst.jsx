@@ -92,6 +92,7 @@ export const UserExamList = () => {
         setIsLoading(false);
       }
       setExams(response.data.data);
+      console.log("data...", response.data.data);
     } catch (error) {
       console.log(error, "error");
     }
@@ -114,6 +115,7 @@ export const UserExamList = () => {
     setSelectedSubject("");
     setSelectedDifficulty("");
     const response = await axios.get("/getExambyFilter");
+    console.log("data...", response.data.data);
     setExams(response.data.data);
   };
 
@@ -205,55 +207,52 @@ export const UserExamList = () => {
           {filteredExams.length > 0 ? (
             filteredExams.map((item) => (
               <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
-                <Box
+              <Box
+                bgcolor="white"
+                border="1px solid #ccc"
+                borderRadius="10px"
+                fontWeight="bold"
+                height={180}
+                padding="20px"
+                textAlign="center"
+                onClick={() => handleClick(item._id)}
+                sx={{
+                  cursor: "pointer",
+                  boxShadow: 3,
+                  transition: "transform 0.2s",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                <Avatar
+                  src={item?.subject?.image_url} // replace with your image path logic
                   sx={{
-                    bgcolor: "white",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    padding: "20px",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    boxShadow: "0 8px 8px rgba(0, 0, 0, 0.2)",
-                    height: "150px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "background-color 0.3s ease, color 0.3s ease",
-                    "&:hover": {
-                      bgcolor: "#010080",
-                      color: "white",
-                      "& .MuiAvatar-root": {
-                        // Targeting the Avatar component on hover
-                        bgcolor: "white",
-                        color: constant.backgroundColor,
-                      },
-                      "& .MuiTypography-root": {
-                        color: "white",
-                      },
-                    },
-                    wordBreak: "break-word",
-                    overflowWrap: "break-word",
-                    whiteSpace: "normal",
+                    width: 80,
+                    height: 80,
+                    margin: "0 auto 10px auto",
                   }}
-                  onClick={() => handleClick(item._id)}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    marginTop: "10px",
+                    textTransform: "uppercase",
+                    color: constant.backgroundColor,
+                    wordWrap: "break-word",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    fontWeight: "bold",
+                  }}
                 >
-                  <Avatar
-                    sx={{
-                      backgroundColor: constant.backgroundColor,
-                      transition: "background-color 0.3s ease, color 0.3s ease",
-                    }}
-                  >
-                    {getAvatarLetter(item.name)}
-                  </Avatar>
-                  <Typography
-                    variant="h6"
-                    sx={{ marginTop: "10px", textTransform: "uppercase",color:constant.backgroundColor }}
-                  >
-                    {item.name}
-                  </Typography>
-                </Box>
-              </Grid>
+                  {item.name}
+                </Typography>
+              </Box>
+            </Grid>
+            
             ))
           ) : (
             <Typography

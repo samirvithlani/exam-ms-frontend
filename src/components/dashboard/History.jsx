@@ -41,6 +41,7 @@ const Historyofuser = () => {
         noOfQuestions: exam.exam_id?.noofquestions || 0,
         totalmarks: exam?.total_marks,
         result: exam?.result,
+        subject: exam.exam_id?.subject
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -92,9 +93,14 @@ const Historyofuser = () => {
           </Box>
         ) : (
           <Grid container spacing={2}>
+            {
+
+            }
             {histories.map((history) => (
               <Grid item xs={12} sm={6} md={4} key={history.id}>
+                
                 <Paper sx={paperStyle}>
+                  <img src={history?.subject?.image_url}alt="image" height="200" width="200"></img>
                   <Typography variant="h6" gutterBottom>
                     {history.name}
                   </Typography>
