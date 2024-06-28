@@ -38,7 +38,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     setAnchorEl(null);
   };
   const handleOpenLogoutDialog = () => {
+    
     setOpenLogoutDialog(true);
+    Cookies.clear();
   };
 
   const handleCloseLogoutDialog = () => {

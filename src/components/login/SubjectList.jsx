@@ -104,7 +104,7 @@ export const SubjectList = () => {
               }}
             >
               <Avatar
-                src={`/path/to/your/images/${item._id}.jpg`} // replace with your image path logic
+                src={item?.image_url} // replace with your image path logic
                 sx={{ 
                   width: 80, 
                   height: 80, 

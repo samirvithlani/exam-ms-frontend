@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   ThemeProvider,
   createTheme,
+  GlobalStyles,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Link, Outlet, useNavigate } from "react-router-dom";
@@ -66,6 +67,7 @@ export const SideBar = () => {
 
   const handleOpenLogoutDialog = () => {
     setOpenLogoutDialog(true);
+    Cookies.clear();
   };
 
   const handleCloseLogoutDialog = () => {
@@ -315,7 +317,29 @@ export const SideBar = () => {
     },
   });
 
+  const GlobalScrollbarStyles = ({ backgroundColor }) => (
+    <GlobalStyles
+      styles={{
+        "*::-webkit-scrollbar": {
+          width: "10px",
+          height: "4px",
+        },
+        "*::-webkit-scrollbar-track": {
+          background: "white",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          background: backgroundColor,
+          borderRadius: "4px",
+        },
+        "*::-webkit-scrollbar-thumb:hover": {
+          background: backgroundColor,
+        },
+      }}
+    />
+  );
+
   return (
+    
     <ThemeProvider theme={defaultTheme}>
       <AdminHeader
         isExpanded={isExpanded}
@@ -329,6 +353,7 @@ export const SideBar = () => {
           backgroundColor: "rgb(238,242,246)",
           width: "100%",
           fontFamily: "Lato",
+          maxHeight:"700px"
         }}
       >
         <Drawer
@@ -468,7 +493,7 @@ export const SideBar = () => {
             </Button>
           </Box>
         </Drawer>
-        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2 }}>
+        <Box component="main" sx={{ width: "100%", height: "100%", mt: 3, mr: 2,maxHeight:"635px" }}>
           <Outlet />
         </Box>
       </Box>
@@ -483,5 +508,7 @@ export const SideBar = () => {
         </DialogActions>
       </Dialog>
     </ThemeProvider>
+    
+
   );
 };

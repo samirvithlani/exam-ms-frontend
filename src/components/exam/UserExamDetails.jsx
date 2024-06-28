@@ -134,6 +134,7 @@ export const UserExamDetails = () => {
                   {questions.subject?.name}
                 </span>
               </Typography>
+              <img src={questions.subject?.image_url} alt="subject" height="20" width="20"/>
             </Box>
             <Box sx={boxStyle}>
               <Typography sx={TypoGraphyProps}>

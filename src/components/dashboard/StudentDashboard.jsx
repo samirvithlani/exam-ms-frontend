@@ -19,7 +19,7 @@ export const StudentDashboard = () => {
   };
   const cardStyle = {
     border: "2px solid #ddd",
-    borderRadius: "20px",
+    // borderRadius: "20px",
     height: 140,
   };
 
@@ -71,7 +71,7 @@ export const StudentDashboard = () => {
         spacing={2}
         width="100%"
         sx={{
-          borderRadius: "8px",
+          // borderRadius: "8px",
           p: 2,
           ml: 0.1,
           mr: 0.1,
@@ -85,7 +85,7 @@ export const StudentDashboard = () => {
           sx={{
             maxheight: "100%",
             height: "400px",
-            borderRadius: "20px",
+            // borderRadius: "20px",
             // mt: 2,
             ml: "0.1px",
             p: 2,

@@ -13,7 +13,7 @@ export const AdminDashboard = () => {
   const [examData, setExamData] = useState([]);
   const[question,setQuestion] = useState([]);
   const cardStyle = {
-    border: "2  px solid #ddd",
+    border: "2px solid #ddd",
     borderRadius: "20px",
     height: 140,
   };
@@ -67,6 +67,7 @@ export const AdminDashboard = () => {
       spacing={2}
       width="100%"
       sx={{
+        
         borderRadius: "8px",
         mt: 2,
         ml: 0.1,
@@ -88,6 +89,7 @@ export const AdminDashboard = () => {
           background: constant.backgroundColor,
           pt: 10,
           gap: 1,
+          
         }}
       >
         <Grid

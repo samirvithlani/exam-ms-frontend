@@ -34,6 +34,7 @@ function App() {
   // axios.defaults.baseURL = "https://exambackendms.onrender.com/";
   // axios.defaults.baseURL = "http://localhost:3000/";
   axios.defaults.baseURL = "https://exam-ms.onrender.com/";
+  // console.log =()=>{};
 
   useEffect(() => {
     axios.interceptors.request.use(

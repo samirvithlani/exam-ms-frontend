@@ -41,6 +41,7 @@ const Historyofuser = () => {
         noOfQuestions: exam.exam_id?.noofquestions || 0,
         totalmarks: exam?.total_marks,
         result: exam?.result,
+        subject: exam.exam_id?.subject,
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -86,35 +87,58 @@ const Historyofuser = () => {
         </Typography>
         {isLoading ? (
           <Box
-            sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "60vh" }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "60vh",
+            }}
           >
             <CustomeLoader />
           </Box>
         ) : (
           <Grid container spacing={2}>
+            {}
             {histories.map((history) => (
               <Grid item xs={12} sm={6} md={4} key={history.id}>
                 <Paper sx={paperStyle}>
-                  <Typography variant="h6" gutterBottom>
+                <Typography variant="h4" gutterBottom sx={{color:constant.backgroundColor,fontWeight:"bold",textAlign:"center"}}>
+                    {history?.subject?.name}
+                  </Typography>
+                  <Box sx={{ textAlign: "center" }}>
+                    <img
+                      src={history?.subject?.image_url}
+                      alt="image"
+                      height="100"
+                      width="100"
+                      style={{ display: "block", margin: "0 auto" }}
+                    />
+                  </Box>
+                  <Typography variant="h6" gutterBottom sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
                     {history.name}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
                     <strong>Exam Type:</strong> {history.examType}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
                     <strong>No. of Questions:</strong> {history.noOfQuestions}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
                     <strong>Total Marks:</strong> {history.totalmarks}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
                     <strong>Result:</strong> {history.result}
                   </Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 2,
+                    }}
+                  >
                     <Button
                       variant="contained"
-                      //color={constant.backgroundColor}
-                      sx={{ backgroundColor: constant.backgroundColor}}
+                      sx={{ backgroundColor: constant.backgroundColor }}
                       onClick={() => viewAnswer(history.id)}
                     >
                       View Answer

@@ -48,7 +48,7 @@ function App() {
       const response = await axios.get(`/facultysubject/${userId}`);
       const subjects = response?.data?.[0]?.subject || [];
 
-      setUserSubjects(subjects.map((subject) => subject._id));
+      setUserSubjects(subjects.map((subject) => subject?._id));
       setsubject(subjects);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -85,7 +85,7 @@ function App() {
   useEffect(() => {
     const filtered = questions.filter((question) => {
       const matchesSubject = selectedSubject
-        ? question.Subject._id === selectedSubject
+        ? question.Subject?._id === selectedSubject
         : true;
       const matchesStandard = selectedStandard
         ? question.std === selectedStandard
@@ -94,7 +94,7 @@ function App() {
         ? question.difficulty === selectedDifficulty
         : true;
       const matchesTopic = selectedTopic
-        ? question.Topic._id === selectedTopic
+        ? question.Topic?._id === selectedTopic
         : true;
       const matchesQuery = question.question
         .toLowerCase()
@@ -168,10 +168,10 @@ function App() {
     try {
       await axios.put(`/mcqdelete/${questionId}`);
       setQuestions((prevQuestions) =>
-        prevQuestions.filter((q) => q._id !== questionId)
+        prevQuestions.filter((q) => q?._id !== questionId)
       );
       setFilteredQuestions((prevQuestions) =>
-        prevQuestions.filter((q) => q._id !== questionId)
+        prevQuestions.filter((q) => q?._id !== questionId)
       );
     } catch (error) {
       console.error("Error deleting question:", error);
@@ -235,7 +235,7 @@ function App() {
                             <em>All Subjects</em>
                           </MenuItem>
                           {subject.map((subject) => (
-                            <MenuItem key={subject._id} value={subject._id}>
+                            <MenuItem key={subject?._id} value={subject?._id}>
                               {subject.name}
                             </MenuItem>
                           ))}
@@ -262,7 +262,7 @@ function App() {
                           <em>All Standards</em>
                         </MenuItem>
                         {standards.map((standard) => (
-                          <MenuItem key={standard._id} value={standard._id}>
+                          <MenuItem key={standard?._id} value={standard?._id}>
                             {standard.std}
                           </MenuItem>
                         ))}
@@ -288,7 +288,7 @@ function App() {
                           <em>All Difficulty Levels</em>
                         </MenuItem>
                         {difficultes.map((item) => (
-                          <MenuItem key={item._id} value={item._id}>
+                          <MenuItem key={item?._id} value={item?._id}>
                             {item.difficulty}
                           </MenuItem>
                         ))}
@@ -314,7 +314,7 @@ function App() {
                           <em>All Topics</em>
                         </MenuItem>
                         {topics.map((topic) => (
-                          <MenuItem key={topic._id} value={topic._id}>
+                          <MenuItem key={topic?._id} value={topic?._id}>
                             {topic.name}
                           </MenuItem>
                         ))}
@@ -335,7 +335,7 @@ function App() {
                     question={question.question}
                     type={question.type}
                     options={options}
-                    onDelete={() => deleteQuestion(question._id)}
+                    onDelete={() => deleteQuestion(question?._id)}
                   />
                 );
               })}
