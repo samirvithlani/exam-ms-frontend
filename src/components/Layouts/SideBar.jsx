@@ -93,7 +93,7 @@ export const SideBar = () => {
       name: "HOME",
       logoImage: HomeIcon,
       linkUrl: "",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["adminDashboard"],
     },
     {
@@ -101,14 +101,14 @@ export const SideBar = () => {
       name: "Create Exam",
       logoImage: AddIcon,
       linkUrl: "createexam",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["createExam"],
     },
     {
       id: 4,
       name: "Exam List",
       linkUrl: "subjectlist",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["profile"],
       logoImage: ListIcon,
     },
@@ -116,7 +116,7 @@ export const SideBar = () => {
       id: 6,
       name: "ADD MCQ",
       linkUrl: "mcqquestion",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["createExam"],
       logoImage: AddIcon,
     },
@@ -124,7 +124,7 @@ export const SideBar = () => {
       id: 7,
       name: "Faculty List",
       linkUrl: "facultylist",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["facultylist"],
       logoImage: ListIcon,
     },
@@ -132,7 +132,7 @@ export const SideBar = () => {
       id: 8,
       name: "Company List",
       linkUrl: "Companylist",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["companylist"],
       logoImage: ListIcon,
     },
@@ -140,7 +140,7 @@ export const SideBar = () => {
       id: 9,
       name: "Student List",
       linkUrl: "studentlist",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["studentlist"],
       logoImage: ListIcon,
     },
@@ -148,7 +148,7 @@ export const SideBar = () => {
       id: 10,
       name: "Add subject",
       linkUrl: "subject",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["subject"],
       logoImage: AddIcon,
     },
@@ -156,7 +156,7 @@ export const SideBar = () => {
       id: 11,
       name: "Add standard",
       linkUrl: "standard",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["standard"],
       logoImage: AddIcon,
     },
@@ -164,7 +164,7 @@ export const SideBar = () => {
       id: 12,
       name: "Add stream",
       linkUrl: "stream",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["stream"],
       logoImage: AddIcon,
     },
@@ -172,7 +172,7 @@ export const SideBar = () => {
       id: 13,
       name: "Add Topic",
       linkUrl: "topic",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["topic"],
       logoImage: AddIcon,
     },
@@ -180,14 +180,14 @@ export const SideBar = () => {
       id: 14,
       name: "View Exam",
       linkUrl: "viewexam",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["viewexam"],
     },
     {
       id: 15,
       name: "Update Exam",
       linkUrl: "updateexam",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["updateexam"],
     },
     {
@@ -220,14 +220,14 @@ export const SideBar = () => {
       id: 21,
       name: "Exam Details",
       linkUrl: "examdetails",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["examdetails"],
     },
     {
       id: 22,
       name: "Deleted Exam",
       linkUrl: "deletedexam",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["deletedexam"],
       logoImage: ListIcon,
     },
@@ -235,7 +235,7 @@ export const SideBar = () => {
       id: 23,
       name: "Deleted Questions",
       linkUrl: "deletedquestion",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["deletedquestion"],
       logoImage: ListIcon
     },
@@ -243,7 +243,7 @@ export const SideBar = () => {
       id: 23,
       name: "viewAnswers",
       linkUrl: "viewAnswers",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["viewAnswers"],
       logoImage: ListIcon
     },
@@ -251,7 +251,7 @@ export const SideBar = () => {
       id: 24,
       name: "ViewAllUserexam",
       linkUrl: "viewalluserexam",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["viewalluserexam"],
       logoImage: ListIcon
     },
@@ -259,7 +259,7 @@ export const SideBar = () => {
       id: 25,
       name: "Create Contest",
       linkUrl: "createcontest",
-      textColor: "#7D8FB3",
+      textColor:constant.backgroundColor,
       activeMenuFor: ["createcontest"],
       logoImage: AddIcon
     },
@@ -356,6 +356,7 @@ export const SideBar = () => {
           maxHeight:"700px"
         }}
       >
+        <GlobalScrollbarStyles backgroundColor={constant.backgroundColor} />
         <Drawer
           PaperProps={{
             sx: {
@@ -397,6 +398,7 @@ export const SideBar = () => {
                     <ListItemButton
                       sx={{
                         paddingLeft: "20px",
+                        
                         "&:hover .sidebartext": {
                           color: "white",
                         },

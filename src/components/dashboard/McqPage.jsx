@@ -19,6 +19,7 @@ import {
   DialogTitle,
   createTheme,
   ThemeProvider,
+  CssBaseline,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
@@ -28,6 +29,7 @@ import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
 import Theme from "quill/core/theme";
 import HangingWatch from "../CustomeCopmonent/HangingWatch";
+import { motion, useScroll } from "framer-motion";
 
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
@@ -163,15 +165,15 @@ const MCQQuestionsPage = () => {
         success: "Exam completed Successfully!",
         error: "Failed to complete Exam. Please try again.",
       });
-      console.log(result,"result data");
-      if(result.status === 200){
-        const contest = Cookies.get("contestid")
-        const score =  result?.data?.savedExam?.result
-        const exam = result?.data?.savedExam?.exam_id
-        const userId = Cookies.get("_id")
-        const data = {contest,score,exam,userId}
-        console.log(data,"data in contest ");
-        const response = await axios.post("/contest_participant",data)
+      console.log(result, "result data");
+      if (result.status === 200) {
+        const contest = Cookies.get("contestid");
+        const score = result?.data?.savedExam?.result;
+        const exam = result?.data?.savedExam?.exam_id;
+        const userId = Cookies.get("_id");
+        const data = { contest, score, exam, userId };
+        console.log(data, "data in contest ");
+        const response = await axios.post("/contest_participant", data);
       }
       if (Userdata.walllet !== null) {
         const updatedcredit = Userdata?.wallet?.token - credit;
@@ -232,9 +234,24 @@ const MCQQuestionsPage = () => {
       },
     },
   });
+  const { scrollYProgress } = useScroll();
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <motion.div
+        style={{
+          width: "100%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: 4,
+          backgroundColor: "#3f51b5",
+          transformOrigin: "0%",
+          zIndex: 1000,
+          scaleX: scrollYProgress,
+        }}
+      />
       <div style={{ position: "relative" }}>
         <div
           style={{

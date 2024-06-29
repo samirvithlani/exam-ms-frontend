@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, ThemeProvider, createTheme } from "@mui/material";
+import { Avatar, Button, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, ThemeProvider, createTheme, GlobalStyles } from "@mui/material";
 import { Box } from "@mui/system";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
@@ -105,6 +105,26 @@ export const UserSideBar = () => {
       },
     },
   });
+  const GlobalScrollbarStyles = ({ backgroundColor }) => (
+    <GlobalStyles
+      styles={{
+        "*::-webkit-scrollbar": {
+          width: "10px",
+          height: "4px",
+        },
+        "*::-webkit-scrollbar-track": {
+          background: "white",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          background: backgroundColor,
+          borderRadius: "4px",
+        },
+        "*::-webkit-scrollbar-thumb:hover": {
+          background: backgroundColor,
+        },
+      }}
+    />
+  );
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -122,6 +142,7 @@ export const UserSideBar = () => {
           fontFamily: "Lato",
         }}
       >
+        <GlobalScrollbarStyles backgroundColor={constant.backgroundColor} />
         <Drawer
           variant={isMobile ? "temporary" : "permanent"}
           open={isExpanded}
