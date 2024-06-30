@@ -286,6 +286,14 @@ export const SideBar = () => {
       textColor:"#7D8FB3",
       activeMenuFor:["contestdetail"],
       logoImage:ListIcon
+    },
+    {
+      id: 28,
+      name:"Leaderboard",
+      linkUrl:"leaderboard",
+      textColor:"#7D8FB3",
+      activeMenuFor:["leaderboard"],
+      logoImage:ListIcon
     }
   ];
 

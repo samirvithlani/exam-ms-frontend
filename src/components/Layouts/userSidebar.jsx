@@ -82,7 +82,14 @@ export const UserSideBar = () => {
       activeMenuFor: ["allcontest"],
       logoImage: ListIcon,
     },
-    
+    {
+      id: 6,
+      name:"Leaderboard",
+      linkUrl:"leaderboard",
+      textColor:"#7D8FB3",
+      activeMenuFor:["leaderboard"],
+      logoImage:ListIcon
+    }
     // ... other routes
   ];
 

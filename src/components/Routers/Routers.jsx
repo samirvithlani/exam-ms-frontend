@@ -58,6 +58,7 @@ import { Annouement } from "../dashboard/Annouement";
 import AllContest from "../exam/AllContest";
 import ContestDetail from "../exam/ContestDetail";
 import UserContestexam from "../exam/UserContestexam";
+import Leaderboard from "../exam/Leaderboard";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -154,6 +155,11 @@ const MainRouter = ({ children }) => {
               path: "contestdetails/:id",
               element: <UserContestexam/>,
             },
+            {
+              path:"leaderboard",
+              element:<Leaderboard/>
+
+            }
           ],
         },
       ],
@@ -279,6 +285,11 @@ const MainRouter = ({ children }) => {
               path: "facultyDetails/:id",
               element: <FacultyView />,
             },
+            {
+              path:"leaderboard",
+              element:<Leaderboard/>
+
+            }
           ],
         },
       ],
@@ -439,6 +450,11 @@ const MainRouter = ({ children }) => {
             {
               path:"contestdetail/:id",
               element:<ContestDetail/>
+            },
+            {
+              path:"leaderboard",
+              element:<Leaderboard/>
+
             }
 
           ],

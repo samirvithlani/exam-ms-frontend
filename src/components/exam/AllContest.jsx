@@ -55,8 +55,11 @@ const AllContest = () => {
 
   const isParticipant = (contestId) => {
     Cookies.set("contestid",contestId)
-
     return participantContests.some(participant => participant?.contest?._id === contestId);
+  };
+
+  const isContestExpired = (endDate) => {
+    return new Date(endDate) < new Date();
   };
 
   return (
@@ -65,7 +68,7 @@ const AllContest = () => {
       <Grid container spacing={2}>
         {contests.map(contest => (
           <Grid item key={contest._id} xs={12} sm={6} md={4}>
-            <Card onClick={() => handleCardClick(contest._id)}>
+            <Card onClick={() => !isContestExpired(contest.endDate) && handleCardClick(contest._id)}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   {contest.name}
@@ -101,6 +104,7 @@ const AllContest = () => {
                         handleParticipantButtonClick(contest._id);
                       }
                     }}
+                    disabled={isContestExpired(contest.endDate)}
                   >
                     {isParticipant(contest._id) ? 'View Contest' : 'Participant Contest'}
                   </Button>
