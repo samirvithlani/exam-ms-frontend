@@ -80,7 +80,11 @@ const StudentDetail = () => {
         <Grid item xs={12} md={8}>
           <Card sx={{ marginBottom: 3 }}>
             <CardContent>
-              <Typography variant="h4" gutterBottom color={constant.backgroundColor}>
+              <Typography
+                variant="h4"
+                gutterBottom
+                color={constant.backgroundColor}
+              >
                 Given Exams List
               </Typography>
               <Grid container spacing={2}>
@@ -96,7 +100,10 @@ const StudentDetail = () => {
                       }}
                     >
                       <CardContent>
-                        <Typography variant="h6" color={constant.backgroundColor}>
+                        <Typography
+                          variant="h6"
+                          color={constant.backgroundColor}
+                        >
                           {exam.examName}
                         </Typography>
                         <Typography variant="body2">
@@ -119,18 +126,19 @@ const StudentDetail = () => {
           </Card>
           <Card sx={{ marginBottom: 3, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-              <PieComponent chartType="pie" apiToCall="subject" userId ={id} />
-              </Typography>
+              <PieComponent chartType="pie" apiToCall="subject" userId={id} />
               {/* Space for first chart */}
-              
             </CardContent>
           </Card>
           <Card sx={{ marginBottom: 3, boxShadow: 3 }}>
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-              <PieComponent chartType="bar" apiToCall="examMarks" userId ={id} />
-              </Typography>
+              
+                <PieComponent
+                  chartType="bar"
+                  apiToCall="examMarks"
+                  userId={id}
+                />
+              
               {/* Space for second chart */}
             </CardContent>
           </Card>
@@ -138,7 +146,11 @@ const StudentDetail = () => {
         <Grid item xs={12} md={4}>
           <Card sx={{ boxShadow: 3, padding: 2 }}>
             <CardContent>
-              <Typography variant="h4" gutterBottom color={constant.backgroundColor}>
+              <Typography
+                variant="h4"
+                gutterBottom
+                color={constant.backgroundColor}
+              >
                 User Profile
               </Typography>
               <Avatar

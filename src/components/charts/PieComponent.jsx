@@ -24,7 +24,7 @@ export const PieComponent = ({ chartType, apiToCall, data,isUserSide,userId }) =
 
   const getLoogedinUserDataExamMarksVise = async () => {
     var _id
-    if(isUserSide==undefined){
+    if(userId==undefined){
       console.log("inside.......................................")
      _id= Cookies.get("_id");
     }
@@ -65,7 +65,7 @@ export const PieComponent = ({ chartType, apiToCall, data,isUserSide,userId }) =
   
   const getLoggedInUserDataSubjectVise = async () => {
     var _id
-    if(isUserSide==undefined){
+    if(userId==undefined){
      _id= Cookies.get("_id");
     }
     else{

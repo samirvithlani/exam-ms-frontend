@@ -705,6 +705,7 @@ export const ExamDetails = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center", // Center the content horizontally
+                height: "100%", // Take full height of the parent container
               }}
             >
               <Typography
