@@ -88,15 +88,16 @@ export const UserExamList = () => {
       if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
       setIsLoading(true);
       const response = await axios.get(url);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         setIsLoading(false);
       }
-      setExams(response.data.data);
-      console.log("data...", response.data.data);
+      const sortedExams = response.data.data.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
+      setExams(sortedExams);
     } catch (error) {
       console.log(error, "error");
     }
   };
+  
 
   const handleClick = (subjectID) => {
     navigate(`/userDasboard/examdetails/${subjectID}`);
