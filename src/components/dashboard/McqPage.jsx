@@ -165,15 +165,20 @@ const MCQQuestionsPage = () => {
         success: "Exam completed Successfully!",
         error: "Failed to complete Exam. Please try again.",
       });
-      console.log(result, "result data");
+      // console.log(result, "result data");
       if (result.status === 200) {
+        const { _id } = result?.data?.savedExam;
+        const getbyid = await axios.get(`/user_exam/${_id}`)
+        // console.log(getbyid,"getbyid");
+        if(getbyid?.data?.exam_id?.isContestExam === true){
         const contest = Cookies.get("contestid");
         const score = result?.data?.savedExam?.result;
-        const exam = result?.data?.savedExam?.exam_id;
+      const exam = result?.data?.savedExam?.exam_id;
         const userId = Cookies.get("_id");
         const data = { contest, score, exam, userId };
         console.log(data, "data in contest ");
         const response = await axios.post("/contest_participant", data);
+        }
       }
       if (Userdata.walllet !== null) {
         const updatedcredit = Userdata?.wallet?.token - credit;
