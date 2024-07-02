@@ -465,7 +465,7 @@ export const SideBar = () => {
                       </ListItemIcon>
                       <ListItemText
                         className="sidebartext"
-                        sx={{ color: "black" }}
+                        sx={{ color: constant.backgroundColor, fontWeight: "bold"}}
                         primary={res.name}
                       />
                     </ListItemButton>
