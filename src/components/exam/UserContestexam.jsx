@@ -48,6 +48,8 @@ const UserContestexam = () => {
         return {
           ...exam,
           isActive,
+          isTaken: userExamData.some(userExam => userExam?.exam.some(userExamDetail => userExamDetail?._id === exam._id))
+
         };
       });
 
@@ -57,8 +59,12 @@ const UserContestexam = () => {
     }
   };
 
-  const handleCardClick = (examId) => {
-   navigate(`/userDasboard/examdetails/${examId}`);
+  const handleCardClick = (exam) => {
+    if (exam.isTaken) {
+      alert("You have already taken this exam.")
+    } else {
+   navigate(`/userDasboard/examdetails/${exam?._id}`);
+    }
 };
 
   return (
@@ -68,8 +74,9 @@ const UserContestexam = () => {
         {exams.map((exam) => (
           <Grid item key={exam._id} xs={12} sm={6} md={4}>
             <Card
-              onClick={() => handleCardClick(exam._id)}
-              style={{ backgroundColor: exam.isActive ? 'white' : 'grey' }} // Change card color based on isActive
+              onClick={() => handleCardClick(exam)}
+              style={{ backgroundColor: exam.isActive ? 'white' : 'grey' , pointerEvents: exam.isActive ? 'auto' : 'none',
+                cursor: exam.isActive ? 'pointer' : 'default',}} 
             >
               <CardContent>
                 <Typography variant="h5" component="div">
