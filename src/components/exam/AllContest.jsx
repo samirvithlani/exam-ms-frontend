@@ -68,7 +68,7 @@ const AllContest = () => {
       <Grid container spacing={2}>
         {contests.map(contest => (
           <Grid item key={contest._id} xs={12} sm={6} md={4}>
-            <Card onClick={() => !isContestExpired(contest.endDate) && handleCardClick(contest._id)}>
+            <Card onClick={() =>  handleCardClick(contest._id)}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   {contest.name}
@@ -99,7 +99,7 @@ const AllContest = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isParticipant(contest._id)) {
-                        navigate(`/userDasboard/contestdetails/${contest._id}`);
+                        navigate(`/userDasboard/contestdetail/${contest._id}`);
                       } else {
                         handleParticipantButtonClick(contest._id);
                       }

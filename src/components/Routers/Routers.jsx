@@ -59,6 +59,7 @@ import AllContest from "../exam/AllContest";
 import ContestDetail from "../exam/ContestDetail";
 import UserContestexam from "../exam/UserContestexam";
 import Leaderboard from "../exam/Leaderboard";
+import UserContestDetail from "../exam/UserContestDetails";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -159,7 +160,13 @@ const MainRouter = ({ children }) => {
               path:"leaderboard",
               element:<Leaderboard/>
 
-            }
+            },
+            
+              {
+                path:"contestdetail/:id",
+                element:<UserContestDetail/>
+              },
+            
           ],
         },
       ],
