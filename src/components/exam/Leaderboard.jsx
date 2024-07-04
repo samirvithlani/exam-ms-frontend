@@ -76,14 +76,6 @@ const Leaderboard = () => {
   const filteredData = selectedContest
     ? data.filter(item => item?.contestparticipant?.contest?._id === selectedContest)
     : data;
-
-  const defaultTheme = createTheme({
-    palette: {
-      primary: {
-        main: constant.backgroundColor, // Change this to your desired color
-      },
-    },
-  });
   return (
     <StyledTableContainer component={Paper}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
