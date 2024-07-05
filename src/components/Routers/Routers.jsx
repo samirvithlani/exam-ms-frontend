@@ -456,7 +456,8 @@ const MainRouter = ({ children }) => {
             },
             {
               path:"contestdetail/:id",
-              element:<ContestDetail/>
+              element:<ContestDetail/>,
+              errorElement:<div>404</div>
             },
             {
               path:"leaderboard",

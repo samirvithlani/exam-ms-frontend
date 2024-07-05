@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box, IconButton, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/system';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { Chart } from 'react-charts';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
+import { constant } from '../../constant';
 
 const StyledTableContainer = styled(TableContainer)({
   marginTop: "20px",
@@ -34,6 +36,7 @@ const Leaderboard = () => {
   const fetchContests = async () => {
     try {
       const result = await axios.get('/contest');
+      console.log("Fetched contests:", result.data);
       setContests(result.data);
     } catch (error) {
       console.error("Error fetching contests:", error);
@@ -44,6 +47,7 @@ const Leaderboard = () => {
     try {
       setIsLoading(true);
       const result = await axios.get('/leaderboard');
+      console.log("Fetched leaderboard data:", result.data);
       if (result.status === 200) {
         setIsLoading(false);
       }
@@ -64,9 +68,9 @@ const Leaderboard = () => {
   };
 
   const handleRefresh = async () => {
-    setSelectedContest(''); 
-    await fetchContests();   
-    await fetchData();       
+    setSelectedContest('');
+    await fetchContests();
+    await fetchData();
   };
 
   const handleContestChange = (event) => {
@@ -76,10 +80,30 @@ const Leaderboard = () => {
   const filteredData = selectedContest
     ? data.filter(item => item?.contestparticipant?.contest?._id === selectedContest)
     : data;
+
+  const chartData = useMemo(() => [
+    {
+      label: 'Scores',
+      data: filteredData.map(item => ({
+        user: `${item?.contestparticipant?.userId?.firstname} ${item?.contestparticipant?.userId?.lastname}`,
+        score: item?.contestparticipant?.score,
+      })),
+    },
+  ], [filteredData]);
+
+  const chartSeries = useMemo(() => ({
+    type: 'bar',
+  }), []);
+
+  const chartAxes = useMemo(() => [
+    { primary: true, type: 'ordinal', position: 'bottom', key: 'user' },
+    { type: 'linear', position: 'left', key: 'score' },
+  ], []);
+
   return (
     <StyledTableContainer component={Paper}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h4">Leaderboard</Typography>
+        <Typography variant="h4" sx={{ color: constant.backgroundColor }}>Leaderboard</Typography>
         <Box display="flex" alignItems="center">
           <Select
             value={selectedContest}
@@ -100,10 +124,10 @@ const Leaderboard = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ backgroundColor: '#3f51b5', color: 'white' }}>Rank</TableCell>
-            <TableCell sx={{ backgroundColor: '#3f51b5', color: 'white' }}>Contest Name</TableCell>
-            <TableCell sx={{ backgroundColor: '#3f51b5', color: 'white' }}>User Name</TableCell>
-            <TableCell sx={{ backgroundColor: '#3f51b5', color: 'white' }}>Score</TableCell>
+            <TableCell sx={{ backgroundColor: constant.backgroundColor, color: 'white' }}>Rank</TableCell>
+            <TableCell sx={{ backgroundColor: constant.backgroundColor, color: 'white' }}>Contest Name</TableCell>
+            <TableCell sx={{ backgroundColor: constant.backgroundColor, color: 'white' }}>User Name</TableCell>
+            <TableCell sx={{ backgroundColor: constant.backgroundColor, color: 'white' }}>Score</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -118,6 +142,7 @@ const Leaderboard = () => {
           ))}
         </TableBody>
       </Table>
+     
     </StyledTableContainer>
   );
 };
