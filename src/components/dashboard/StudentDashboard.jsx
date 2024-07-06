@@ -27,14 +27,15 @@ export const StudentDashboard = () => {
     fetchData();
     fetchUserExam();
     fetchWalletData();
+    
   }, []);
 
   const fetchData = async () => {
     try {
       const studentsResponse = await axios.get("/user");
       const examResponse = await axios.get("/Exam");
-      const studentsCount = studentsResponse.data.length;
-      const examsCount = examResponse.data.length;
+      const studentsCount = studentsResponse?.data?.length;
+      const examsCount = examResponse?.data?.length;
       setStudents(studentsCount);
       setExamData(examsCount);
     } catch (error) {
@@ -45,7 +46,7 @@ export const StudentDashboard = () => {
     const _id = Cookies.get("_id");
     try {
       const response = await axios.get(`/userhistory/${_id}`);
-      const historylength = response.data.length;
+      const historylength = response?.data?.length;
       console.log(historylength);
       sethistory(historylength);
     } catch (error) {
@@ -56,9 +57,8 @@ export const StudentDashboard = () => {
   const fetchWalletData = async () => {
     try {
       const response = await axios.get(`/transcation/${Cookies.get("_id")}`);
-      console.log(response.data.wallet.token);
       if (response) {
-        setwallet(response.data.wallet.token);
+        setwallet(response?.data?.wallet?.token);
       }
     } catch (error) {
       console.error(error);

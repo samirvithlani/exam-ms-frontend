@@ -18,7 +18,7 @@ const UserContestexam = () => {
 
   const fetchUserExam = async () => {
     try {
-      const response = await axios.get(`/contest_participant/${Id}`);
+      const response = await axios.get(`/contest_participant/${Id}`,id);
       const userExamData = response?.data;
       setUserExams(userExamData);
       fetchDetails(userExamData);

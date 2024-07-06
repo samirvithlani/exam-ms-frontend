@@ -42,8 +42,7 @@ const CurrentExam = () => {
     const _id = Cookies.get("_id");
     try {
       const response = await axios.get(`/user/${_id}`);
-      console.log(response);
-      setUserdata(response.data)
+      setUserdata(response?.data)
     } catch (error) {
       
     }
@@ -51,7 +50,7 @@ const CurrentExam = () => {
   const fetchstd = async () => {
     try {
       const response = await axios.get("/getstd");
-      setstandards(response.data.data);
+      setstandards(response.data?.data);
     } catch (error) {
       console.log(error, "error");
     }
@@ -67,7 +66,7 @@ const CurrentExam = () => {
   const fetchDifficultyLevels = async () => {
     try {
       const response = await axios.get("/difficulty");
-      let data = response.data;
+      let data = response?.data;
       setDifficulties(data);
     } catch (error) {
       console.error("Error fetching difficulty levels:", error);
@@ -150,23 +149,23 @@ const CurrentExam = () => {
       .then((response) => {
         const filteredData = response.data.data.map((exam, index) => ({
           displayid: index + 1,
-          name: exam.name,
-          examType: exam.examtype?.type || "N/A",
-          examTopic: exam.examtopic?.name || "N/A",
-          Subject: exam.subject?.name || "N/A",
-          Stream: exam.stream ? exam.stream.name : "NA",
-          Standard: exam.std ? exam.std.std : "NA",
-          Difficulty: exam.difficulty ? exam.difficulty.difficulty : "NA",
-          noOfQuestions: exam.noofquestions || 0,
-          isNegative: exam.isNegative,
-          isTimeLimit: exam.isTimeLimit ? "Yes" : "No",
-          examTime: exam.examtime || 0,
-          perQuestionTime: exam.perQuestiontime || 0,
-          totalmarks: exam.totalmarks,
-          id: exam._id,
-          topicId: exam.examtopic?._id || "N/A",
-          difficultyId: exam.difficulty?._id || "NA",
-          examtype_id: exam.examtype?._id || "N/A",
+          name: exam?.name,
+          examType: exam?.examtype?.type || "N/A",
+          examTopic: exam?.examtopic?.name || "N/A",
+          Subject: exam?.subject?.name || "N/A",
+          Stream: exam?.stream ? exam.stream.name : "NA",
+          Standard: exam?.std ? exam.std.std : "NA",
+          Difficulty: exam?.difficulty ? exam.difficulty.difficulty : "NA",
+          noOfQuestions: exam?.noofquestions || 0,
+          isNegative: exam?.isNegative,
+          isTimeLimit: exam?.isTimeLimit ? "Yes" : "No",
+          examTime: exam?.examtime || 0,
+          perQuestionTime: exam?.perQuestiontime || 0,
+          totalmarks: exam?.totalmarks,
+          id: exam?._id,
+          topicId: exam?.examtopic?._id || "N/A",
+          difficultyId: exam?.difficulty?._id || "NA",
+          examtype_id: exam?.examtype?._id || "N/A",
           credit:exam?.credit || "N/A"
         }));
         setExamList(filteredData);

@@ -223,22 +223,7 @@ export const SideBar = () => {
       textColor:constant.backgroundColor,
       activeMenuFor: ["examdetails"],
     },
-    {
-      id: 22,
-      name: "Deleted Exam",
-      linkUrl: "deletedexam",
-      textColor:constant.backgroundColor,
-      activeMenuFor: ["deletedexam"],
-      logoImage: ListIcon,
-    },
-    {
-      id: 23,
-      name: "Deleted Questions",
-      linkUrl: "deletedquestion",
-      textColor:constant.backgroundColor,
-      activeMenuFor: ["deletedquestion"],
-      logoImage: ListIcon
-    },
+    
     {
       id: 23,
       name: "viewAnswers",
@@ -280,7 +265,7 @@ export const SideBar = () => {
       logoImage:ListIcon
     },
     {
-      id: 27,
+      id: 28,
       name:"Contest Detial",
       linkUrl:"contestdetail",
       textColor:"#7D8FB3",
@@ -288,12 +273,36 @@ export const SideBar = () => {
       logoImage:ListIcon
     },
     {
-      id: 28,
+      id: 29,
       name:"Leaderboard",
       linkUrl:"leaderboard",
       textColor:"#7D8FB3",
       activeMenuFor:["leaderboard"],
       logoImage:ListIcon
+    },
+    {
+      id: 22,
+      name: "Deleted Exam",
+      linkUrl: "deletedexam",
+      textColor:constant.backgroundColor,
+      activeMenuFor: ["deletedexam"],
+      logoImage: ListIcon,
+    },
+    {
+      id: 23,
+      name: "Deleted Questions",
+      linkUrl: "deletedquestion",
+      textColor:constant.backgroundColor,
+      activeMenuFor: ["deletedquestion"],
+      logoImage: ListIcon
+    },
+    {
+      id: 30,
+      name: "Deleted Contest",
+      linkUrl: "deletedcontest",
+      textColor:constant.backgroundColor,
+      activeMenuFor: ["deletedcontest"],
+      logoImage: ListIcon
     }
   ];
 

@@ -1,92 +1,87 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, createTheme, ThemeProvider, Tooltip } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, createTheme, ThemeProvider, Tooltip } from '@mui/material';
 import { Delete as DeleteIcon, Restore as RestoreIcon, Close as CloseIcon } from '@mui/icons-material';
 import { constant } from '../../constant';
 import { CustomeLoader } from '../Layouts/CustomeLoader';
 import { useNavigate } from 'react-router-dom';
 
-export const DeletedExam = () => {
-  const [exams, setExams] = useState([]);
+const DeletedContest = () => {
+  const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openRestoreDialog, setOpenRestoreDialog] = useState(false);
-  const [examToDelete, setExamToDelete] = useState(null);
-  const [examToRestore, setExamToRestore] = useState(null);
-  const navigate = useNavigate();
-  // Function to fetch deleted exams
-  const fetchExams = async () => {
+  const [contestToDelete, setContestToDelete] = useState(null);
+  const [contestToRestore, setContestToRestore] = useState(null);
+  const navigate = useNavigate()
+  const fetchDeletedContests = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/getdeletedexam');
+      const response = await axios.get('/deletedcontest');
+      console.log(response, 'response');
       if (response.status === 200) {
-        setExams(response.data);
+        setContests(response.data);
       }
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching deleted exams:', error);
+      console.error('Error fetching deleted contests:', error);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchExams();
+    fetchDeletedContests();
   }, []);
 
-  // Function to handle opening delete dialog
-  const handleOpenDeleteDialog = (examId) => {
-    setExamToDelete(examId);
+  const handleOpenDeleteDialog = (contestId) => {
+    setContestToDelete(contestId);
     setOpenDeleteDialog(true);
   };
 
-  // Function to handle closing delete dialog
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
-    setExamToDelete(null);
+    setContestToDelete(null);
   };
 
-  // Function to handle confirming deletion of exam
-  const confirmDelete = async () => {
-    if (examToDelete) {
-      try {
-        const response = await axios.delete(`/exam/${examToDelete}`);
-        if (response.status === 200) {
-          setExams((prevExams) => prevExams.filter(examItem => examItem._id !== examToDelete));
-        }
-      } catch (error) {
-        console.error('Error deleting exam:', error);
-      }
-    }
-    handleCloseDeleteDialog();
-  };
-
-  // Function to handle opening restore dialog
-  const handleOpenRestoreDialog = (examId) => {
-    setExamToRestore(examId);
+  const handleOpenRestoreDialog = (contestId) => {
+    setContestToRestore(contestId);
     setOpenRestoreDialog(true);
   };
 
   const handleCloseRestoreDialog = () => {
     setOpenRestoreDialog(false);
-    setExamToRestore(null);
+    setContestToRestore(null);
+  };
+
+  const confirmDelete = async () => {
+    if (contestToDelete) {
+      try {
+        const response = await axios.delete(`/contest/${contestToDelete}`);
+        if (response.status === 200) {
+          setContests((prevContests) => prevContests.filter(contest => contest._id !== contestToDelete));
+        }
+      } catch (error) {
+        console.error('Error deleting contest:', error);
+      }
+    }
+    handleCloseDeleteDialog();
   };
 
   const confirmRestore = async () => {
-    if (examToRestore) {
+    if (contestToRestore) {
       try {
-
-        const response = await axios.put(`/exam/${examToRestore}`,{isActive:true});
+        const data = {isActive:true}
+        const response = await axios.put(`/contest/${contestToRestore}`,data);
         if (response.status === 200) {
-          navigate('/adminDashboard/subjectlist')
+            navigate("/adminDashboard/contestlist");
         }
       } catch (error) {
-        console.error('Error restoring exam:', error);
+        console.error('Error restoring contest:', error);
       }
     }
     handleCloseRestoreDialog();
   };
 
-  // Theme customization
   const defaultTheme = createTheme({
     palette: {
       primary: {
@@ -107,19 +102,17 @@ export const DeletedExam = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {exams.map((examItem) => (
-              <TableRow key={examItem._id}>
-                <TableCell>{examItem.name}</TableCell>
+            {contests.map((contest) => (
+              <TableRow key={contest._id}>
+                <TableCell>{contest.name}</TableCell>
                 <TableCell>
-                  {/* Restore Button */}
                   <Tooltip title="Restore">
-                    <IconButton onClick={() => handleOpenRestoreDialog(examItem._id)} aria-label="restore">
+                    <IconButton onClick={() => handleOpenRestoreDialog(contest._id)} aria-label="restore">
                       <RestoreIcon />
                     </IconButton>
                   </Tooltip>
-                  {/* Delete Button */}
                   <Tooltip title="Delete">
-                    <IconButton onClick={() => handleOpenDeleteDialog(examItem._id)} aria-label="delete">
+                    <IconButton onClick={() => handleOpenDeleteDialog(contest._id)} aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
@@ -129,7 +122,7 @@ export const DeletedExam = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={openDeleteDialog}
@@ -152,7 +145,7 @@ export const DeletedExam = () => {
         </DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete this exam?
+            Are you sure you want to delete this contest?
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -187,7 +180,7 @@ export const DeletedExam = () => {
         </DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to restore this exam?
+            Are you sure you want to restore this contest?
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -203,4 +196,4 @@ export const DeletedExam = () => {
   );
 };
 
-export default DeletedExam;
+export default DeletedContest;

@@ -39,10 +39,9 @@ const DeletedMcq = () => {
   const fetchMcqs = async () => {
     setisLoading(true)
     try {
-      debugger;
       const response = await axios.get("/mcq");
       if (response.status === 200) {
-        const removequestions = response.data.filter(
+        const removequestions = response?.data.filter(
           (mcq) => mcq.isActive === false
         );
         setremovemcq(removequestions);

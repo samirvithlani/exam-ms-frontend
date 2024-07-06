@@ -19,7 +19,6 @@ import {
   Box,
 } from "@mui/material";
 import { constant } from "../../constant";
-import { set } from "lodash";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 
 const ContestDetail = () => {
@@ -28,7 +27,7 @@ const ContestDetail = () => {
   const [contest, setContest] = useState({});
   const [participants, setParticipants] = useState([]);
   const [showParticipants, setShowParticipants] = useState(false);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,27 +36,27 @@ const ContestDetail = () => {
 
   const fetchDetails = async () => {
     try {
-      setisLoading(true)
+      setisLoading(true);
       const response = await axios.get(`/contest/${id}`);
       setExams(response.data.exam);
       setContest(response.data);
       console.log(response.data, "data in contest");
-      setisLoading(false)
+      setisLoading(false);
     } catch (error) {
       console.error("Error fetching contest details:", error);
-      setisLoading(false)
+      setisLoading(false);
     }
   };
 
   const fetchContestUser = async () => {
     try {
-      setisLoading(true)
+      setisLoading(true);
       const response = await axios.get(`/participant/${id}`);
       setParticipants(response.data);
       console.log(response.data, "response");
-      setisLoading(false)
+      setisLoading(false);
     } catch (error) {
-      setisLoading(false)
+      setisLoading(false);
       console.error("Error fetching contest participants:", error);
     }
   };
@@ -74,28 +73,41 @@ const ContestDetail = () => {
     navigate(`/adminDashboard/examdetails/${examId}`);
   };
 
+  const handleDeleteContest = async () => {
+    try {
+      setisLoading(true);
+      const data = {isActive:false}
+      const response = await axios.put(`/contest/${id}`,data);
+      navigate("/adminDashboard/contestlist");
+      setisLoading(false);
+    } catch (error) {
+      console.error("Error deleting contest:", error);
+      setisLoading(false);
+    }
+  };
+
   const defaultTheme = createTheme({
     palette: {
       primary: {
-        main: constant.backgroundColor, // Change this to your desired color
+        main: constant.backgroundColor,
       },
     },
   });
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {
-        isLoading && <CustomeLoader/>
-      }
+      {isLoading && <CustomeLoader />}
       <Box sx={{ padding: 3 }}>
-        <Typography variant="h4" gutterBottom sx={{color:constant.backgroundColor}}>
+        <Typography variant="h4" gutterBottom sx={{ color: constant.backgroundColor }}>
           Contest Details
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6" sx={{color:constant.backgroundColor}}>Contest Name</Typography>
+                <Typography variant="h6" sx={{ color: constant.backgroundColor }}>
+                  Contest Name
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {contest.name}
                 </Typography>
@@ -105,7 +117,9 @@ const ContestDetail = () => {
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6" sx={{color:constant.backgroundColor}}>Start Date</Typography>
+                <Typography variant="h6" sx={{ color: constant.backgroundColor }}>
+                  Start Date
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {new Date(contest.startDate).toLocaleString()}
                 </Typography>
@@ -115,7 +129,9 @@ const ContestDetail = () => {
           <Grid item xs={12} sm={6} md={4}>
             <Card>
               <CardContent>
-                <Typography variant="h6" sx={{color:constant.backgroundColor}}>End Date</Typography>
+                <Typography variant="h6" sx={{ color: constant.backgroundColor }}>
+                  End Date
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {new Date(contest.endDate).toLocaleString()}
                 </Typography>
@@ -126,7 +142,9 @@ const ContestDetail = () => {
             <Grid item xs={12} sm={6} md={4} key={sub._id}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" sx={{color:constant.backgroundColor}}>Subjects</Typography>
+                  <Typography variant="h6" sx={{ color: constant.backgroundColor }}>
+                    Subjects
+                  </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {sub.name}
                   </Typography>
@@ -135,7 +153,7 @@ const ContestDetail = () => {
             </Grid>
           ))}
         </Grid>
-        <Typography variant="h4" gutterBottom sx={{ mt: 4,color:constant.backgroundColor }} >
+        <Typography variant="h4" gutterBottom sx={{ mt: 4, color: constant.backgroundColor }}>
           Exam Details
         </Typography>
         <Grid container spacing={2}>
@@ -143,7 +161,7 @@ const ContestDetail = () => {
             <Grid item key={exam._id} xs={12} sm={6} md={4}>
               <Card onClick={() => handleCardClick(exam._id)}>
                 <CardContent>
-                  <Typography variant="h6" component="div" sx={{color:constant.backgroundColor}}>
+                  <Typography variant="h6" component="div" sx={{ color: constant.backgroundColor }}>
                     Name: {exam.name}
                   </Typography>
                 </CardContent>
@@ -151,14 +169,22 @@ const ContestDetail = () => {
             </Grid>
           ))}
         </Grid>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleShowParticipants}
-          sx={{ mt: 4 }}
-        >
-          {showParticipants ? "Hide Participants" : "Show Participants"}
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleShowParticipants}
+          >
+            {showParticipants ? "Hide Participants" : "Show Participants"}
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteContest}
+          >
+            Delete Contest
+          </Button>
+        </Box>
         {showParticipants && (
           <TableContainer component={Paper} sx={{ mt: 2 }}>
             <Table>

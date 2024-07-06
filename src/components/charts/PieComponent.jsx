@@ -5,7 +5,7 @@ import { Pie, Line, Bar } from "react-chartjs-2";
 import Cookies from "js-cookie";
 
 export const PieComponent = ({ chartType, apiToCall, data,isUserSide,userId }) => {
-  console.log(isUserSide,userId)
+  // console.log(isUserSide,userId)
   const [chartData, setChartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 

@@ -78,9 +78,9 @@ const Leaderboard = () => {
   };
 
   const filteredData = selectedContest
-    ? data.filter(item => item?.contestparticipant?.contest?._id === selectedContest)
-    : data;
-
+    ? data.filter(item => item?.contestparticipant?.contest?._id === selectedContest )
+    : data.filter(item=>item?.contestparticipant?.contest?.isActive === true);
+    
   const chartData = useMemo(() => [
     {
       label: 'Scores',
