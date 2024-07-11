@@ -45,7 +45,8 @@ const AllContest = () => {
   const fetchParticipantContests = async () => {
     try {
       setisLoading(true);
-      const response = await axios.get(`/contest_participant/${Id}`);
+      
+      const response = await axios.get(`/userparticipant/${Id}`);
       setParticipantContests(response?.data);
       setisLoading(false);
     } catch (error) {
@@ -64,7 +65,7 @@ const AllContest = () => {
       const data = { contest: contestId, userId: Id };
       const response = await axios.post("/contest_participant", data);
       if (response.status === 200) {
-        navigate(`/userDasboard/contestdetails/${contestId}`);
+        navigate(`/userDasboard/contestdetail/${contestId}`);
       }
     } catch (error) {
       console.error("Error participating in contest:", error);
@@ -72,10 +73,9 @@ const AllContest = () => {
   };
 
   const isParticipant = (contestId) => {
-    Cookies.set("contestid", contestId);
-    return participantContests.some(
-      (participant) => participant?.contest?._id === contestId
-    );
+    
+    Cookies.set("contestid",contestId)
+    return participantContests.some(participant => participant?.contest?._id === contestId);
   };
 
   const isContestExpired = (endDate) => {
@@ -151,9 +151,8 @@ const AllContest = () => {
                   }}
                   disabled={isContestExpired(contest.endDate)}
                 >
-                  {isParticipant(contest._id)
-                    ? "View Contest"
-                    : "Participate in Contest"}
+                                      {isParticipant(contest._id) ? 'View Contest' : 'Participant Contest'}
+
                 </CustomButton>
               )}
             </Box>
