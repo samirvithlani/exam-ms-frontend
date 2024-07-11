@@ -18,7 +18,7 @@ const CustomButton = styled(Button)`
 const AllContest = () => {
   const [contests, setContests] = useState([]);
   const [participantContests, setParticipantContests] = useState([]);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const Id = Cookies.get("_id");
@@ -31,27 +31,25 @@ const AllContest = () => {
   }, [location.pathname]);
 
   const fetchContests = async () => {
-    
     try {
-      setisLoading(true)
+      setisLoading(true);
       const response = await axios.get(`/contest`);
       setContests(response?.data);
-      setisLoading(false)
+      setisLoading(false);
     } catch (error) {
-      setisLoading(false)
+      setisLoading(false);
       console.error("Error fetching contests:", error);
     }
   };
 
   const fetchParticipantContests = async () => {
-    
     try {
-      setisLoading(true)
+      setisLoading(true);
       const response = await axios.get(`/contest_participant/${Id}`);
       setParticipantContests(response?.data);
-      setisLoading(false)
+      setisLoading(false);
     } catch (error) {
-      setisLoading(false)
+      setisLoading(false);
       console.error("Error fetching participant contests:", error);
     }
   };
@@ -94,11 +92,8 @@ const AllContest = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {
-        isLoading && <CustomeLoader/>
-      }
-    
-      <Typography variant="h4" gutterBottom sx={{color:constant.backgroundColor}}>
+      {isLoading && <CustomeLoader />}
+      <Typography variant="h4" gutterBottom sx={{ color: constant.backgroundColor }}>
         Contests
       </Typography>
       <Grid container spacing={3}>
@@ -110,14 +105,14 @@ const AllContest = () => {
               borderRadius="10px"
               padding="20px"
               textAlign="center"
-              onClick={() => handleCardClick(contest._id)}
+              onClick={location.pathname !== "/userDasboard/allcontest" ? () => handleCardClick(contest._id) : null}
               sx={{
-                cursor: "pointer",
+                cursor: location.pathname !== "/userDasboard/allcontest" ? "pointer" : "default",
                 boxShadow: 3,
                 transition: "transform 0.2s",
                 width: "100%",
                 "&:hover": {
-                  transform: "scale(1.05)",
+                  transform: location.pathname !== "/userDasboard/allcontest" ? "scale(1.05)" : "none",
                 },
                 margin: "0 auto", // Centering the box
                 display: "flex",
@@ -126,7 +121,7 @@ const AllContest = () => {
                 alignItems: "center",
               }}
             >
-              <Typography variant="h5" component="div" sx={{color:constant.backgroundColor}}>
+              <Typography variant="h5" component="div" sx={{ color: constant.backgroundColor }}>
                 {contest.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -141,12 +136,6 @@ const AllContest = () => {
                   <span key={subject._id}> {subject.name},</span>
                 ))}
               </Typography>
-              {/* <Typography variant="body2" color="text.secondary">
-                Exams:
-                {contest.exam.map((exam) => (
-                  <span key={exam._id}> {exam.name},</span>
-                ))}
-              </Typography> */}
               {location.pathname === "/userDasboard/allcontest" && (
                 <CustomButton
                   size="small"
@@ -164,14 +153,13 @@ const AllContest = () => {
                 >
                   {isParticipant(contest._id)
                     ? "View Contest"
-                    : "Participant Contest"}
+                    : "Participate in Contest"}
                 </CustomButton>
               )}
             </Box>
           </Grid>
         ))}
       </Grid>
-    
     </ThemeProvider>
   );
 };
