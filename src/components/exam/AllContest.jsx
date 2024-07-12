@@ -119,6 +119,7 @@ const AllContest = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                height: "100%",
               }}
             >
               <Typography variant="h5" component="div" sx={{ color: constant.backgroundColor }}>

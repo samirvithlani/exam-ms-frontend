@@ -154,7 +154,7 @@ const ContestDetail = () => {
           ))}
         </Grid>
         <Typography variant="h4" gutterBottom sx={{ mt: 4, color: constant.backgroundColor }}>
-          Exam Details
+          Exam Details1
         </Typography>
         <Grid container spacing={2}>
           {exams.map((exam) => (

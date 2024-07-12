@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, createTheme, ThemeProvider } from '@mui/material';
 import Cookies from 'js-cookie';
+import { constant } from '../../constant';
 
 const UserContestexam = () => {
   const { id } = useParams();
@@ -66,10 +67,18 @@ const UserContestexam = () => {
    navigate(`/userDasboard/examdetails/${exam?._id}`);
     }
 };
-
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: constant.backgroundColor, // Change this to your desired color
+    },
+  },
+});
   return (
-    <div>
-      <h1>Exam Details</h1>
+    <ThemeProvider theme={defaultTheme}>
+      <Typography variant="h4" component="h2" style={{margin: '20px 0',color:constant.backgroundColor }}>
+        Contest Exams
+      </Typography>
       <Grid container spacing={2}>
         {exams.map((exam) => (
           <Grid item key={exam._id} xs={12} sm={6} md={4}>
@@ -93,7 +102,7 @@ const UserContestexam = () => {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </ThemeProvider>
   );
 };
 
