@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, MenuItem, Select, Checkbox, ListItemText, FormControl, InputLabel, OutlinedInput, Box, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -16,9 +16,13 @@ export const CreateContest = () => {
   const [endDate, setEndDate] = useState(dayjs());
   const [subjects, setSubjects] = useState([]);
   const [exams, setExams] = useState([]);
+  const [prizeTypes, setPrizeTypes] = useState([]);
+  const [selectedPrizeType, setSelectedPrizeType] = useState('');
+  const [prizeValue, setPrizeValue] = useState('');
 
   useEffect(() => {
     fetchSubject();
+    fetchPrizeTypes();
   }, []);
 
   const fetchSubject = async () => {
@@ -41,10 +45,19 @@ export const CreateContest = () => {
   const fetchExams = async (subjectIds) => {
     try {
       const response = await axios.post('/getexams', { subjects: subjectIds });
-      const contestExam = response.data.filter(exam=>exam?.isContestExam===true)
+      const contestExam = response.data.filter(exam => exam?.isContestExam===true)
       setExams(contestExam);
     } catch (error) {
       console.error('Error fetching exams:', error);
+    }
+  };
+
+  const fetchPrizeTypes = async () => {
+    try {
+      const response = await axios.get('/prizetype');
+      setPrizeTypes(response?.data?.data);
+    } catch (error) {
+      console.error('Error fetching prize types:', error);
     }
   };
 
@@ -59,20 +72,35 @@ export const CreateContest = () => {
     setSelectedExams(value);
   };
 
+  const handlePrizeTypeChange = (event) => {
+    setSelectedPrizeType(event.target.value);
+    setPrizeValue('');
+  };
+
+  const handlePrizeValueChange = (event) => {
+    setPrizeValue(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const selectedSubjectIds = selectedSubjects.map(subject => subject?._id);
     const selectedExamIds = selectedExams.map(exam => exam?._id);
-
     const contestData = {
       name: name,
       subject: selectedSubjectIds,
       exam: selectedExamIds,
       startDate: dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss[Z]'),
       endDate: dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      prizetype: selectedPrizeType,
       isActive: true
     };
+
+    if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType).name === 'Cash') {
+      contestData.amount = prizeValue;
+    } else if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType).name === 'Coupon') {
+      contestData.cupponCode = prizeValue;
+    }
 
     try {
       const response = await axios.post('/contest', contestData); 
@@ -81,6 +109,8 @@ export const CreateContest = () => {
       setSelectedExams([]);
       setStartDate(dayjs());
       setEndDate(dayjs());
+      setSelectedPrizeType('');
+      setPrizeValue('');
       toast.success('Contest created successfully');
     } catch (error) {
       console.error('Error creating contest:', error);
@@ -135,19 +165,53 @@ export const CreateContest = () => {
           </Select>
         </FormControl>
 
-        <DatePicker
+        <DateTimePicker
           label="Start Date"
           value={startDate}
           onChange={(newValue) => setStartDate(newValue)}
           renderInput={(params) => <TextField {...params} />}
         />
 
-        <DatePicker
+        <DateTimePicker
           label="End Date"
           value={endDate}
           onChange={(newValue) => setEndDate(newValue)}
           renderInput={(params) => <TextField {...params} />}
         />
+
+        <FormControl variant="outlined">
+          <InputLabel>Prize Type</InputLabel>
+          <Select
+            value={selectedPrizeType}
+            onChange={handlePrizeTypeChange}
+            input={<OutlinedInput label="Prize Type" />}
+          >
+            {prizeTypes.map((prizeType) => (
+              <MenuItem key={prizeType._id} value={prizeType._id}>
+                {prizeType.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Cash' && (
+          <TextField
+            label="Cash Amount"
+            variant="outlined"
+            value={prizeValue}
+            onChange={handlePrizeValueChange}
+            type="number"
+          />
+        )}
+
+        {prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Coupon' && (
+          <TextField
+            label="Coupon Code"
+            variant="outlined"
+            value={prizeValue}
+            onChange={handlePrizeValueChange}
+          />
+        )}
 
         <Button type="submit" variant="contained" color="primary">
           Create Contest
