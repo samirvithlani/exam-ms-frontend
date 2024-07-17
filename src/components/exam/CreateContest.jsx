@@ -20,6 +20,14 @@ export const CreateContest = () => {
   const [selectedPrizeType, setSelectedPrizeType] = useState('');
   const [prizeValue, setPrizeValue] = useState('');
 
+  const [nameError, setNameError] = useState('');
+  const [subjectError, setSubjectError] = useState('');
+  const [examError, setExamError] = useState('');
+  const [startDateError, setStartDateError] = useState('');
+  const [endDateError, setEndDateError] = useState('');
+  const [prizeTypeError, setPrizeTypeError] = useState('');
+  const [prizeValueError, setPrizeValueError] = useState('');
+
   useEffect(() => {
     fetchSubject();
     fetchPrizeTypes();
@@ -83,6 +91,56 @@ export const CreateContest = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setNameError('');
+    setSubjectError('');
+    setExamError('');
+    setStartDateError('');
+    setEndDateError('');
+    setPrizeTypeError('');
+    setPrizeValueError('');
+    let isValid = true;
+
+    if (!name) {
+      setNameError('Name is required');
+      isValid = false;
+    }
+
+    if (selectedSubjects.length === 0) {
+      setSubjectError('At least one subject must be selected');
+      isValid = false;
+    }
+
+    if (selectedExams.length === 0) {
+      setExamError('At least one exam must be selected');
+      isValid = false;
+    }
+
+    if (!startDate) {
+      setStartDateError('Start date is required');
+      isValid = false;
+    }
+
+    if (!endDate) {
+      setEndDateError('End date is required');
+      isValid = false;
+    }
+
+    if (!selectedPrizeType) {
+      setPrizeTypeError('Prize type is required');
+      isValid = false;
+    }
+
+    if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Cash' && !prizeValue) {
+      setPrizeValueError('Cash amount is required');
+      isValid = false;
+    }
+
+    if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Coupon' && !prizeValue) {
+      setPrizeValueError('Coupon code is required');
+      isValid = false;
+    }
+
+    if (!isValid) return;
 
     const selectedSubjectIds = selectedSubjects.map(subject => subject?._id);
     const selectedExamIds = selectedExams.map(exam => exam?._id);
@@ -126,6 +184,9 @@ export const CreateContest = () => {
           variant="outlined"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          error={!!nameError}
+          helperText={nameError}
+
         />
 
         <FormControl variant="outlined">
@@ -144,6 +205,8 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
+          {subjectError && <span style={{ color: 'red' }}>{subjectError}</span>}
+
         </FormControl>
 
         <FormControl variant="outlined">
@@ -163,6 +226,7 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
+          {examError && <span style={{ color: 'red' }}>{examError}</span>}
         </FormControl>
 
         <DateTimePicker
@@ -192,6 +256,8 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
+          {prizeTypeError && <span style={{ color: 'red' }}>{prizeTypeError}</span>}
+
         </FormControl>
 
         {prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Cash' && (
