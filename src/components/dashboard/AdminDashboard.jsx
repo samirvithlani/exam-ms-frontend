@@ -47,8 +47,13 @@ export const AdminDashboard = () => {
   });
 
   useEffect(() => {
+    cronjob();
     fetchdata();
   }, []);
+  const cronjob = async ()=>{
+    const response = await axios.get("/cronjob")
+    console.log(response,"response");
+  }
   const fetchdata = async () => {
     const studentsResponse = await axios.get("/user");
     const examResponse = await axios.get("/Exam");
