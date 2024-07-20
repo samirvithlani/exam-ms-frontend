@@ -40,7 +40,7 @@ const ContestDetail = () => {
       const response = await axios.get(`/contest/${id}`);
       setExams(response.data.exam);
       setContest(response.data);
-      console.log(response.data, "data in contest");
+      // console.log(response.data, "data in contest");
       setisLoading(false);
     } catch (error) {
       console.error("Error fetching contest details:", error);
@@ -53,7 +53,7 @@ const ContestDetail = () => {
       setisLoading(true);
       const response = await axios.get(`/participant/${id}`);
       setParticipants(response.data);
-      console.log(response.data, "response");
+      // console.log(response.data, "response");
       setisLoading(false);
     } catch (error) {
       setisLoading(false);
@@ -69,7 +69,7 @@ const ContestDetail = () => {
   };
 
   const handleCardClick = (examId) => {
-    console.log("Clicked exam id:", examId);
+    // console.log("Clicked exam id:", examId);
     navigate(`/adminDashboard/examdetails/${examId}`);
   };
 
@@ -121,7 +121,7 @@ const ContestDetail = () => {
                   Start Date
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {new Date(contest.startDate).toLocaleString()}
+                {new Date(contest.startDate).toLocaleString('en-GB', { timeZone: 'UTC' })}
                 </Typography>
               </CardContent>
             </Card>
@@ -133,7 +133,7 @@ const ContestDetail = () => {
                   End Date
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {new Date(contest.endDate).toLocaleString()}
+                {new Date(contest.endDate).toLocaleString('en-GB', { timeZone: 'UTC' })}
                 </Typography>
               </CardContent>
             </Card>
