@@ -85,6 +85,13 @@ const ContestDetail = () => {
       setisLoading(false);
     }
   };
+  const handleEditContest = async () => {
+    try {      
+      navigate(`/adminDashboard/Editcontest/${id}`);
+    } catch (error) {
+      console.error("Error deleting contest:", error);
+    }
+  };
 
   const defaultTheme = createTheme({
     palette: {
@@ -183,6 +190,13 @@ const ContestDetail = () => {
             onClick={handleDeleteContest}
           >
             Delete Contest
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleEditContest}
+          >
+            Edit Contest
           </Button>
         </Box>
         {showParticipants && (
