@@ -15,6 +15,7 @@ import { PieComponent } from "../charts/PieComponent"; // Assuming PieComponent 
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
   const id = Cookies.get("_id");
   const { register, handleSubmit } = useForm();
 
@@ -34,9 +35,9 @@ const UserProfile = () => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.put(`/user/${id}`, data);
-      // Refresh user data after update
+      await axios.put(`/updateUser/${id}`, data);
       fetchData();
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -73,53 +74,63 @@ const UserProfile = () => {
             <Typography variant="body2" color="text.secondary" gutterBottom>
               Phone: {userData.phone}
             </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsEditing(!isEditing)}
+              sx={{ marginTop: 2 }}
+            >
+              {isEditing ? "Cancel" : "Edit Profile"}
+            </Button>
           </CardContent>
         </Card>
-        <Card style={{ marginTop: 20 }}>
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              Edit Profile
-            </Typography>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField
-                {...register("firstname")}
-                label="First Name"
-                defaultValue={userData.firstname}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                {...register("lastname")}
-                label="Last Name"
-                defaultValue={userData.lastname}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                {...register("email")}
-                label="Email"
-                defaultValue={userData.email}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                {...register("phone")}
-                label="Phone"
-                defaultValue={userData.phone}
-                fullWidth
-                margin="normal"
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ marginTop: 2 }}
-              >
-                Save Changes
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+        {isEditing && (
+          <Card style={{ marginTop: 20 }}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Edit Profile
+              </Typography>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <TextField
+                  {...register("firstname")}
+                  label="First Name"
+                  defaultValue={userData.firstname}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  {...register("lastname")}
+                  label="Last Name"
+                  defaultValue={userData.lastname}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  {...register("email")}
+                  label="Email"
+                  defaultValue={userData.email}
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  {...register("phone")}
+                  label="Phone"
+                  defaultValue={userData.phone}
+                  fullWidth
+                  margin="normal"
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: 2 }}
+                >
+                  Save Changes
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )}
       </Grid>
       <Grid item xs={12} md={8}>
         <Card>

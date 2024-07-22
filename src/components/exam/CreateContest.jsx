@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, MenuItem, Select, Checkbox, ListItemText, FormControl, InputLabel, OutlinedInput, Box, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -36,6 +36,7 @@ export const CreateContest = () => {
       fetchContestDetail();
     }
     fetchSubject();
+    fetchPrizeTypes();
   }, []);
 
   const fetchContestDetail = async () => {
@@ -78,10 +79,19 @@ export const CreateContest = () => {
   const fetchExams = async (subjectIds) => {
     try {
       const response = await axios.post('/getexams', { subjects: subjectIds });
-      const contestExam = response.data.filter(exam => exam?.isContestExam === true);
+      const contestExam = response.data.filter(exam => exam?.isContestExam===true)
       setExams(contestExam);
     } catch (error) {
       console.error('Error fetching exams:', error);
+    }
+  };
+
+  const fetchPrizeTypes = async () => {
+    try {
+      const response = await axios.get('/prizetype');
+      setPrizeTypes(response?.data?.data);
+    } catch (error) {
+      console.error('Error fetching prize types:', error);
     }
   };
 
@@ -94,6 +104,15 @@ export const CreateContest = () => {
   const handleExamChange = (event) => {
     const { target: { value } } = event;
     setSelectedExams(value);
+  };
+
+  const handlePrizeTypeChange = (event) => {
+    setSelectedPrizeType(event.target.value);
+    setPrizeValue('');
+  };
+
+  const handlePrizeValueChange = (event) => {
+    setPrizeValue(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -111,6 +130,8 @@ export const CreateContest = () => {
       setNameError('Name is required');
       isValid = false;
     }
+
+   
 
     if (!startDate) {
       setStartDateError('Start date is required');
@@ -141,13 +162,13 @@ export const CreateContest = () => {
 
     const selectedSubjectIds = selectedSubjects.map(subject => subject?._id);
     const selectedExamIds = selectedExams.map(exam => exam?._id);
-
     const contestData = {
       name: name,
       subject: selectedSubjectIds,
       exam: selectedExamIds,
       startDate: dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss[Z]'),
       endDate: dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      prizetype: selectedPrizeType,
       isActive: true
     };
 
@@ -210,6 +231,8 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
+          {subjectError && <span style={{ color: 'red' }}>{subjectError}</span>}
+
         </FormControl>
 
         <FormControl variant="outlined">
@@ -229,9 +252,10 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
+          {examError && <span style={{ color: 'red' }}>{examError}</span>}
         </FormControl>
 
-        <DatePicker
+        <DateTimePicker
           label="Start Date"
           value={startDate}
           onChange={(newValue) => setStartDate(newValue)}
@@ -239,7 +263,7 @@ export const CreateContest = () => {
           disabled={!!id} // Disable date pickers if editing
         />
 
-        <DatePicker
+        <DateTimePicker
           label="End Date"
           value={endDate}
           onChange={(newValue) => setEndDate(newValue)}
