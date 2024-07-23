@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useParams } from "react-router-dom";
 
 export const CreateContest = () => {
   const [name, setName] = useState('');
@@ -27,11 +28,36 @@ export const CreateContest = () => {
   const [endDateError, setEndDateError] = useState('');
   const [prizeTypeError, setPrizeTypeError] = useState('');
   const [prizeValueError, setPrizeValueError] = useState('');
-
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
   useEffect(() => {
+    if (id) {
+      fetchContestDetail();
+    }
     fetchSubject();
     fetchPrizeTypes();
   }, []);
+
+  const fetchContestDetail = async () => {
+    try {
+      const response = await axios.get(`/contest/${id}`);
+      const contest = response.data;
+      setName(contest.name);
+      setSelectedSubjects(contest.subject);
+      setSelectedExams(contest.exam);
+      setStartDate(dayjs(contest.startDate));
+      setEndDate(dayjs(contest.endDate));
+      setSelectedPrizeType(contest.prizetype);
+      if (contest.amount) {
+        setPrizeValue(contest.amount);
+      } else if (contest.couponCode) {
+        setPrizeValue(contest.couponCode);
+      }
+    } catch (error) {
+      console.error('Error fetching contest details:', error);
+    }
+  };
 
   const fetchSubject = async () => {
     try {
@@ -105,15 +131,7 @@ export const CreateContest = () => {
       isValid = false;
     }
 
-    if (selectedSubjects.length === 0) {
-      setSubjectError('At least one subject must be selected');
-      isValid = false;
-    }
-
-    if (selectedExams.length === 0) {
-      setExamError('At least one exam must be selected');
-      isValid = false;
-    }
+   
 
     if (!startDate) {
       setStartDateError('Start date is required');
@@ -157,11 +175,21 @@ export const CreateContest = () => {
     if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType).name === 'Cash') {
       contestData.amount = prizeValue;
     } else if (prizeTypes.find(prizeType => prizeType._id === selectedPrizeType).name === 'Coupon') {
-      contestData.cupponCode = prizeValue;
+      contestData.couponCode = prizeValue;
     }
 
     try {
-      const response = await axios.post('/contest', contestData); 
+      let response ;
+      if (id) {
+        response = await axios.put(`/contest/${id}`, contestData);
+        toast.success('Contest updated successfully');
+        navigate('/adminDashboard/contestlist');
+      } else {
+        response = await axios.post('/contest', contestData);
+        toast.success('Contest created successfully');
+        navigate('/adminDashboard/contestlist');
+
+      }
       setName('');
       setSelectedSubjects([]);
       setSelectedExams([]);
@@ -169,7 +197,6 @@ export const CreateContest = () => {
       setEndDate(dayjs());
       setSelectedPrizeType('');
       setPrizeValue('');
-      toast.success('Contest created successfully');
     } catch (error) {
       console.error('Error creating contest:', error);
       toast.error('Error creating contest');
@@ -186,7 +213,6 @@ export const CreateContest = () => {
           onChange={(e) => setName(e.target.value)}
           error={!!nameError}
           helperText={nameError}
-
         />
 
         <FormControl variant="outlined">
@@ -234,6 +260,7 @@ export const CreateContest = () => {
           value={startDate}
           onChange={(newValue) => setStartDate(newValue)}
           renderInput={(params) => <TextField {...params} />}
+          disabled={!!id} // Disable date pickers if editing
         />
 
         <DateTimePicker
@@ -241,6 +268,8 @@ export const CreateContest = () => {
           value={endDate}
           onChange={(newValue) => setEndDate(newValue)}
           renderInput={(params) => <TextField {...params} />}
+          disabled={!!id} // Disable date pickers if editing
+
         />
 
         <FormControl variant="outlined">
@@ -257,7 +286,6 @@ export const CreateContest = () => {
             ))}
           </Select>
           {prizeTypeError && <span style={{ color: 'red' }}>{prizeTypeError}</span>}
-
         </FormControl>
 
         {prizeTypes.find(prizeType => prizeType._id === selectedPrizeType)?.name === 'Cash' && (
@@ -280,7 +308,7 @@ export const CreateContest = () => {
         )}
 
         <Button type="submit" variant="contained" color="primary">
-          Create Contest
+          {id ? 'Update Contest' : 'Create Contest'}
         </Button>
 
         <ToastContainer />
