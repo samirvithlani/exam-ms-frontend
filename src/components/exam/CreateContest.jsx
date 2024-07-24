@@ -231,7 +231,7 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
-          {subjectError && <span style={{ color: 'red' }}>{subjectError}</span>}
+          {/* {subjectError && <span style={{ color: 'red' }}>{subjectError}</span>} */}
 
         </FormControl>
 
@@ -252,7 +252,7 @@ export const CreateContest = () => {
               </MenuItem>
             ))}
           </Select>
-          {examError && <span style={{ color: 'red' }}>{examError}</span>}
+          {/* {examError && <span style={{ color: 'red' }}>{examError}</span>} */}
         </FormControl>
 
         <DateTimePicker
