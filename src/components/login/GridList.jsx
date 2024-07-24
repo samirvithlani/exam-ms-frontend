@@ -7,6 +7,11 @@ import {
   Button,
   createTheme,
   ThemeProvider,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -19,17 +24,19 @@ import { constant } from "../../constant";
 export const GridList = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [exam, setExam] = useState(null);
+  const [exams, setExams] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showContestExams, setShowContestExams] = useState(false);
+
   const fetchExams = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/exams/${id}`);
-      console.log(response, "response");
       if (response.status === 200) {
-        const ActiveExam = response.data.filter((data) => data.isActive);
-        console.log(ActiveExam, "ActiveExam");
-        setExam(ActiveExam);
+        const filteredExams = response.data.filter(
+          (data) => data.isContestExam === showContestExams
+        );
+        setExams(filteredExams);
       }
       setLoading(false);
     } catch (error) {
@@ -37,9 +44,10 @@ export const GridList = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchExams();
-  }, [id]);
+  }, [id, showContestExams]);
 
   const handleClick = (examId) => {
     const role = Cookies.get("role");
@@ -77,9 +85,10 @@ export const GridList = () => {
     navigate(`/${dashboardPath}/subjectlist`);
   };
 
-  const getAvatarLetter = (name) => {
-    return name.charAt(0).toUpperCase();
+  const handleRadioChange = (event) => {
+    setShowContestExams(event.target.value === "contest");
   };
+
   const defaultTheme = createTheme({
     palette: {
       primary: {
@@ -87,6 +96,7 @@ export const GridList = () => {
       },
     },
   });
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box padding="20px">
@@ -107,20 +117,39 @@ export const GridList = () => {
           Exam List
         </Typography>
 
+        <FormControl component="fieldset" style={{ marginBottom: "20px" }}>
+          <RadioGroup
+            row
+            aria-label="exam-filter"
+            name="exam-filter"
+            value={showContestExams ? "contest" : "regular"}
+            onChange={handleRadioChange}
+          >
+            <FormControlLabel
+              value="regular"
+              control={<Radio />}
+              label="Regular Exams"
+            />
+            <FormControlLabel
+              value="contest"
+              control={<Radio />}
+              label="Contest Exams"
+            />
+          </RadioGroup>
+        </FormControl>
+
         {loading && <CustomeLoader />}
 
-        {!loading && exam?.length === 0 && (
+        {!loading && exams?.length === 0 && (
           <Typography variant="h6" color="error" textAlign="center">
             No Exams Found!
           </Typography>
         )}
 
         <Grid container spacing={3}>
-          {exam?.length > 0 &&
-          
-            exam.map((item) => (
+          {exams?.length > 0 &&
+            exams.map((item) => (
               <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
-                
                 <Box
                   bgcolor="white"
                   border="1px solid #ccc"
@@ -137,9 +166,8 @@ export const GridList = () => {
                     },
                   }}
                 >
-                  
                   <Avatar
-                    src={item?.subject?.image_url} // replace with your image path logic
+                    src={item?.subject?.image_url} 
                     sx={{
                       width: 80,
                       height: 80,
