@@ -61,6 +61,7 @@ import UserContestexam from "../exam/UserContestexam";
 import Leaderboard from "../exam/Leaderboard";
 import UserContestDetail from "../exam/UserContestDetails";
 import DeletedContest from "../exam/DeletedContest";
+import { AddModule } from "../login/AddModule";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -472,6 +473,10 @@ const MainRouter = ({ children }) => {
             {
               path:"deletedcontest",
               element:<DeletedContest/>
+            },
+            {
+              path:"module",
+              element:<AddModule/>
             }
           ],
         },

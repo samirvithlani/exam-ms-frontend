@@ -303,7 +303,15 @@ export const SideBar = () => {
       textColor:constant.backgroundColor,
       activeMenuFor: ["deletedcontest"],
       logoImage: ListIcon
-    }
+    },
+    {
+      id: 31,
+      name: "Add Module",
+      linkUrl: "module",
+      textColor:constant.backgroundColor,
+      activeMenuFor: ["module"],
+      logoImage: AddIcon,
+    },
   ];
 
   const filteredRouteArray = RouteArray.filter(
