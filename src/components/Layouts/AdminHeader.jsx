@@ -142,10 +142,10 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
                 <Typography variant="h6">Notifications</Typography>
                 <List>
                   {announcement.map((item) => (
-                    <ListItem key={item._id}>
+                    <ListItem key={item?._id}>
                       <ListItemText
-                        primary={item.title}
-                        secondary={item.type.name}
+                        primary={item?.title}
+                        secondary={item?.type?.name}
                       />
                     </ListItem>
                   ))}
