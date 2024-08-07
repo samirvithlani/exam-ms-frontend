@@ -1,44 +1,65 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-import Cookies from "js-cookie";
 import {
+  IconButton,
+  Menu,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemText,
+  Popover,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { deepOrange, deepPurple } from "@mui/material/colors";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { constant } from "../../constant";
+import axios from "axios";
 
 const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [announcement, setAnnouncement] = useState([]);
+  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
+
   const navigate = useNavigate();
   const role = Cookies.get("name");
+
+  useEffect(() => {
+    fetchAnnouncement();
+  }, []);
+
+  const fetchAnnouncement = async () => {
+    try {
+      const response = await axios.get('/announcement');
+      console.log(response.data,"--");
+      setAnnouncement(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  useEffect(() => {
-    setOpenLogoutDialog(false);
-  }, []);
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
   const handleOpenLogoutDialog = () => {
-    
     setOpenLogoutDialog(true);
     Cookies.clear();
   };
@@ -53,9 +74,22 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     Cookies.remove("id", { path: "" });
     navigate("/login");
   };
-  const handlewallet = () => {
+
+  const handleWallet = () => {
     navigate("/userDasboard/wallet");
   };
+
+  const handleNotificationClick = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseNotificationPopover = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const open = Boolean(notificationAnchorEl);
+  const id = open ? 'notification-popover' : undefined;
+
   return (
     <Box className="main-box">
       <AppBar
@@ -74,14 +108,11 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
               color="inherit"
               aria-label="menu"
               onClick={toggleSidebar}
-              sx={{ color: isExpanded ? "#fff" : "#fff" }} // Change color based on sidebar state
+              sx={{ color: isExpanded ? "#fff" : "#fff" }}
             >
               {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
-            <Typography
-              variant="h6"
-              sx={{ color: "white", fontWeight: "bold" }}
-            >
+            <Typography variant="h6" sx={{ color: "white", fontWeight: "bold" }}>
               {name}
             </Typography>
             <Box sx={{ width: "100px" }}></Box>
@@ -89,9 +120,38 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
             <IconButton
               color="rgb(255 255 255)"
               sx={{ color: "rgb(255 255 255)" }}
+              onClick={handleNotificationClick}
             >
               <NotificationsIcon />
             </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={notificationAnchorEl}
+              onClose={handleCloseNotificationPopover}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <Box sx={{ p: 2, maxWidth: '300px' }}>
+                <Typography variant="h6">Notifications</Typography>
+                <List>
+                  {announcement.map((item) => (
+                    <ListItem key={item._id}>
+                      <ListItemText
+                        primary={item.title}
+                        secondary={item.type.name}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Popover>
             <IconButton
               color="white"
               onClick={handleMenuClick}
@@ -99,7 +159,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
             >
               <AccountCircleIcon />
             </IconButton>
-            <IconButton color="white" onClick={handlewallet}>
+            <IconButton color="white" onClick={handleWallet}>
               <AccountBalanceWalletIcon />
             </IconButton>
             <Menu
@@ -109,29 +169,19 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
             >
               <MenuItem
                 component={Link}
-                to={
-                  name === "STUDENT PANEL" ? "/userDasboard" : "/adminDashboard"
-                }
+                to={name === "STUDENT PANEL" ? "/userDasboard" : "/adminDashboard"}
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Home</Typography>
               </MenuItem>
               <MenuItem
                 component={Link}
-                // to="/adminDashboard/userprofile"
-                to={
-                  name === "STUDENT PANEL"
-                    ? "/userDasboard/userprofile"
-                    : "/adminDashboard/userprofile"
-                }
+                to={name === "STUDENT PANEL" ? "/userDasboard/userprofile" : "/adminDashboard/userprofile"}
                 onClick={handleMenuClose}
               >
                 <Typography variant="inherit">Profile</Typography>
               </MenuItem>
-              <MenuItem
-                sx={{ color: "#whitesmoke" }}
-                onClick={handleOpenLogoutDialog}
-              >
+              <MenuItem sx={{ color: "#whitesmoke" }} onClick={handleOpenLogoutDialog}>
                 <Typography variant="inherit">Logout</Typography>
               </MenuItem>
             </Menu>
@@ -154,4 +204,5 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     </Box>
   );
 };
+
 export default AdminHeader;
