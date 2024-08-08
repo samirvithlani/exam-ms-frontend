@@ -36,6 +36,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
 
   const navigate = useNavigate();
   const role = Cookies.get("name");
+  const Roles = Cookies.get("role")
 
   useEffect(() => {
     fetchAnnouncement();
@@ -44,7 +45,6 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
   const fetchAnnouncement = async () => {
     try {
       const response = await axios.get('/announcement');
-      console.log(response.data,"--");
       setAnnouncement(response.data);
     } catch (error) {
       console.error(error);
@@ -87,6 +87,24 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     setNotificationAnchorEl(null);
   };
 
+ 
+  const handleNotificationItemClick = (examId,type ,contestId) => {
+    debugger
+    if(type === 'Exam'){
+      if(Roles == 'superAdmin'){
+      navigate(`/adminDashboard/examdetails/${examId}`)
+      }else{
+        navigate(`/userDasboard/examdetails/${examId}`)
+      }
+    }
+    if(type === 'Contest'){
+      if(Roles == 'superAdmin'){
+      navigate(`/adminDashboard/contestdetail/${contestId}`)
+      }else{
+        navigate(`/userDasboard/contestdetail/${contestId}`)
+      }
+    }
+  };
   const open = Boolean(notificationAnchorEl);
   const id = open ? 'notification-popover' : undefined;
 
@@ -142,8 +160,8 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
                 <Typography variant="h6">Notifications</Typography>
                 <List>
                   {announcement.map((item) => (
-                    <ListItem key={item?._id}>
-                      <ListItemText
+                    <ListItem key={item?._id} button onClick= {()=>handleNotificationItemClick(item?.exam?._id,item?.type?.name,item?.contest?._id)}>
+                      <ListItemText 
                         primary={item?.title}
                         secondary={item?.type?.name}
                       />

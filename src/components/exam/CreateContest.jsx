@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const CreateContest = () => {
   const [name, setName] = useState('');
@@ -30,6 +31,8 @@ export const CreateContest = () => {
   const [prizeValueError, setPrizeValueError] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
+  const userId = Cookies.get("_id");
+
   
   useEffect(() => {
     if (id) {
@@ -186,9 +189,25 @@ export const CreateContest = () => {
         navigate('/adminDashboard/contestlist');
       } else {
         response = await axios.post('/contest', contestData);
+        if(response?.data){
+          const currentDateTime = new Date().toISOString();
+          let message = `${response?.data?.name} Contest Created`
+            const data = {
+              title: message,
+              description: `${response?.data?.name}`,
+              anoouced_by: userId,
+              type:'Contest' ,
+              contest:`${response?.data?._id}`,
+              isActive: true,
+              date_time: currentDateTime
+            };
+            await axios.post('/announcement', data);
+            await axios.post("/api/notify", {message }); 
+    
+          }
+        
         toast.success('Contest created successfully');
         navigate('/adminDashboard/contestlist');
-
       }
       setName('');
       setSelectedSubjects([]);
