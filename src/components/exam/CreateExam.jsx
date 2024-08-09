@@ -283,7 +283,23 @@ export const CreateExam = () => {
         success: "Exam Created Successfully!",
         error: "Failed to create Exam. Please try again.",
       });
+      if(result?.data){
+      const currentDateTime = new Date().toISOString();
+      let message = `${result?.data?.name} Exam Created`
 
+        const data = {
+          title: message,
+          description: `${result?.data?.name}`,
+          anoouced_by: userId,
+          type:'Exam' ,
+          exam:`${result?.data?._id}`,
+          isActive: true,
+          date_time: currentDateTime
+        };
+        await axios.post('/announcement', data);
+        await axios.post("/api/notify", {message }); 
+
+      }
       const role = Cookies.get("role");
       let dashboardPath = "";
 
