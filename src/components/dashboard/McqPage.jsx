@@ -26,6 +26,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
 import { motion, useScroll } from "framer-motion";
+import Pagination from "./Pagination";
 
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
@@ -234,19 +235,7 @@ const MCQQuestionsPage = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <motion.div
-        style={{
-          width: "100%",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          height: 4,
-          backgroundColor: "#3f51b5",
-          transformOrigin: "0%",
-          zIndex: 1000,
-          scaleX: scrollYProgress,
-        }}
-      />
+      {/* Existing code */}
       <div style={{ position: "relative" }}>
         <div
           style={{
@@ -280,7 +269,7 @@ const MCQQuestionsPage = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} key={currentQuestion._id}>
                 <Paper
-                  sx={{ display: "flex", flexDirection: "column", height: "auto", backgroundColor: "#E6E6E6", p: 1, fontFamily: "Arial" }}
+                  sx={{ display: "flex", flexDirection: "column", height: "auto", backgroundColor: "#E6E6E6", p: 1 }}
                   className="responsive-container"
                 >
                   <Typography variant="h6" gutterBottom>
@@ -382,8 +371,17 @@ const MCQQuestionsPage = () => {
               </Button>
             )}
           </div>
-          <ToastContainer />
+
+          {/* Pagination Component */}
+          <Pagination
+            questions={questions}
+            currentQuestionIndex={currentQuestionIndex}
+            setCurrentQuestionIndex={setCurrentQuestionIndex}
+            attemptedQuestions={attemptedQuestions}
+          />
         </Paper>
+
+        {/* Dialog */}
         <Dialog open={openDialog} onClose={handleDialogClose}>
           <DialogTitle>Time Warning</DialogTitle>
           <DialogContent>
