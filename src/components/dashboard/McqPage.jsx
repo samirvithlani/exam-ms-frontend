@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   FormControl,
   FormControlLabel,
@@ -22,32 +22,30 @@ import {
   CssBaseline,
 } from "@mui/material";
 import Cookies from "js-cookie";
-import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
-import Theme from "quill/core/theme";
-import HangingWatch from "../CustomeCopmonent/HangingWatch";
 import { motion, useScroll } from "framer-motion";
 
 const MCQQuestionsPage = () => {
   const navigate = useNavigate();
-  const [isLoading, setisLoading] = useState(false);
   const location = useLocation();
   const { id } = useParams();
   const [questions, setQuestions] = useState([]);
-  const [attemptedQuestions, setAttemptedQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [attemptedQuestions, setAttemptedQuestions] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  
   const examtype_id = location.state?.examtype_id;
   const totalmarks = location.state?.totalmarks;
   const examName = location.state?.name;
   const credit = location.state?.credit;
   const Userdata = location.state?.userdata;
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [startTime, setStartTime] = useState(null);
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -74,23 +72,6 @@ const MCQQuestionsPage = () => {
       return () => clearInterval(timer);
     }
   }, [timeLeft]);
-
-  const paperStyle = {
-    p: 2,
-    display: "flex",
-    flexDirection: "column",
-    height: "auto",
-    backgroundColor: "white",
-    m1: 1,
-  };
-  const paperStyle2 = {
-    display: "flex",
-    flexDirection: "column",
-    height: "auto",
-    backgroundColor: "#E6E6E6",
-    p: 1,
-    fontFamily: "Arial",
-  };
 
   const fetchQuestions = async () => {
     setisLoading(true);
@@ -136,6 +117,30 @@ const MCQQuestionsPage = () => {
     });
   };
 
+  const handleCheckboxChange = (questionId, optionNumber, isChecked) => {
+    setSelectedAnswers((prevState) => {
+      let updatedValueArray = prevState[questionId]
+        .split(",")
+        .filter((val) => val);
+
+      if (isChecked) {
+        updatedValueArray.push(optionNumber);
+      } else {
+        updatedValueArray = updatedValueArray.filter(
+          (val) => val !== optionNumber
+        );
+      }
+
+      const updatedValue = updatedValueArray.sort().join(",");
+
+      return { ...prevState, [questionId]: updatedValue };
+    });
+
+    if (!attemptedQuestions.includes(questionId)) {
+      setAttemptedQuestions([...attemptedQuestions, questionId]);
+    }
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -161,26 +166,25 @@ const MCQQuestionsPage = () => {
     };
     try {
       const result = await toast.promise(axios.post("/add", data), {
-        pending: "completed Exam...",
+        pending: "Completing Exam...",
         success: "Exam completed Successfully!",
         error: "Failed to complete Exam. Please try again.",
       });
-      // console.log(result, "result data");
+
       if (result.status === 200) {
         const { _id } = result?.data?.savedExam;
         const getbyid = await axios.get(`/user_exam/${_id}`)
-        // console.log(getbyid,"getbyid");
-        if(getbyid?.data?.exam_id?.isContestExam === true){
-        const contest = Cookies.get("contestid");
-        const score = result?.data?.savedExam?.result;
-      const exam = result?.data?.savedExam?.exam_id;
-        const userId = Cookies.get("_id");
-        const data = { contest, score, exam, userId };
-        console.log(data, "data in contest ");
-        const response = await axios.post("/contest_participant", data);
+        if (getbyid?.data?.exam_id?.isContestExam === true) {
+          const contest = Cookies.get("contestid");
+          const score = result?.data?.savedExam?.result;
+          const exam = result?.data?.savedExam?.exam_id;
+          const userId = Cookies.get("_id");
+          const data = { contest, score, exam, userId };
+          console.log(data, "data in contest ");
+          await axios.post("/contest_participant", data);
         }
       }
-      if (Userdata.walllet !== null) {
+      if (Userdata.wallet !== null) {
         const updatedcredit = Userdata?.wallet?.token - credit;
         await axios.put(`/wallet/${Userdata.wallet?._id}`, {
           token: updatedcredit,
@@ -191,8 +195,7 @@ const MCQQuestionsPage = () => {
           wallet: Userdata.wallet?._id,
           Transcation_history: `Debit ${credit} credit from wallet for ${examName} exam`,
         };
-        const transction = await axios.post("/transcation", data);
-        console.log(transction, "transction");
+        await axios.post("/transcation", data);
       }
       navigate("/userDasboard/history");
     } catch (error) {
@@ -201,28 +204,12 @@ const MCQQuestionsPage = () => {
     }
   };
 
-  const handleCheckboxChange = (questionId, optionNumber, isChecked) => {
-    setSelectedAnswers((prevState) => {
-      let updatedValueArray = prevState[questionId]
-        .split(",")
-        .filter((val) => val);
+  const handleNextQuestion = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+  };
 
-      if (isChecked) {
-        updatedValueArray.push(optionNumber);
-      } else {
-        updatedValueArray = updatedValueArray.filter(
-          (val) => val !== optionNumber
-        );
-      }
-
-      const updatedValue = updatedValueArray.sort().join(",");
-
-      return { ...prevState, [questionId]: updatedValue };
-    });
-
-    if (!attemptedQuestions.includes(questionId)) {
-      setAttemptedQuestions([...attemptedQuestions, questionId]);
-    }
+  const handlePreviousQuestion = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
   };
 
   const HtmlLabel = ({ html }) => (
@@ -232,14 +219,17 @@ const MCQQuestionsPage = () => {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
   const defaultTheme = createTheme({
     palette: {
       primary: {
-        main: constant.backgroundColor, // Change this to your desired color
+        main: constant.backgroundColor,
       },
     },
   });
+
   const { scrollYProgress } = useScroll();
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -263,7 +253,7 @@ const MCQQuestionsPage = () => {
             position: "fixed",
             top: "20px",
             right: "20px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)", // Adjust the alpha value as needed (0.8 is 80% opaque)
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
             padding: "10px",
             borderRadius: "5px",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
@@ -281,26 +271,31 @@ const MCQQuestionsPage = () => {
           )}
         </div>
 
-        <Paper sx={paperStyle} className="responsive-container">
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column", height: "auto", backgroundColor: "white", m1: 1 }} className="responsive-container">
           {isLoading ? <CustomeLoader /> : null}
           <Typography variant="h5" gutterBottom sx={{ color: "#010080" }}>
             ExamName :: {examName.toUpperCase()}
           </Typography>
-          <Grid container spacing={2}>
-            {questions.map((question, qIndex) => (
-              <Grid item xs={12} key={question._id}>
-                <Paper sx={paperStyle2} className="responsive-container">
+          {currentQuestion && (
+            <Grid container spacing={2}>
+              <Grid item xs={12} key={currentQuestion._id}>
+                <Paper
+                  sx={{ display: "flex", flexDirection: "column", height: "auto", backgroundColor: "#E6E6E6", p: 1, fontFamily: "Arial" }}
+                  className="responsive-container"
+                >
                   <Typography variant="h6" gutterBottom>
-                    {`Q${qIndex + 1}. `}
+                    {`Q${currentQuestionIndex + 1}. `}
                     <div
-                      dangerouslySetInnerHTML={{ __html: question.question }}
+                      dangerouslySetInnerHTML={{
+                        __html: currentQuestion.question,
+                      }}
                     />
                   </Typography>
                 </Paper>
                 <FormControl component="fieldset">
-                  {question.isMultiselectedQuestion ? (
+                  {currentQuestion.isMultiselectedQuestion ? (
                     <FormGroup>
-                      {Object.keys(question).map((key) => {
+                      {Object.keys(currentQuestion).map((key) => {
                         if (key.startsWith("Option")) {
                           const optionNumber = key.replace("Option", "");
                           return (
@@ -309,18 +304,18 @@ const MCQQuestionsPage = () => {
                               control={
                                 <Checkbox
                                   checked={selectedAnswers[
-                                    question._id
+                                    currentQuestion._id
                                   ].includes(optionNumber)}
                                   onChange={(e) =>
                                     handleCheckboxChange(
-                                      question._id,
+                                      currentQuestion._id,
                                       optionNumber,
                                       e.target.checked
                                     )
                                   }
                                 />
                               }
-                              label={<HtmlLabel html={question[key]} />}
+                              label={<HtmlLabel html={currentQuestion[key]} />}
                             />
                           );
                         }
@@ -329,13 +324,16 @@ const MCQQuestionsPage = () => {
                     </FormGroup>
                   ) : (
                     <RadioGroup
-                      name={`question_${question._id}`}
-                      value={selectedAnswers[question._id]}
+                      name={`question_${currentQuestion._id}`}
+                      value={selectedAnswers[currentQuestion._id]}
                       onChange={(e) =>
-                        handleAnswerChange(question._id, e.target.value)
+                        handleAnswerChange(
+                          currentQuestion._id,
+                          e.target.value
+                        )
                       }
                     >
-                      {Object.keys(question).map((key) => {
+                      {Object.keys(currentQuestion).map((key) => {
                         if (key.startsWith("Option")) {
                           const optionNumber = key.replace("Option", "");
                           return (
@@ -343,7 +341,7 @@ const MCQQuestionsPage = () => {
                               key={optionNumber}
                               value={optionNumber}
                               control={<Radio />}
-                              label={<HtmlLabel html={question[key]} />}
+                              label={<HtmlLabel html={currentQuestion[key]} />}
                             />
                           );
                         }
@@ -353,16 +351,37 @@ const MCQQuestionsPage = () => {
                   )}
                 </FormControl>
               </Grid>
-            ))}
-          </Grid>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            Submit Answers
-          </Button>
+            </Grid>
+          )}
+
+          <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handlePreviousQuestion}
+              disabled={currentQuestionIndex === 0}
+            >
+              Previous
+            </Button>
+            {currentQuestionIndex === questions.length - 1 ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+              >
+                Submit Answers
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNextQuestion}
+              >
+                Next
+              </Button>
+            )}
+          </div>
           <ToastContainer />
         </Paper>
         <Dialog open={openDialog} onClose={handleDialogClose}>
