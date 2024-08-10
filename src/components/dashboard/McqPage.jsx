@@ -40,8 +40,10 @@ const MCQQuestionsPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openSubmitDialog, setOpenSubmitDialog] = useState(false); // New state for submit/review dialog
   const [startTime, setStartTime] = useState(null);
-  
+  const [isReviewMode, setIsReviewMode] = useState(false); // New state for review mode
+
   const examtype_id = location.state?.examtype_id;
   const totalmarks = location.state?.totalmarks;
   const examName = location.state?.name;
@@ -206,11 +208,25 @@ const MCQQuestionsPage = () => {
   };
 
   const handleNextQuestion = () => {
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    if (currentQuestionIndex === questions.length - 1) {
+      setOpenSubmitDialog(true); // Open dialog when on last question
+    } else {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    }
   };
 
   const handlePreviousQuestion = () => {
     setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+  };
+
+  const handleReviewClick = () => {
+    setIsReviewMode(true);
+    setOpenSubmitDialog(false);
+  };
+
+  const handleSubmitClick = () => {
+    handleSubmit();
+    setOpenSubmitDialog(false);
   };
 
   const HtmlLabel = ({ html }) => (
