@@ -174,7 +174,7 @@ const MCQQuestionsPage = () => {
         error: "Failed to complete Exam. Please try again.",
       });
 
-      if (result.status === 200) {
+      if (result?.status === 200) {
         const { _id } = result?.data?.savedExam;
         const getbyid = await axios.get(`/user_exam/${_id}`)
         if (getbyid?.data?.exam_id?.isContestExam === true) {
@@ -186,15 +186,15 @@ const MCQQuestionsPage = () => {
           await axios.post("/contest_participant", data);
         }
       }
-      if (Userdata.wallet !== null) {
+      if (Userdata?.wallet !== null) {
         const updatedcredit = Userdata?.wallet?.token - credit;
-        await axios.put(`/wallet/${Userdata.wallet?._id}`, {
+        await axios.put(`/wallet/${Userdata?.wallet?._id}`, {
           token: updatedcredit,
         });
         const data = {
           user: _id,
-          walletType: Userdata.wallet?.walletType,
-          wallet: Userdata.wallet?._id,
+          walletType: Userdata?.wallet?.walletType,
+          wallet: Userdata?.wallet?._id,
           Transcation_history: `Debit ${credit} credit from wallet for ${examName} exam`,
         };
         await axios.post("/transcation", data);
@@ -251,167 +251,306 @@ const MCQQuestionsPage = () => {
     <ThemeProvider theme={defaultTheme}>
       
       <CssBaseline />
-      {/* Existing code */}
-      <div style={{ position: "relative" }}>
-        <div
-          style={{
-            position: "fixed",
-            top: "20px",
-            right: "20px",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            padding: "10px",
-            borderRadius: "5px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-            zIndex: 1000,
-            color: constant.backgroundColor,
-            height: "auto",
-            width: "auto",
-          }}
-        >
-          {timeLeft !== null && (
-            <Typography variant="h6" gutterBottom>
-              Time Left: {Math.floor(timeLeft / 60)}:
-              {String(timeLeft % 60).padStart(2, "0")}
-            </Typography>
-          )}
-        </div>
-
-        <Paper sx={{ p: 2, display: "flex", flexDirection: "column", height: "auto", backgroundColor: "white", m1: 1 }} className="responsive-container">
-          {isLoading ? <CustomeLoader /> : null}
-          <Typography variant="h5" gutterBottom sx={{ color: "#010080" }}>
-            ExamName :: {examName.toUpperCase()}
-          </Typography>
-          {currentQuestion && (
-            <Grid container spacing={2}>
-              <Grid item xs={12} key={currentQuestion._id}>
-                <Paper
-                  sx={{ display: "flex", flexDirection: "column", height: "auto", backgroundColor: "#E6E6E6", p: 1 }}
-                  className="responsive-container"
-                >
-                  <Typography variant="h6" gutterBottom>
-                    {`Q${currentQuestionIndex + 1}. `}
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: currentQuestion.question,
+      <motion.div
+        style={{
+          width: "100%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          height: 4,
+          backgroundColor: "green",
+          scaleX: scrollYProgress,
+          transformOrigin: "0%",
+        }}
+      />
+      <div style={{ padding: "10px" }}>
+        <Paper elevation={0} sx={{ backgroundColor: "#f5f5f5", mt: 2 }}>
+          {isLoading ? (
+            <CustomeLoader />
+          ) : isReviewMode ? (
+            // Review Mode UI
+            <div>
+              {questions.map((question, index) => (
+                <Grid container spacing={2} key={question._id}>
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "auto",
+                        backgroundColor: "#E6E6E6",
+                        p: 1,
+                        fontFamily: "Arial",
                       }}
-                    />
-                  </Typography>
-                </Paper>
-                <FormControl component="fieldset">
-                  {currentQuestion.isMultiselectedQuestion ? (
-                    <FormGroup>
-                      {Object.keys(currentQuestion).map((key) => {
-                        if (key.startsWith("Option")) {
-                          const optionNumber = key.replace("Option", "");
-                          return (
-                            <FormControlLabel
-                              key={optionNumber}
-                              control={
-                                <Checkbox
-                                  checked={selectedAnswers[
-                                    currentQuestion._id
-                                  ].includes(optionNumber)}
-                                  onChange={(e) =>
-                                    handleCheckboxChange(
-                                      currentQuestion._id,
-                                      optionNumber,
-                                      e.target.checked
-                                    )
-                                  }
-                                />
-                              }
-                              label={<HtmlLabel html={currentQuestion[key]} />}
-                            />
-                          );
-                        }
-                        return null;
-                      })}
-                    </FormGroup>
-                  ) : (
-                    <RadioGroup
-                      name={`question_${currentQuestion._id}`}
-                      value={selectedAnswers[currentQuestion._id]}
-                      onChange={(e) =>
-                        handleAnswerChange(
-                          currentQuestion._id,
-                          e.target.value
-                        )
-                      }
+                      className="responsive-container"
                     >
-                      {Object.keys(currentQuestion).map((key) => {
-                        if (key.startsWith("Option")) {
-                          const optionNumber = key.replace("Option", "");
-                          return (
-                            <FormControlLabel
-                              key={optionNumber}
-                              value={optionNumber}
-                              control={<Radio />}
-                              label={<HtmlLabel html={currentQuestion[key]} />}
-                            />
-                          );
-                        }
-                        return null;
-                      })}
-                    </RadioGroup>
-                  )}
-                </FormControl>
-              </Grid>
-            </Grid>
+                      <Typography variant="h6" gutterBottom>
+                        {`Q${index + 1}. `}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: question.question,
+                          }}
+                        />
+                      </Typography>
+                    </Paper>
+                    <FormControl component="fieldset">
+                      {question.isMultiselectedQuestion ? (
+                        <FormGroup>
+                          {Object.keys(question).map((key) => {
+                            if (key.startsWith("Option")) {
+                              const optionNumber = key.replace("Option", "");
+                              return (
+                                <FormControlLabel
+                                  key={optionNumber}
+                                  control={
+                                    <Checkbox
+                                      checked={selectedAnswers[
+                                        question._id
+                                      ].includes(optionNumber)}
+                                      onChange={(e) =>
+                                        handleCheckboxChange(
+                                          question._id,
+                                          optionNumber,
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label={<HtmlLabel html={question[key]} />}
+                                />
+                              );
+                            }
+                            return null;
+                          })}
+                        </FormGroup>
+                      ) : (
+                        <RadioGroup
+                          name={`question_${question._id}`}
+                          value={selectedAnswers[question._id]}
+                          onChange={(e) =>
+                            handleAnswerChange(question._id, e.target.value)
+                          }
+                        >
+                          {Object.keys(question).map((key) => {
+                            if (key.startsWith("Option")) {
+                              const optionNumber = key.replace("Option", "");
+                              return (
+                                <FormControlLabel
+                                  key={optionNumber}
+                                  value={optionNumber}
+                                  control={<Radio />}
+                                  label={<HtmlLabel html={question[key]} />}
+                                />
+                              );
+                            }
+                            return null;
+                          })}
+                        </RadioGroup>
+                      )}
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              ))}
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setIsReviewMode(false)}
+                >
+                  Back to Exam
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  Submit Answers
+                </Button>
+              </div>
+            </div>
+          ) : (
+            // Exam Mode UI
+            <>
+              {currentQuestion && (
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Paper
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "auto",
+                        backgroundColor: "#E6E6E6",
+                        p: 1,
+                        fontFamily: "Arial",
+                      }}
+                      className="responsive-container"
+                    >
+                      <Typography variant="h6" gutterBottom>
+                        {`Q${currentQuestionIndex + 1}. `}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: currentQuestion.question,
+                          }}
+                        />
+                      </Typography>
+                    </Paper>
+                    <FormControl component="fieldset">
+                      {currentQuestion.isMultiselectedQuestion ? (
+                        <FormGroup>
+                          {Object.keys(currentQuestion).map((key) => {
+                            if (key.startsWith("Option")) {
+                              const optionNumber = key.replace("Option", "");
+                              return (
+                                <FormControlLabel
+                                  key={optionNumber}
+                                  control={
+                                    <Checkbox
+                                      checked={selectedAnswers[
+                                        currentQuestion._id
+                                      ].includes(optionNumber)}
+                                      onChange={(e) =>
+                                        handleCheckboxChange(
+                                          currentQuestion._id,
+                                          optionNumber,
+                                          e.target.checked
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label={<HtmlLabel html={currentQuestion[key]} />}
+                                />
+                              );
+                            }
+                            return null;
+                          })}
+                        </FormGroup>
+                      ) : (
+                        <RadioGroup
+                          name={`question_${currentQuestion._id}`}
+                          value={selectedAnswers[currentQuestion._id]}
+                          onChange={(e) =>
+                            handleAnswerChange(
+                              currentQuestion._id,
+                              e.target.value
+                            )
+                          }
+                        >
+                          {Object.keys(currentQuestion).map((key) => {
+                            if (key.startsWith("Option")) {
+                              const optionNumber = key.replace("Option", "");
+                              return (
+                                <FormControlLabel
+                                  key={optionNumber}
+                                  value={optionNumber}
+                                  control={<Radio />}
+                                  label={<HtmlLabel html={currentQuestion[key]} />}
+                                />
+                              );
+                            }
+                            return null;
+                          })}
+                        </RadioGroup>
+                      )}
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handlePreviousQuestion}
+                  disabled={currentQuestionIndex === 0}
+                >
+                  Previous
+                </Button>
+                {currentQuestionIndex === questions.length - 1 && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNextQuestion}
+                  >
+                    Review / Submit
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNextQuestion}
+                  disabled={currentQuestionIndex === questions.length - 1}
+                >
+                  Next
+                </Button>
+              </div>
+            </>
           )}
-
-          <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handlePreviousQuestion}
-              disabled={currentQuestionIndex === 0}
-            >
-              Previous
-            </Button>
-            {currentQuestionIndex === questions.length - 1 ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
-                Submit Answers
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNextQuestion}
-              >
-                Next
-              </Button>
-            )}
-          </div>
-
-          {/* Pagination Component */}
-          <Pagination
+           <Pagination
             questions={questions}
             currentQuestionIndex={currentQuestionIndex}
             setCurrentQuestionIndex={setCurrentQuestionIndex}
             attemptedQuestions={attemptedQuestions}
           />
         </Paper>
-
-        {/* Dialog */}
-        <Dialog open={openDialog} onClose={handleDialogClose}>
-          <DialogTitle>Time Warning</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Only 2 minutes left. Please review and submit your answers.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="primary" autoFocus>
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Time Warning</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You have only 2 minutes remaining. Please review and submit your
+            answers.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary" autoFocus>
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openSubmitDialog}
+        onClose={() => setOpenSubmitDialog(false)}
+        aria-labelledby="review-submit-dialog-title"
+        aria-describedby="review-submit-dialog-description"
+      >
+        <DialogTitle id="review-submit-dialog-title">
+          Review or Submit
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="review-submit-dialog-description">
+            You have completed all questions. Would you like to review your answers or submit them now?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleReviewClick} color="primary">
+            Review Questions
+          </Button>
+          <Button onClick={handleSubmitClick} color="primary">
+            Submit Answers
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ToastContainer />
     </ThemeProvider>
   );
 };
