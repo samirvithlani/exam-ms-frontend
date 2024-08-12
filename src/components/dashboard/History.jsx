@@ -51,7 +51,7 @@ const Historyofuser = () => {
         result: exam?.result,
         subject: exam.exam_id?.subject,
         examId: exam?.exam_id?._id,
-        reattemptRequest: exam?.ReAttemp_request, // Tracking reattempt request status
+        reattemptRequest: exam?.ReAttemp_request, 
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -86,8 +86,10 @@ const Historyofuser = () => {
     }
   };
 
-  const attemptExam = (id) => {
-    navigate(`/userDasboard/examdetails/${id}`);
+  const attemptExam = async(ExamId,id) => {
+    const data = {  ReAttemp_request: 'false' };
+      await axios.put(`/user_exam/${id}`, data);
+    navigate(`/userDasboard/examdetails/${ExamId}`);
   };
 
   const paperStyle = {
@@ -172,7 +174,7 @@ const Historyofuser = () => {
                     <Button
                       variant="contained"
                       sx={{ backgroundColor: "#28a745" }}
-                      onClick={() => attemptExam(history?.examId)}
+                      onClick={() => attemptExam(history?.examId,history?.id)}
                       disabled={history.reattemptRequest !== "Accepted"} // Enable/Disable based on status
                     >
                       Attempt Exam
