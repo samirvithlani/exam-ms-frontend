@@ -217,6 +217,13 @@ export const SideBar = () => {
       logoImage: ListIcon,
     },
     {
+      id: 19,
+      name: "ReAttempt Exam List",
+      linkUrl: "ReAttemptrequest",
+      activeMenuFor: ["reattemptrequest"],
+      logoImage: ListIcon,
+    },
+    {
       id: 21,
       name: "Exam Details",
       linkUrl: "examdetails",

@@ -10,7 +10,12 @@ import {
   createTheme,
   useMediaQuery,
   CssBaseline,
-  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -21,6 +26,9 @@ const Historyofuser = () => {
   const navigate = useNavigate();
   const [histories, setHistories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedExamId, setSelectedExamId] = useState(null);
+  const [requestMessage, setRequestMessage] = useState("");
   const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
@@ -42,6 +50,8 @@ const Historyofuser = () => {
         totalmarks: exam?.total_marks,
         result: exam?.result,
         subject: exam.exam_id?.subject,
+        examId: exam?.exam_id?._id,
+        reattemptRequest: exam?.ReAttemp_request, // Tracking reattempt request status
       }));
       console.log("filteredData", filteredData);
       setHistories(filteredData);
@@ -56,8 +66,28 @@ const Historyofuser = () => {
     navigate(`/userDasboard/viewAnswers/${id}`);
   };
 
-  const reattemptExam = (id) => {
-    navigate(`/userDasboard/reattemptExam/${id}`);
+  const handleClickOpen = (id) => {
+    setSelectedExamId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setRequestMessage("");
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const data = { ReAttemp_requestmsg: requestMessage, ReAttemp_request: 'pending' };
+      await axios.put(`/user_exam/${selectedExamId}`, data);
+      handleClose();
+    } catch (error) {
+      console.error("Error submitting reattempt request:", error);
+    }
+  };
+
+  const attemptExam = (id) => {
+    navigate(`/userDasboard/examdetails/${id}`);
   };
 
   const paperStyle = {
@@ -98,11 +128,14 @@ const Historyofuser = () => {
           </Box>
         ) : (
           <Grid container spacing={2}>
-            {}
             {histories.map((history) => (
               <Grid item xs={12} sm={6} md={4} key={history.id}>
                 <Paper sx={paperStyle}>
-                <Typography variant="h4" gutterBottom sx={{color:constant.backgroundColor,fontWeight:"bold",textAlign:"center"}}>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{ color: constant.backgroundColor, fontWeight: "bold", textAlign: "center" }}
+                  >
                     {history?.subject?.name}
                   </Typography>
                   <Box sx={{ textAlign: "center" }}>
@@ -114,19 +147,19 @@ const Historyofuser = () => {
                       style={{ display: "block", margin: "0 auto" }}
                     />
                   </Box>
-                  <Typography variant="h6" gutterBottom sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
+                  <Typography variant="h6" gutterBottom sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
                     {history.name}
                   </Typography>
-                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
+                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
                     <strong>Exam Type:</strong> {history.examType}
                   </Typography>
-                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
+                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
                     <strong>No. of Questions:</strong> {history.noOfQuestions}
                   </Typography>
-                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
+                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
                     <strong>Total Marks:</strong> {history.totalmarks}
                   </Typography>
-                  <Typography variant="body1" sx={{color:constant.backgroundColor,fontWeight:"bold"}}>
+                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
                     <strong>Result:</strong> {history.result}
                   </Typography>
                   <Box
@@ -138,16 +171,24 @@ const Historyofuser = () => {
                   >
                     <Button
                       variant="contained"
+                      sx={{ backgroundColor: "#28a745" }}
+                      onClick={() => attemptExam(history?.examId)}
+                      disabled={history.reattemptRequest !== "Accepted"} // Enable/Disable based on status
+                    >
+                      Attempt Exam
+                    </Button>
+                    <Button
+                      variant="contained"
                       sx={{ backgroundColor: constant.backgroundColor }}
                       onClick={() => viewAnswer(history.id)}
                     >
                       View Answer
                     </Button>
                     <Button
-                      disabled
                       variant="contained"
                       sx={{ backgroundColor: "#FF0000" }}
-                      onClick={() => reattemptExam(history.id)}
+                      onClick={() => handleClickOpen(history.id)}
+              
                     >
                       Reattempt Exam
                     </Button>
@@ -158,6 +199,31 @@ const Historyofuser = () => {
           </Grid>
         )}
       </Box>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Reattempt Exam</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please provide a message for your reattempt request.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Reattempt Request Message"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={requestMessage}
+            onChange={(e) => setRequestMessage(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };

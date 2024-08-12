@@ -183,7 +183,6 @@ const MCQQuestionsPage = () => {
           const exam = result?.data?.savedExam?.exam_id;
           const userId = Cookies.get("_id");
           const data = { contest, score, exam, userId };
-          console.log(data, "data in contest ");
           await axios.post("/contest_participant", data);
         }
       }
@@ -250,6 +249,7 @@ const MCQQuestionsPage = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      
       <CssBaseline />
       {/* Existing code */}
       <div style={{ position: "relative" }}>
