@@ -17,6 +17,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Badge,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -87,24 +88,24 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     setNotificationAnchorEl(null);
   };
 
- 
-  const handleNotificationItemClick = (examId,type ,contestId) => {
+  const handleNotificationItemClick = (examId, type, contestId) => {
     debugger
-    if(type === 'Exam'){
-      if(Roles == 'superAdmin'){
-      navigate(`/adminDashboard/examdetails/${examId}`)
-      }else{
+    if (type === 'Exam') {
+      if (Roles == 'superAdmin') {
+        navigate(`/adminDashboard/examdetails/${examId}`)
+      } else {
         navigate(`/userDasboard/examdetails/${examId}`)
       }
     }
-    if(type === 'Contest'){
-      if(Roles == 'superAdmin'){
-      navigate(`/adminDashboard/contestdetail/${contestId}`)
-      }else{
+    if (type === 'Contest') {
+      if (Roles == 'superAdmin') {
+        navigate(`/adminDashboard/contestdetail/${contestId}`)
+      } else {
         navigate(`/userDasboard/contestdetail/${contestId}`)
       }
     }
   };
+
   const open = Boolean(notificationAnchorEl);
   const id = open ? 'notification-popover' : undefined;
 
@@ -140,7 +141,9 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
               sx={{ color: "rgb(255 255 255)" }}
               onClick={handleNotificationClick}
             >
-              <NotificationsIcon />
+              <Badge badgeContent={announcement.length} color="error">
+                <NotificationsIcon />
+              </Badge>
             </IconButton>
             <Popover
               id={id}
@@ -160,8 +163,8 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
                 <Typography variant="h6">Notifications</Typography>
                 <List>
                   {announcement.map((item) => (
-                    <ListItem key={item?._id} button onClick= {()=>handleNotificationItemClick(item?.exam?._id,item?.type?.name,item?.contest?._id)}>
-                      <ListItemText 
+                    <ListItem key={item?._id} button onClick={() => handleNotificationItemClick(item?.exam?._id, item?.type?.name, item?.contest?._id)}>
+                      <ListItemText
                         primary={item?.title}
                         secondary={item?.type?.name}
                       />

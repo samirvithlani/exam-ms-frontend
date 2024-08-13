@@ -16,7 +16,11 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
@@ -41,9 +45,24 @@ const Historyofuser = () => {
       setIsLoading(true);
       const response = await axios.get(`/userhistory/${_id}`);
       console.log("response", response);
-      const filteredData = response.data.map((exam, index) => ({
-        id: exam._id || index,
-        displayid: index + 1,
+      const groupedData = groupByExamId(response.data);
+      setHistories(groupedData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const groupByExamId = (data) => {
+    const grouped = data.reduce((acc, exam) => {
+      const examId = exam.exam_id._id;
+      if (!acc[examId]) {
+        acc[examId] = [];
+      }
+      acc[examId].push({
+        id: exam._id,
+        displayid: acc[examId].length + 1,
         name: exam.exam_id?.name,
         examType: exam.exam_type?.type,
         noOfQuestions: exam.exam_id?.noofquestions || 0,
@@ -51,15 +70,12 @@ const Historyofuser = () => {
         result: exam?.result,
         subject: exam.exam_id?.subject,
         examId: exam?.exam_id?._id,
-        reattemptRequest: exam?.ReAttemp_request, 
-      }));
-      console.log("filteredData", filteredData);
-      setHistories(filteredData);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setIsLoading(false);
-    }
+        reattemptRequest: exam?.ReAttemp_request,
+        ReAttemp_count: exam?.ReAttemp_count||0,
+      });
+      return acc;
+    }, {});
+    return Object.values(grouped);
   };
 
   const viewAnswer = (id) => {
@@ -78,7 +94,7 @@ const Historyofuser = () => {
 
   const handleSubmit = async () => {
     try {
-      const data = { ReAttemp_requestmsg: requestMessage, ReAttemp_request: 'pending' };
+      const data = { ReAttemp_requestmsg: requestMessage, ReAttemp_request: "pending" };
       await axios.put(`/user_exam/${selectedExamId}`, data);
       handleClose();
     } catch (error) {
@@ -86,9 +102,9 @@ const Historyofuser = () => {
     }
   };
 
-  const attemptExam = async(ExamId,id) => {
-    const data = {  ReAttemp_request: 'false' };
-      await axios.put(`/user_exam/${id}`, data);
+  const attemptExam = async (ExamId, id) => {
+    const data = { ReAttemp_request: "false" };
+    await axios.put(`/user_exam/${id}`, data);
     navigate(`/userDasboard/examdetails/${ExamId}`);
   };
 
@@ -130,71 +146,116 @@ const Historyofuser = () => {
           </Box>
         ) : (
           <Grid container spacing={2}>
-            {histories.map((history) => (
-              <Grid item xs={12} sm={6} md={4} key={history.id}>
+            {histories.map((examGroup, index) => (
+              <Grid item xs={12} key={index}>
                 <Paper sx={paperStyle}>
                   <Typography
                     variant="h4"
                     gutterBottom
-                    sx={{ color: constant.backgroundColor, fontWeight: "bold", textAlign: "center" }}
-                  >
-                    {history?.subject?.name}
-                  </Typography>
-                  <Box sx={{ textAlign: "center" }}>
-                    <img
-                      src={history?.subject?.image_url}
-                      alt="image"
-                      height="100"
-                      width="100"
-                      style={{ display: "block", margin: "0 auto" }}
-                    />
-                  </Box>
-                  <Typography variant="h6" gutterBottom sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
-                    {history.name}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
-                    <strong>Exam Type:</strong> {history.examType}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
-                    <strong>No. of Questions:</strong> {history.noOfQuestions}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
-                    <strong>Total Marks:</strong> {history.totalmarks}
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
-                    <strong>Result:</strong> {history.result}
-                  </Typography>
-                  <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginTop: 2,
+                      color: constant.backgroundColor,
+                      fontWeight: "bold",
+                      textAlign: "center",
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: "#28a745" }}
-                      onClick={() => attemptExam(history?.examId,history?.id)}
-                      disabled={history.reattemptRequest !== "Accepted"} // Enable/Disable based on status
+                    {examGroup[0]?.subject?.name} - {examGroup[0]?.name}
+                  </Typography>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
                     >
-                      Attempt Exam
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: constant.backgroundColor }}
-                      onClick={() => viewAnswer(history.id)}
-                    >
-                      View Answer
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: "#FF0000" }}
-                      onClick={() => handleClickOpen(history.id)}
-              
-                    >
-                      Reattempt Exam
-                    </Button>
-                  </Box>
+                      <Typography variant="h6" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
+                        View Attempts ({examGroup.length})
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {examGroup.map((history) => (
+                        <Box key={history.id} sx={{ mb: 2 }}>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: constant.backgroundColor,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <strong>Attempt:</strong> {history.ReAttemp_count}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: constant.backgroundColor,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <strong>Exam Type:</strong> {history.examType}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: constant.backgroundColor,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <strong>No. of Questions:</strong> {history.noOfQuestions}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: constant.backgroundColor,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <strong>Total Marks:</strong> {history.totalmarks}
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              color: constant.backgroundColor,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <strong>Result:</strong> {history.result}
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginTop: 2,
+                            }}
+                          >
+                            {examGroup.length < 2 && (
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: "#28a745" }}
+                              onClick={() => attemptExam(history.examId, history.id)}
+                              disabled={history.reattemptRequest !== "Accepted"}
+                            >
+                              Attempt Exam
+                            </Button>
+                            )}
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: constant.backgroundColor }}
+                              onClick={() => viewAnswer(history.id)}
+                            >
+                              View Answer
+                            </Button>
+                            {examGroup.length < 2 && (
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: "#FF0000" }}
+                              onClick={() => handleClickOpen(history.id)}
+                            >
+                              Reattempt Exam
+                            </Button>
+                            )}
+                          </Box>
+                        </Box>
+                      ))}
+                    </AccordionDetails>
+                  </Accordion>
                 </Paper>
               </Grid>
             ))}
