@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  Tooltip
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -167,27 +168,29 @@ export const GridList = () => {
                   }}
                 >
                   <Avatar
-                    src={item?.subject?.image_url} 
+                    src={item?.subject?.image_url}
                     sx={{
                       width: 80,
                       height: 80,
                       margin: "0 auto 10px auto",
                     }}
                   />
-                  <Typography
-                    variant="p"
-                    sx={{
-                      fontWeight: "bold",
-                      mt: 2,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      maxWidth: "100%", // Ensure the text does not overflow the box
-                      color: constant.backgroundColor,
-                    }}
-                  >
-                    {item.name}
-                  </Typography>
+                  <Tooltip title={item.name} arrow>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: "bold",
+                        mt: 2,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: "100%",
+                        color: constant.backgroundColor,
+                      }}
+                    >
+                      {item.name}
+                    </Typography>
+                  </Tooltip>
                 </Box>
               </Grid>
             ))}

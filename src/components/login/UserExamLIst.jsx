@@ -183,13 +183,16 @@ export const UserExamList = () => {
                   }}
                 >
                   <option value="">Select Subject</option>
-                  {subjects.map((subject) => (
-                    <option key={subject._id} value={subject._id}>
-                      {subject.name}
-                    </option>
-                  ))}
+                  {subjects
+                    .sort((a, b) => a.name.localeCompare(b.name)) // Sorting subjects alphabetically
+                    .map((subject) => (
+                      <option key={subject._id} value={subject._id}>
+                        {subject.name.toUpperCase()}
+                      </option>
+                    ))}
                 </select>
               </Box>
+
               <Box flexBasis="200px" flexGrow={1}>
                 <select
                   value={selectedDifficulty}
@@ -226,7 +229,15 @@ export const UserExamList = () => {
                 {filteredExams
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Implement pagination here
                   .map((item) => (
-                    <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <Grid
+                      key={item._id}
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                    >
                       <Box
                         bgcolor="white"
                         border="1px solid #ccc"
@@ -275,15 +286,35 @@ export const UserExamList = () => {
                   ))}
               </Grid>
 
-              <TablePagination
-                component="div"
-                count={filteredExams.length}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                rowsPerPageOptions={[4, 8, 16]}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center", // Ensures vertical alignment if needed
+                  width: "100%", // Ensures the Box takes up the full width of its container
+                  mt: 2,
+                }}
+              >
+                <TablePagination
+                  component="div"
+                  count={filteredExams.length}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  rowsPerPageOptions={[4, 8, 16]}
+                  sx={{
+                    color: constant.backgroundColor,
+                    "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input":
+                      {
+                        color: constant.backgroundColor,
+                      },
+                    "& .MuiTablePagination-actions button": {
+                      color: constant.backgroundColor,
+                    },
+                  }}
+                />
+              </Box>
             </>
           ) : (
             <Typography

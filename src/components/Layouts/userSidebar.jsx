@@ -1,11 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Button, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, ThemeProvider, createTheme, GlobalStyles } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  useMediaQuery,
+  ThemeProvider,
+  createTheme,
+  GlobalStyles,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import AdminHeader from "./AdminHeader";
 import HomeIcon from "@mui/icons-material/Home";
 import ListIcon from "@mui/icons-material/List";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Cookies from "js-cookie";
 import { constant } from "../../constant";
 
@@ -15,6 +36,7 @@ export const UserSideBar = () => {
   const drawerWidth = 250;
   const [isExpanded, setIsExpanded] = useState(!isMobile);
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
+  const [openContestMenu, setOpenContestMenu] = useState(false);
   const { token } = useParams();
 
   useEffect(() => {
@@ -39,6 +61,10 @@ export const UserSideBar = () => {
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const toggleContestMenu = () => {
+    setOpenContestMenu(!openContestMenu);
   };
 
   const RouteArray = [
@@ -68,29 +94,30 @@ export const UserSideBar = () => {
     },
     {
       id: 4,
-      name: "All Contest",
-      linkUrl: "allcontest",
-      textColor: "#7D8FB3",
-      activeMenuFor: ["allcontest"],
+      name: "Contest",
       logoImage: ListIcon,
+      linkUrl: "#", // The main "Contest" item does not link to any URL
+      textColor: "#7D8FB3",
+      activeMenuFor: ["allcontest", "contestdetails"],
+      submenu: [
+        {
+          name: "All Contest",
+          linkUrl: "allcontest", // URL remains the same
+        },
+        // {
+        //   name: "Contest Details",
+        //   linkUrl: "contestdetails", // URL remains the same
+        // },
+      ],
     },
     {
       id: 5,
-      name: "Contest Details",
-      linkUrl: "contestdetails",
+      name: "Leaderboard",
+      linkUrl: "leaderboard",
       textColor: "#7D8FB3",
-      activeMenuFor: ["allcontest"],
+      activeMenuFor: ["leaderboard"],
       logoImage: ListIcon,
     },
-    {
-      id: 6,
-      name:"Leaderboard",
-      linkUrl:"leaderboard",
-      textColor:"#7D8FB3",
-      activeMenuFor:["leaderboard"],
-      logoImage:ListIcon
-    }
-    // ... other routes
   ];
 
   const filteredRouteArray = RouteArray.filter(
@@ -100,9 +127,7 @@ export const UserSideBar = () => {
       route.name !== "userprofile" &&
       route.name !== "wallet" &&
       route.name !== "subjects" &&
-      route.name !== "Exam Details"&&
-      route.name !== "Contest Details"
-
+      route.name !== "Exam Details"
   );
 
   const defaultTheme = createTheme({
@@ -112,6 +137,7 @@ export const UserSideBar = () => {
       },
     },
   });
+
   const GlobalScrollbarStyles = ({ backgroundColor }) => (
     <GlobalStyles
       styles={{
@@ -176,34 +202,75 @@ export const UserSideBar = () => {
         >
           <List>
             {filteredRouteArray.map((res, index) => (
-              <ListItem
-                key={res.name}
-                disablePadding
-                component={Link}
-                to={res.linkUrl !== "null" ? res.linkUrl : "#"}
-                onClick={() => isMobile && setIsExpanded(false)}
-                sx={{
-                  fontWeight: "bold",
-                  "&:hover": {
-                    backgroundColor: constant.backgroundColor,
-                  },
-                  "&:hover .MuiListItemText-root": {
-                    color: "white",
-                  },
-                }}
-              >
-                <ListItemButton>
-                  <ListItemIcon>
-                    <Avatar sx={{ bgcolor: constant.backgroundColor }}>
-                      {res?.logoImage && <res.logoImage />}
-                    </Avatar>
-                  </ListItemIcon>
-                  <ListItemText
-                    sx={{ color: constant.backgroundColor,fontWeight:"bold"}}
-                    primary={res.name}
-                  />
-                </ListItemButton>
-              </ListItem>
+              <React.Fragment key={res.name}>
+                <ListItem
+                  disablePadding
+                  component={res.submenu ? "div" : Link}
+                  to={res.submenu ? undefined : res.linkUrl}
+                  onClick={
+                    res.submenu
+                      ? toggleContestMenu
+                      : () => isMobile && setIsExpanded(false)
+                  }
+                  sx={{
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: constant.backgroundColor,
+                    },
+                    "&:hover .MuiListItemText-root": {
+                      color: "white",
+                    },
+                  }}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <Avatar sx={{ bgcolor: constant.backgroundColor }}>
+                        {res?.logoImage && <res.logoImage />}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      sx={{
+                        color: constant.backgroundColor,
+                        fontWeight: "bold",
+                      }}
+                      primary={res.name}
+                    />
+                    {res.submenu && (openContestMenu ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
+                  </ListItemButton>
+                </ListItem>
+
+                {res.submenu && (
+                  <Collapse in={openContestMenu} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {res.submenu.map((submenu) => (
+                        <ListItem
+                          key={submenu.name}
+                          disablePadding
+                          component={Link}
+                          to={submenu.linkUrl}
+                          onClick={() => isMobile && setIsExpanded(false)}
+                          sx={{
+                            paddingLeft: 4,
+                            "&:hover": {
+                              backgroundColor: constant.backgroundColor,
+                            },
+                            "&:hover .MuiListItemText-root": {
+                              color: "white",
+                            },
+                          }}
+                        >
+                          <ListItemButton>
+                            <ListItemText
+                              sx={{ color: constant.backgroundColor, fontWeight: "bold" }}
+                              primary={submenu.name}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                )}
+              </React.Fragment>
             ))}
           </List>
           <Box sx={{ marginTop: "auto" }}>

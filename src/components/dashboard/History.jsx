@@ -19,6 +19,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Avatar,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
@@ -71,7 +72,8 @@ const Historyofuser = () => {
         subject: exam.exam_id?.subject,
         examId: exam?.exam_id?._id,
         reattemptRequest: exam?.ReAttemp_request,
-        ReAttemp_count: exam?.ReAttemp_count||0,
+        ReAttemp_count: exam?.ReAttemp_count || 0,
+        subjectImage: exam.exam_id?.subject?.image_url
       });
       return acc;
     }, {});
@@ -113,12 +115,18 @@ const Historyofuser = () => {
     display: "flex",
     flexDirection: "column",
     backgroundColor: "white",
-    margin: 2,
     boxShadow: 10,
     transition: "transform 0.3s",
     "&:hover": {
       transform: "scale(1.05)",
     },
+    height: "100%", // Ensures all boxes have the same height
+  };
+
+  const gridItemStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "stretch",
   };
 
   const defaultTheme = createTheme();
@@ -147,10 +155,23 @@ const Historyofuser = () => {
         ) : (
           <Grid container spacing={2}>
             {histories.map((examGroup, index) => (
-              <Grid item xs={12} key={index}>
+              <Grid item xs={12} sm={6} md={4} key={index} sx={gridItemStyle}>
                 <Paper sx={paperStyle}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginBottom: 2,
+                    }}
+                  >
+                    <Avatar
+                      alt="Exam Avatar"
+                      src={examGroup[0]?.subjectImage} // Replace with your image path
+                      sx={{ width: 56, height: 56 }}
+                    />
+                  </Box>
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     gutterBottom
                     sx={{
                       color: constant.backgroundColor,
@@ -166,7 +187,10 @@ const Historyofuser = () => {
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
-                      <Typography variant="h6" sx={{ color: constant.backgroundColor, fontWeight: "bold" }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ color: constant.backgroundColor, fontWeight: "bold" }}
+                      >
                         View Attempts ({examGroup.length})
                       </Typography>
                     </AccordionSummary>
@@ -226,14 +250,14 @@ const Historyofuser = () => {
                             }}
                           >
                             {examGroup.length < 2 && (
-                            <Button
-                              variant="contained"
-                              sx={{ backgroundColor: "#28a745" }}
-                              onClick={() => attemptExam(history.examId, history.id)}
-                              disabled={history.reattemptRequest !== "Accepted"}
-                            >
-                              Attempt Exam
-                            </Button>
+                              <Button
+                                variant="contained"
+                                sx={{ backgroundColor: "#28a745" }}
+                                onClick={() => attemptExam(history.examId, history.id)}
+                                disabled={history.reattemptRequest !== "Accepted"}
+                              >
+                                Attempt Exam
+                              </Button>
                             )}
                             <Button
                               variant="contained"
@@ -243,13 +267,13 @@ const Historyofuser = () => {
                               View Answer
                             </Button>
                             {examGroup.length < 2 && (
-                            <Button
-                              variant="contained"
-                              sx={{ backgroundColor: "#FF0000" }}
-                              onClick={() => handleClickOpen(history.id)}
-                            >
-                              Reattempt Exam
-                            </Button>
+                              <Button
+                                variant="contained"
+                                sx={{ backgroundColor: "#FF0000" }}
+                                onClick={() => handleClickOpen(history.id)}
+                              >
+                                Reattempt Exam
+                              </Button>
                             )}
                           </Box>
                         </Box>
