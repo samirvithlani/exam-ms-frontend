@@ -106,7 +106,7 @@ export const UserExamDetails = () => {
               <Typography sx={TypoGraphyProps}>
                 Name:{" "}
                 <span style={{ textDecoration: "underline" }}>
-                  {questions.name}
+                  {questions?.name}
                 </span>
               </Typography>
             </Box>
@@ -115,7 +115,7 @@ export const UserExamDetails = () => {
                 Standard:
                 <span style={{ textDecoration: "underline" }}>
                   {" "}
-                  {questions.std?.std}
+                  {questions?.std?.std}
                 </span>
               </Typography>
             </Box>
@@ -123,7 +123,7 @@ export const UserExamDetails = () => {
               <Typography sx={TypoGraphyProps}>
                 Stream:{" "}
                 <span style={{ textDecoration: "underline" }}>
-                  {questions.stream?.name || "N/A"}
+                  {questions?.stream?.name || "N/A"}
                 </span>
               </Typography>
             </Box>

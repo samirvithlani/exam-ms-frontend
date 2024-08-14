@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, Typography, Grid, createTheme, ThemeProvider } from '@mui/material';
 import Cookies from 'js-cookie';
 import { constant } from '../../constant';
@@ -11,7 +11,9 @@ const UserContestexam = () => {
   const [userExams, setUserExams] = useState([]);
   const navigate = useNavigate();
   const Id = Cookies.get("_id");
-
+  const location = useLocation();
+  const isParticipant = location.state?.isParticipant;
+  
   useEffect(() => {
     fetchDetails();
     fetchUserExam();
@@ -50,7 +52,6 @@ const UserContestexam = () => {
           ...exam,
           isActive,
           isTaken: userExamData.some(userExam => userExam?.exam.some(userExamDetail => userExamDetail?._id === exam._id))
-
         };
       });
 
@@ -61,22 +62,26 @@ const UserContestexam = () => {
   };
 
   const handleCardClick = (exam) => {
-    if (exam.isTaken) {
-      alert("You have already taken this exam.")
-    } else {
-   navigate(`/userDasboard/examdetails/${exam?._id}`);
+    if (isParticipant) {
+      if (exam.isTaken) {
+        alert("You have already taken this exam.");
+      } else {
+        navigate(`/userDasboard/examdetails/${exam?._id}`);
+      }
     }
-};
-const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: constant.backgroundColor, // Change this to your desired color
+  };
+
+  const defaultTheme = createTheme({
+    palette: {
+      primary: {
+        main: constant.backgroundColor,
+      },
     },
-  },
-});
+  });
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Typography variant="h4" component="h2" style={{margin: '20px 0',color:constant.backgroundColor }}>
+      <Typography variant="h4" component="h2" style={{ margin: '20px 0', color: constant.backgroundColor }}>
         Contest Exams
       </Typography>
       <Grid container spacing={2}>
@@ -84,8 +89,11 @@ const defaultTheme = createTheme({
           <Grid item key={exam._id} xs={12} sm={6} md={4}>
             <Card
               onClick={() => handleCardClick(exam)}
-              style={{ backgroundColor: exam.isActive ? 'white' : 'grey' , pointerEvents: exam.isActive ? 'auto' : 'none',
-                cursor: exam.isActive ? 'pointer' : 'default',}} 
+              style={{
+                backgroundColor: exam.isActive && isParticipant ? 'white' : 'grey',
+                pointerEvents: exam.isActive && isParticipant ? 'auto' : 'none',
+                cursor: exam.isActive && isParticipant ? 'pointer' : 'default',
+              }} 
             >
               <CardContent>
                 <Typography variant="h5" component="div">
