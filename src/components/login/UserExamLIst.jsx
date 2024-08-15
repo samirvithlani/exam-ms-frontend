@@ -43,13 +43,13 @@ export const UserExamList = () => {
     fetchDifficulties();
     fetchStandards();
     fetchHistory();
-    fetchExams();
+    fetchAssignedExams();
   }, [id, selectedSubject, selectedDifficulty, selectedStandard, page]);
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get("/subject");
-      setSubjects(response.data);
+      const response = await axios.get(`/assigendsubjects/${_id}`);      
+      setSubjects(response.data?.subjects);
     } catch (error) {
       console.log(error, "error");
     }
@@ -82,33 +82,34 @@ export const UserExamList = () => {
       console.log(error, "error");
     }
   };
+const fetchAssignedExams = async () => {
+  try {
+    let url = `/getAssignedExams/${_id}?`;
 
-  const fetchExams = async () => {
-    try {
-      let url = "/getExambyFilter?";
-      if (selectedStandard) url += `std=${selectedStandard}&`;
-      if (selectedSubject) url += `subject=${selectedSubject}&`;
-      if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
-      setIsLoading(true);
-      const response = await axios.get(url);
-      if (response?.status === 200) {
-        setIsLoading(false);
-      }
-      const sortedExams = response.data.data.sort(
-        (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)
-      );
-      setExams(sortedExams);
-    } catch (error) {
-      console.log(error, "error");
+    if (selectedStandard) url += `std=${selectedStandard}&`;
+    if (selectedSubject) url += `subject=${selectedSubject}&`;
+    if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
+    setIsLoading(true);
+    const response = await axios.get(url);
+    if (response?.status === 200) {
+      setIsLoading(false);
     }
-  };
+    const sortedExams = response?.data?.exams.sort(
+      (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)
+    );
+    setExams(sortedExams);
+  } catch (error) {
+    console.log(error, "error");
+  }
+};
+
 
   const handleClick = (subjectID) => {
     navigate(`/userDasboard/examdetails/${subjectID}`);
   };
 
   const filterExamsByHistory = () => {
-    return exams.filter((exam) => !userHistory.includes(exam._id));
+    return exams?.filter((exam) => !userHistory.includes(exam._id));
   };
 
   const getAvatarLetter = (name) => {
@@ -119,9 +120,8 @@ export const UserExamList = () => {
     setSelectedStandard("");
     setSelectedSubject("");
     setSelectedDifficulty("");
-    const response = await axios.get("/getExambyFilter");
-    console.log("data...", response.data.data);
-    setExams(response.data.data);
+    const response = await axios.get(`/getAssignedExams/${_id} `);
+    setExams(response.data.exams);
   };
 
   const filteredExams = filterExamsByHistory();
@@ -223,7 +223,7 @@ export const UserExamList = () => {
               </Box>
             </Box>
           </Grid>
-          {filteredExams.length > 0 ? (
+          {filteredExams?.length > 0 ? (
             <>
               <Grid container spacing={2}>
                 {filteredExams

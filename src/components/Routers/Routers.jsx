@@ -63,6 +63,7 @@ import UserContestDetail from "../exam/UserContestDetails";
 import DeletedContest from "../exam/DeletedContest";
 import { AddModule } from "../login/AddModule";
 import ReattemptRequest from "../dashboard/ReattemptRequest";
+import StudentSubject from "../Layouts/StudentSubject";
 
 const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
@@ -168,6 +169,10 @@ const MainRouter = ({ children }) => {
               {
                 path:"contestdetail/:id",
                 element:<UserContestDetail/>
+              },
+              {
+                path:"subjectprefrence",
+                element:<StudentSubject/>
               },
             
           ],

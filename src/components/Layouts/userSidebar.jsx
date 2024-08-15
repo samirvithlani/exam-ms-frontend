@@ -77,6 +77,14 @@ export const UserSideBar = () => {
       activeMenuFor: ["dashboard"],
     },
     {
+      id: 6,
+      name: "Subject Prefrence",
+      linkUrl: "subjectprefrence",
+      textColor: "#7D8FB3",
+      activeMenuFor: ["subjectprefrence"],
+      logoImage: ListIcon,
+    },
+    {
       id: 2,
       name: "Current Exam",
       logoImage: ListIcon,
@@ -118,6 +126,7 @@ export const UserSideBar = () => {
       activeMenuFor: ["leaderboard"],
       logoImage: ListIcon,
     },
+   
   ];
 
   const filteredRouteArray = RouteArray.filter(
