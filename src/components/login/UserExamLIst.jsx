@@ -85,7 +85,6 @@ export const UserExamList = () => {
 const fetchAssignedExams = async () => {
   try {
     let url = `/getAssignedExams/${_id}?`;
-
     if (selectedStandard) url += `std=${selectedStandard}&`;
     if (selectedSubject) url += `subject=${selectedSubject}&`;
     if (selectedDifficulty) url += `difficulty=${selectedDifficulty}&`;
@@ -100,6 +99,13 @@ const fetchAssignedExams = async () => {
     setExams(sortedExams);
   } catch (error) {
     console.log(error, "error");
+    if (error?.response?.data?.message === "No subjects assigned to the user.") {
+      setIsLoading(false);
+
+      alert("Please select a subject first.");
+      navigate("/userDasboard/subjectprefrence");
+      return;
+    }
   }
 };
 
