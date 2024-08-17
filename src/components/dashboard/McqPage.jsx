@@ -263,6 +263,28 @@ const MCQQuestionsPage = () => {
           transformOrigin: "0%",
         }}
       />
+          <div
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            padding: "10px",
+            borderRadius: "5px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+            zIndex: 1000,
+            color: constant.backgroundColor,
+            height: "auto",
+            width: "auto",
+          }}
+        >
+          {timeLeft !== null && (
+            <Typography variant="h6" gutterBottom>
+              Time Left: {Math.floor(timeLeft / 60)}:
+              {String(timeLeft % 60).padStart(2, "0")}
+            </Typography>
+          )}
+        </div>
       <div style={{ padding: "10px" }}>
         <Paper elevation={0} sx={{ backgroundColor: "#f5f5f5", mt: 2 }}>
           {isLoading ? (
