@@ -7,6 +7,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -32,6 +34,7 @@ const defaultTheme = createTheme({
 export default function Login() {
   const [isLogin, setisLogin] = useState(false);
   const [isLoading, setisLoading] = React.useState(false);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [validation, setValidation] = useState({
     email: true,
@@ -72,6 +75,7 @@ export default function Login() {
       setisLoading(false);
       return;
     }
+
     try {
       const response = await axios.post("/login", userData);
       const { message } = response.data;
@@ -79,10 +83,15 @@ export default function Login() {
         setisLogin(true);
         setisLoading(false);
         const { _id, name, role, token } = response.data;
-        Cookies.set("_id", _id);
-        Cookies.set("name", name);
-        Cookies.set("token", token);
-        Cookies.set("role", role);
+        const cookieOptions = stayLoggedIn
+          ? { expires: 7 } 
+          : undefined; 
+
+        Cookies.set("_id", _id, cookieOptions);
+        Cookies.set("name", name, cookieOptions);
+        Cookies.set("token", token, cookieOptions);
+        Cookies.set("role", role, cookieOptions);
+
         if (role === "student") {
           navigate("/userDasboard");
         } else if (role === "faculty") {
@@ -143,7 +152,7 @@ export default function Login() {
                     <Typography
                       component="h1"
                       variant="h5"
-                      sx={{ fontWeight: "bold", color: constant.backgroundColor}}
+                      sx={{ fontWeight: "bold", color: constant.backgroundColor }}
                     >
                       Log in
                     </Typography>
@@ -185,6 +194,16 @@ export default function Login() {
                           handleFieldChange("password", e.target.value)
                         }
                       />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            value={stayLoggedIn}
+                            onChange={(e) => setStayLoggedIn(e.target.checked)}
+                            color="primary"
+                          />
+                        }
+                        label="Stay Logged In"
+                      />
                       <Button
                         type="submit"
                         fullWidth
@@ -207,7 +226,7 @@ export default function Login() {
                       <Grid container justifyContent="flex-end">
                         <Grid item>
                           <Typography>
-                            <Link to="/">
+                            <Link to="/signup">
                               {"Don't have an account? Sign Up"}
                             </Link>
                           </Typography>

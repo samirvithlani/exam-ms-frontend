@@ -81,7 +81,7 @@ export default function SignUp() {
       if (response.status === 200) {
         toast.success(message);
         setTimeout(() => {
-          navigate("/login"); 
+          navigate("/"); 
         }, 10000);
       } else {
         console.error("Signup failed");
@@ -234,7 +234,7 @@ export default function SignUp() {
                   </Button>
                   <Grid container justifyContent="flex-end">
                     <Grid item>
-                      <Link to="/login">Already have an account? Log in</Link>
+                      <Link to="/">Already have an account? Log in</Link>
                     </Grid>
                   </Grid>
                 </Box>

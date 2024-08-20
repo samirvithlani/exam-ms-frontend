@@ -23,7 +23,7 @@ const ResetPassword = () => {
     if (result.status === 200) {
       toast.success(message);
       setTimeout(() => {
-        navigate("/login");
+        navigate("/");
       }, 10000);
     }
   };
@@ -69,7 +69,7 @@ const ResetPassword = () => {
           Reset Password
         </Button>
       </Box>
-      <Link to="/login" variant="body2" sx={{ mt: 2 }}>
+      <Link to="/" variant="body2" sx={{ mt: 2 }}>
         Back to Login
       </Link>
       <ToastContainer/>

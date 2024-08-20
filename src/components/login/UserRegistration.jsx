@@ -55,7 +55,7 @@ export default function UserRegistration() {
           else {
             console.error('Signup failed');
           }
-          navigate('/login')
+          navigate('/')
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 const errorMessage = error.response.data.message;

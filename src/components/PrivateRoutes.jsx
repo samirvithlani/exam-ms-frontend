@@ -34,7 +34,7 @@ export const PrivateRoutes = () => {
             const currentPath = window.location.pathname;
             navigate(currentPath); // Redirect to student dashboard or any other route for students
           } else {
-            navigate("/login");
+            navigate("/");
           }
 
           //navigate("/userDasboard"); // Redirect to student dashboard or any other route for students
@@ -48,7 +48,7 @@ export const PrivateRoutes = () => {
             navigate(currentPath2); // Redirect to faculty dashboard or any other route for faculty
           } else {
             
-            navigate("/login");
+            navigate("/");
           }
           break;
         case "superAdmin":
@@ -60,7 +60,7 @@ export const PrivateRoutes = () => {
             const currentPath1 = window.location.pathname;
             navigate(currentPath1); // Redirect to super admin dashboard or any other route for super admins
           } else {
-            navigate("/login");
+            navigate("/");
           }
           break;
         default:

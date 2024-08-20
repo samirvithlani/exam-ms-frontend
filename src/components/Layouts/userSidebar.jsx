@@ -56,7 +56,7 @@ export const UserSideBar = () => {
     Cookies.remove("name");
     Cookies.remove("_id");
     Cookies.remove("role");
-    navigate("/login");
+    navigate("/");
   };
 
   const toggleSidebar = () => {

@@ -56,7 +56,7 @@ const ForgotPassword = () => {
           Send Reset Link
         </Button>
       </Box>
-      <Link to="/login" variant="body2" sx={{ mt: 2 }}>
+      <Link to="/" variant="body2" sx={{ mt: 2 }}>
         Back to Login
       </Link>
       <ToastContainer/>

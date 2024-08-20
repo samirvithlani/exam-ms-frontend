@@ -69,7 +69,7 @@ const MainRouter = ({ children }) => {
   //console.log("MainRouter",children);
   const routesData = createBrowserRouter([
     {
-      path: "/",
+      path: "/signup",
       element: <SignUp />,
       errorElement: <div>404</div>,
     },
@@ -79,7 +79,7 @@ const MainRouter = ({ children }) => {
       errorElement: <div>404</div>,
     },
     {
-      path: "/login",
+      path: "/",
       element: <Login />,
       errorElement: <div>404</div>,
     },

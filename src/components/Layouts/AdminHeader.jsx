@@ -73,7 +73,7 @@ const AdminHeader = ({ isExpanded, toggleSidebar, name }) => {
     Cookies.remove("token", { path: "" });
     Cookies.remove("name", { path: "" });
     Cookies.remove("id", { path: "" });
-    navigate("/login");
+    navigate("/");
   };
 
   const handleWallet = () => {
