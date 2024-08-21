@@ -81,7 +81,6 @@ export const ExamDetails = () => {
   const fetchStudentDetailByExamId = async () => {
     setisLoading(true);
     const response = await axios.get(`/studentByExamId/${id}`);
-    console.log(response.data, "response");
     setstudents(response.data);
     setopenStudentList(true);
     setisLoading(false);

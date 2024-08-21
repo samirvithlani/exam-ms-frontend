@@ -17,15 +17,15 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { CustomeLoader } from "../Layouts/CustomeLoader";
 import { constant } from "../../constant";
+import { toast, ToastContainer } from "react-toastify";
 
 const StudentList = () => {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [creditToAdd, setCreditToAdd] = useState("");
-  const [user, setUser] = useState("");
+  const [editedWallets, setEditedWallets] = useState({});
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [filterCriteria, setFilterCriteria] = useState("");
@@ -52,23 +52,45 @@ const StudentList = () => {
       role: faculty.role?.role,
       status: faculty.status,
       credit: faculty.credit,
-      createdAt: faculty.createdAt,  
+      createdAt: faculty.createdAt,
+      wallet: faculty?.wallet?.token, // Assuming 'wallet.token' contains the wallet balance
     }));
     filterdata.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     setStudents(filterdata);
     setIsLoading(false);
   };
 
+  const handleWalletChange = (studentId, newWalletValue) => {
+    setEditedWallets((prev) => ({
+      ...prev,
+      [studentId]: newWalletValue,
+    }));
+  };
 
-  const handleAddCredit = async (userId) => {
-    const user = await axios.get(`/user/${userId}`);
-    setUser(user.data.wallet._id);
-    if (user) {
-      const data = { token: user.data.wallet.token + parseFloat(creditToAdd) };
-      const addcredit = await axios.put(`/wallet/${user}`, data);
+  const handleUpdateWallet = async (studentId) => {    
+    const updatedWallet = editedWallets[studentId];
+    if (updatedWallet !== undefined) {
+      try {
+       const response =  await axios.post(`/addorupdatewallet`, {user:studentId, token: updatedWallet });
+       if(response?.status == 200){
+        toast.success("Wallet Updated Successfully ...");
+       }
+        setStudents((prevStudents) =>
+          prevStudents.map((student) =>
+            student.id === studentId
+              ? { ...student, wallet: updatedWallet }
+              : student
+          )
+        );
+        setEditedWallets((prev) => {
+          const updatedState = { ...prev };
+          delete updatedState[studentId];
+          return updatedState;
+        });
+      } catch (error) {
+        console.error("Failed to update wallet:", error);
+      }
     }
-    setCreditToAdd("");
-    setSelectedUserId(null);
   };
 
   const applyFilters = () => {
@@ -90,10 +112,11 @@ const StudentList = () => {
 
     setFilteredStudents(tempStudents);
   };
+
   const typoPorps = {
-    color:"#000000",
-    fontWeight:"bold"
-  }
+    color: "#000000",
+    fontWeight: "bold",
+  };
 
   return (
     <Paper
@@ -114,7 +137,6 @@ const StudentList = () => {
         variant="h4"
         sx={{
           fontWeight: "bold",
-          
           mb: 2,
           color: constant.backgroundColor,
         }}
@@ -154,12 +176,10 @@ const StudentList = () => {
               sx={{
                 backgroundColor: "#FFFFF",
                 boxShadow: 10,
-                borderRadius:4 ,
+                borderRadius: 4,
                 transition: "transform 0.3s",
-
                 "&:hover": {
                   transform: "scale(1.10)",
-                  
                 },
               }}
             >
@@ -180,38 +200,48 @@ const StudentList = () => {
                 <Typography variant="body2" sx={typoPorps}>
                   Status: {student.status}
                 </Typography>
-                <Typography variant="body2" sx={typoPorps}>
-                  Credit: {student.credit}
-                </Typography>
-                <Typography variant="body2" sx={typoPorps}>
-                  Contact: {student.contact}
-                </Typography>
                 {/* <Typography variant="body2" sx={typoPorps}>
-                  Created At: {new Date(student.createdAt).toLocaleString()}
+                  Credit: {student.credit}
                 </Typography> */}
+                <Typography variant="body2" sx={typoPorps}>
+                  Wallet:
+                  <TextField
+                    size="small"
+                    variant="outlined"
+                    value={
+                      editedWallets[student.id] !== undefined
+                        ? editedWallets[student.id]
+                        : student.wallet
+                    }
+                    onChange={(e) =>
+                      handleWalletChange(student.id, e.target.value)
+                    }
+                    sx={{
+                      ml: 1,
+                      width: "60px", // Adjust this width as needed
+                      "& .MuiInputBase-input": {
+                        fontSize: "14px", // Adjust font size as needed
+                        padding: "8px", // Adjust padding as needed
+                      },
+                    }}
+                  />
+                </Typography>
               </CardContent>
               <CardActions>
-                {/* <TextField
-                  size="small"
-                  value={selectedUserId === student.id ? creditToAdd : ""}
-                  onChange={(e) => {
-                    setCreditToAdd(e.target.value);
-                    setSelectedUserId(student.id);
-                  }}
-                  placeholder="Add Credit"
-                />
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleAddCredit(student.id)}
-                  disabled={!creditToAdd || selectedUserId !== student.id}
-                  sx={{ ml: 1 }}
+                  onClick={() => handleUpdateWallet(student.id)}
+                  disabled={
+                    editedWallets[student.id] === undefined ||
+                    editedWallets[student.id] === student.wallet
+                  }
                 >
-                  Add
-                </Button> */}
+                  Update Wallet
+                </Button>
                 <Link
                   to={`../studentDetail/${student.id}`}
-                  style={{ textDecoration: "none", alignSelf: "center"}}
+                  style={{ textDecoration: "none", alignSelf: "center" }}
                 >
                   <Button variant="outlined" color="primary">
                     DETAIL
@@ -222,6 +252,7 @@ const StudentList = () => {
           </Grid>
         ))}
       </Grid>
+      <ToastContainer/>
     </Paper>
   );
 };
