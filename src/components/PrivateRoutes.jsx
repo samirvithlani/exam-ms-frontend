@@ -84,6 +84,6 @@ export const PrivateRoutes = () => {
   return isLoggedin ? (
     <Outlet />
   ) : (
-    <Navigate to="/login" state={{ from: location }} />
+    <Navigate to="/" state={{ from: location }} />
   );
 };

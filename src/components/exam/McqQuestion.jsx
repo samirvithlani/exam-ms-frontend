@@ -22,7 +22,7 @@ import { isEqual } from "lodash";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import "../../assets/layouts/layout.module.css";
-import React, { useEffect } from "react";
+import React, { useEffect,useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -34,7 +34,10 @@ import { RemoveCircleOutline } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { constant } from "../../constant";
 import PreWrapper from "../CustomeCopmonent/PreWrapper";
-
+import "react-quill/dist/quill.snow.css";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+import Quill from "quill";
 export const McqQuestion = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -407,7 +410,23 @@ export const McqQuestion = () => {
     console.log(content,"content");
     setQuestion(content);
   };
+  const reactQuillRef = useRef(null); // Ref for ReactQuill
 
+  
+
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline"],
+        ["link", "image"],
+        [{ script: "sub" }, { script: "super" }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["math",""], // Custom math button
+      ],
+      
+    },
+  };
   const validateQuestionData = (data) => {
     return true;
   };
@@ -483,7 +502,17 @@ export const McqQuestion = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <MySnackBar />
-      <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:constant.backgroundColor }}>Add Question :</Typography>
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: "bold",
+          fontFamily: "Lato",
+          mb: 1,
+          color: constant.backgroundColor,
+        }}
+      >
+        Add Question :
+      </Typography>
       <Grid
         container
         spacing={2}
@@ -514,8 +543,6 @@ export const McqQuestion = () => {
           Upload File
         </label>
       </Grid>
-
-      
 
       {/* </Typography> */}
       <Grid
@@ -561,8 +588,14 @@ export const McqQuestion = () => {
                 </Grid>
               )}
               <InputLabel htmlFor="question">Question</InputLabel>
-              <ReactQuill value={question} onChange={setQuestion} />
-
+              {/* <ReactQuill value={question} onChange={setQuestion} /> */}
+              <ReactQuill
+                ref={reactQuillRef}
+                value={question}
+                onChange={setQuestion}
+                modules={modules}
+                theme="snow"
+              />
               <Grid item xs={3}>
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Multiselect</FormLabel>
@@ -590,13 +623,14 @@ export const McqQuestion = () => {
                   <InputLabel htmlFor={`Option${index + 1}`}>
                     {`Option${index + 1}`}
                   </InputLabel>
-                
                   <ReactQuill
-                      value={option}
-                      onChange={(value) => handleOptionTextChange(index, value)}
-                      placeholder={`Enter option ${index + 1} here`}
-                      style={{ width: '90%' }}
-                    />
+                    value={option}
+                    onChange={(value) => handleOptionTextChange(index, value)}
+                    placeholder={`Enter option ${index + 1} here`}
+                    style={{ width: "90%" }}
+                    ref={reactQuillRef}
+                    modules={modules}
+                  />
                   {index >= 4 && (
                     <IconButton
                       aria-label="remove-option"
@@ -705,17 +739,17 @@ export const McqQuestion = () => {
                         {...register("Subject", validationSchema.subject)}
                         onChange={handleSubjectChange}
                       >
-                       {subjects.length > 0 ? (
-                    subjects.map((subject) => (
-                      <MenuItem key={subject._id} value={subject._id}>
-                        {subject.name}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem value="">
-                      Contact admin to assign the subject
-                    </MenuItem>
-                  )}
+                        {subjects.length > 0 ? (
+                          subjects.map((subject) => (
+                            <MenuItem key={subject._id} value={subject._id}>
+                              {subject.name}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem value="">
+                            Contact admin to assign the subject
+                          </MenuItem>
+                        )}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -809,31 +843,38 @@ export const McqQuestion = () => {
               {/* Display the list of added questions */}
               {questionsList.map((questions, index) => (
                 <div key={index}>
-
                   <Typography variant="subtitle1">
                     Question {index + 1}:
                   </Typography>
                   {/* <pre>{String.raw`${question.question}`}</pre>  */}
                   {/* <pre>question:<div dangerouslySetInnerHTML={{ __html:questions.question }} /></pre> */}
-                  <pre>options:<pre dangerouslySetInnerHTML={{ __html:questions.option }} /></pre>
-
+                  <pre>
+                    options:
+                    <pre
+                      dangerouslySetInnerHTML={{ __html: questions.option }}
+                    />
+                  </pre>
 
                   <pre>
-                  question:<pre dangerouslySetInnerHTML={{ __html:questions.question }} />
-                    {JSON.stringify(questions, null, 2)}</pre>
+                    question:
+                    <pre
+                      dangerouslySetInnerHTML={{ __html: questions.question }}
+                    />
+                    {JSON.stringify(questions, null, 2)}
+                  </pre>
                 </div>
               ))}
-                                  {/* <div dangerouslySetInnerHTML={{ __html: question }} /> */}
+              {/* <div dangerouslySetInnerHTML={{ __html: question }} /> */}
 
-                <Button
-                  type="submit" 
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={() => submitHandler(getValues())} 
-                >
-                  SUBMIT
-                </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => submitHandler(getValues())}
+              >
+                SUBMIT
+              </Button>
             </>
           )}
           {selectedOption === "file" && (
