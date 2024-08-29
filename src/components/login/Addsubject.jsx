@@ -46,6 +46,8 @@ export const AddSubject = () => {
   const [selectedStream, setSelectedStream] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageName, setImageName] = useState("");
 
   useEffect(() => {
     fetchStd();
@@ -57,7 +59,6 @@ export const AddSubject = () => {
     applyFilters();
   }, [subjects, searchTerm, sortOrder]);
 
-  
   const fetchSubject = async () => {
     try {
       const response = await axios.get("/subject");
@@ -103,37 +104,43 @@ export const AddSubject = () => {
     setSelectedStream(event.target.value);
   };
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setImage(file);
+    setImageName(file.name);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
-    const userData = {
-      name: data.get("name"),
-      std: selectedStandards,
-      stream: selectedStream,
-    };
+    if (!image) {
+      toast.error("Please select an image first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", image);
 
     try {
+      const uploadResponse = await axios.post("/upload", formData);
+      const userData = {
+        name: event.target.name.value,
+        std: selectedStandards,
+        stream: selectedStream||null,
+        image_url: uploadResponse?.data?.url,
+      };
       const response = await axios.post("/subject", userData);
       const { message } = response.data;
       if (response.status === 200) {
-        toast.success(message);
-        fetchSubject(); // Refresh the subject list
+        toast.success("Subject Added Sucessfully");
+        navigate("/adminDashboard");
       } else {
-        console.error("Failed");
+        console.error("Failed to add subject");
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        const errorMessage = error.response.data.message;
-        toast.error(errorMessage);
-        console.error("Server responded with a 400 error:", errorMessage);
-      } else {
-        console.error("Error occurred:", error);
-      }
+      console.log(error, "error");
     }
-    navigate("/adminDashboard");
   };
-
   const applyFilters = () => {
     let tempSubjects = [...subjects];
 
@@ -149,7 +156,6 @@ export const AddSubject = () => {
 
     setFilteredSubjects(tempSubjects);
   };
-
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -183,7 +189,17 @@ export const AddSubject = () => {
                 backgroundColor: "#f0f0f0",
               }}
             >
-              <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato",mb:1,color:"#010080" }}>Add Subject ::</Typography>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                  fontFamily: "Lato",
+                  mb: 1,
+                  color: "#010080",
+                }}
+              >
+                Add Subject ::
+              </Typography>
               <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -232,6 +248,26 @@ export const AddSubject = () => {
                     ))}
                   </Select>
                 </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{ mt: 2 }}
+                  >
+                    Upload Image
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleImageChange}
+                    />
+                  </Button>
+                  {imageName && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      Selected Image: {imageName}
+                    </Typography>
+                  )}
+                </FormControl>
                 <Button
                   type="submit"
                   fullWidth
@@ -244,7 +280,7 @@ export const AddSubject = () => {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+                 <Grid item xs={12} md={6}>
             <Paper
               sx={{
                 p: 4,

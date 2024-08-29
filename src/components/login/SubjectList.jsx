@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Avatar, Typography } from '@mui/material';
+import { Grid, Box, Avatar, Typography, Pagination } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -13,8 +13,11 @@ export const SubjectList = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setIsLoading] = useState(false);
   const [userSubjects, setUserSubjects] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const userId = Cookies.get("_id");
   const role = Cookies.get("role");
+
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchSubjects();
@@ -70,6 +73,17 @@ export const SubjectList = () => {
     ? subjects.filter(subject => userSubjects.includes(subject._id))
     : subjects;
 
+  const totalPages = Math.ceil(filteredSubjects.length / itemsPerPage);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  const paginatedSubjects = filteredSubjects.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <Box padding="20px">
       <Typography variant="h4" sx={{ fontWeight: "bold", fontFamily: "Lato", mb: 3, color: constant.backgroundColor }}>
@@ -78,14 +92,14 @@ export const SubjectList = () => {
 
       {loading && <CustomeLoader />}
 
-      {!loading && filteredSubjects.length === 0 && (
+      {!loading && paginatedSubjects.length === 0 && (
         <Typography variant="h6">
           No data found
         </Typography>
       )}
 
       <Grid container spacing={3}>
-        {filteredSubjects.map((item) => (
+        {paginatedSubjects.map((item) => (
           <Grid key={item._id} item xs={12} sm={6} md={4} lg={3} xl={2}>
             <Box
               bgcolor="white"
@@ -118,6 +132,17 @@ export const SubjectList = () => {
           </Grid>
         ))}
       </Grid>
+
+      {!loading && totalPages > 1 && (
+        <Box mt={3} display="flex" justifyContent="center">
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Box>
+      )}
     </Box>
   );
 };
